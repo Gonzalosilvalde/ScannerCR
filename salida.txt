@@ -1,0 +1,2 @@
+Caracter desconocido: #
+syntax error
