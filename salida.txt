@@ -1,2 +1,4 @@
-Caracter desconocido: #
-syntax error
+
+
+
+[0;31mLINE 1: Error: Invalid sintax.

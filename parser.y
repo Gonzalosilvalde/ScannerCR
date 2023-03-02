@@ -8,7 +8,6 @@ void yyerror (char const *);
 extern int yylex();
 extern int yylineno;
 %}
-%define parse.error verbose
 
 %union{
 	int valInt;
@@ -24,7 +23,6 @@ extern int yylineno;
 %token ELSE
 %token FOR
 %token IF
-%token COMENTARIO1
 %token NOT
 %token OR
 %token RETURN
@@ -35,11 +33,9 @@ extern int yylineno;
 %token <string> STRINGVAL
 %token <string> VARNAME
 %token <valFloat> FLOATNUM
-%token <valInt> INTNUM
+%token <valInt> INT
 %token <valVoid> VOID
 %token <valBool> BOOL
-%token INT 
-%token FLOAT
 %token EQUAL
 %token ADD
 %token MINUS
@@ -68,17 +64,20 @@ extern int yylineno;
 
 %%
 s: 	
-	code NEWLINE code {return 0;}
-	|code ENDOFFILE {return 0;}
+	code NEWLINE code {;}
+	|code ENDOFFILE {;}
 	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Something unexpected has happened.\n"),yyclearin;exit(0);}
 ;
 
 code:
   	HINCLUDE LESS VARNAME BIGGER {;}
   	|HINCLUDE STRINGVAL{;}
-	|VARNAME EQUAL term SEMICOLON code{;}
-	|vartypes VARNAME OPEN args CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
-	|vartypes VARNAME OPEN CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
+	|VARNAME EQUAL term SEMICOLON{;}
+	|INT VARNAME OPEN args CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
+ 	|VOID VARNAME OPEN args CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
+  	|BOOL VARNAME OPEN args CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
+  	|FLOATNUM VARNAME OPEN args CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
+  	/*|DOUBLE VARNAME OPEN args CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}*/
 	|IF OPEN condition CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET ifpart2 {;}
 	/*casos en los cuales termina en break*/
 	|FOR OPEN code SEMICOLON condition SEMICOLON code CLOSE OPENCURLYBRACKET BREAK CLOSECURLYBRACKET {;}
@@ -88,7 +87,7 @@ code:
 	/*casos en los cuales no termina en break*/
 	|FOR OPEN code SEMICOLON condition SEMICOLON code CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET {;}
 	|WHILE OPEN condition CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
-	|COUT LESS LESS print_content SEMICOLON code{;}
+	|COUT LESS LESS print_content SEMICOLON{;}
   	/*añado aqui la potencia porque no funciona igual que las otras funciones*/
   	|POW OPEN number COMMA number CLOSE SEMICOLON{;}
 	/*|RETURN term {;}*/
@@ -100,8 +99,8 @@ print_content:
 	term {;}
 	|VARNAME {;}
 	/*por ahora no se asegura de que se le pasan al print los argumentos necesarios para hacer el print*/
-	/*|STRINGVAL PERCENTAGE OPEN args CLOSE {;}*/
-	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Can't print this.\n"),yyclearin;exit(0);}*/
+	|STRINGVAL PERCENTAGE OPEN args CLOSE {;}
+	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Can't print this.\n"),yyclearin;exit(0);}
 
 args:
 	VARNAME {;}
@@ -114,7 +113,7 @@ args:
 boolean:
 	TRUEVAL {;}
 	|FALSEVAL {;}
-	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid boolean value.\n"),yyclearin;exit(0);}*/
+	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid boolean value.\n"),yyclearin;exit(0);}
 ;
 
 term:
@@ -129,17 +128,17 @@ operation:
 	|DIVIDE {;}	
   	|ADD {;}
 	|MINUS {;}
-	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid operator.\n"),yyclearin;exit(0);}*/
+	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid operator.\n"),yyclearin;exit(0);}
 ;
 
 number:
-	INTNUM {;}
+	INT {;}
 	|FLOATNUM {;}
   	/*|DOUBLE {;}*/
-	|INTNUM operation number {;}
+	|INT operation number {;}
 	|FLOATNUM operation number {;}
   	/*|DOUBLE operation number {;}*/
-	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error:Invalid value for a number.\n"),yyclearin;exit(0);}*/
+	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error:Invalid value for a number.\n"),yyclearin;exit(0);}
 ;
 
 /*
@@ -157,14 +156,14 @@ list_elements:
 ifpart2:
 	ELSE IF OPEN statement CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET ifpart2 {;}
 	|ELSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
-	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid sintax on if.\n"),yyclearin;exit(0);}*/
+	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid sintax on if.\n"),yyclearin;exit(0);}
 ;
 
 statement:
 	boolean {;}
-	|INTNUM{;}
+	|INT {;}
 	|term logical_operators term
-	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid statement for condition.\n"),yyclearin;exit(0);}*/
+	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid statement for condition.\n"),yyclearin;exit(0);}
 ;
 
 logical_operators:
@@ -174,14 +173,7 @@ logical_operators:
 	|LESSEQ {;}
 	|EQUALB {;}
 	|NOTEQUAL {;} 
-	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid logical operator.\n"),yyclearin;exit(0);}*/
-;
-
-vartypes:
-	INT{;}
-	|FLOAT{;}
-	|BOOL {;}
-	|VOID {;}
+	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid logical operator.\n"),yyclearin;exit(0);}
 ;
 
 condition:
@@ -189,7 +181,7 @@ condition:
 	|NOT statement condition {;}
 	|AND statement condition {;}
 	|OR statement condition {;}
-	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid condition.\n"),yyclearin;exit(0);}*/
+	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid condition.\n"),yyclearin;exit(0);}
 ;
 
 %%
