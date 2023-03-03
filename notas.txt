@@ -2,3 +2,15 @@ el double abria que añadirlo de alguna manera diferente al float, por lo de aho
 /*cuidado con estas reglas: VOID, BOOL y POW, porque choca con la de abajo si la pongo debajo de esta, esto puede pasar mas adelante con la definicion de otras reglas del estilo string, ya que en si son como string :)
 %error-verbose regla para ver errores mas precisos,se mete despues de todas estas vainas de include y demas
 xxxxxxxxx mirar porque los strings no estan bien definidos xxxxxxxx
+stringval \"[^\t\n]*\" como estaba antes stringval
+como estaba antes:
+(
+(?i:writeln) {return WRITELN;}
+(?i:read) {return READ;}
+(?i:readln) {return READLN;}
+files : {}
+        | LPAREN file RPAREN SEMICOLON {}
+;
+file : STRINGV COMMA file {}
+        | STRINGV {}
+;

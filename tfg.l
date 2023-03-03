@@ -26,7 +26,7 @@ while "while"
 true "True"
 false "False"
 cout "cout"
-stringval \"[^\t\n]*\"
+stringval \"[A-Z]+|[a-z]+\"
 varname [a-zA-Z_][a-zA-Z0-9_]*
 int "int"
 intnum -?[0-9]+

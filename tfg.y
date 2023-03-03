@@ -72,11 +72,10 @@ s:
 	|code ENDOFFILE {return 0;}
 	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Something unexpected has happened.\n"),yyclearin;exit(0);}
 ;
-
 code:
   	HINCLUDE LESS VARNAME BIGGER {;}
   	|HINCLUDE STRINGVAL{;}
-	|VARNAME EQUAL term SEMICOLON code{;}
+	|VARNAME EQUAL term SEMICOLON code{printf("aqui llega?");}
 	|vartypes VARNAME OPEN args CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
 	|vartypes VARNAME OPEN CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET{;}
 	|IF OPEN condition CLOSE OPENCURLYBRACKET code CLOSECURLYBRACKET ifpart2 {;}
@@ -97,7 +96,7 @@ code:
 ;
 
 print_content:
-	term {;}
+	term {printf("aqui llega?");}
 	|VARNAME {;}
 	/*por ahora no se asegura de que se le pasan al print los argumentos necesarios para hacer el print*/
 	/*|STRINGVAL PERCENTAGE OPEN args CLOSE {;}*/
@@ -106,8 +105,8 @@ print_content:
 args:
 	VARNAME {;}
 	|VARNAME COMMA args {;}
-	|VARNAME EQUAL term {;}
-	|VARNAME EQUAL term COMMA args {;}
+	|VARNAME EQUAL term {printf("aqui llega?");}
+	|VARNAME EQUAL term COMMA args {printf("aqui llega?");}
 	|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid arguments.\n"),yyclearin;exit(0);}
 ;
 
@@ -163,7 +162,7 @@ ifpart2:
 statement:
 	boolean {;}
 	|INTNUM{;}
-	|term logical_operators term
+	|term logical_operators term {printf("aqui llega?");}
 	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid statement for condition.\n"),yyclearin;exit(0);}*/
 ;
 
@@ -191,6 +190,7 @@ condition:
 	|OR statement condition {;}
 	/*|error {printf("\033[0;31m");printf("LINE %d: ",yylineno), printf("Error: Invalid condition.\n"),yyclearin;exit(0);}*/
 ;
+
 
 %%
 int main(int argc, char *argv[]) {

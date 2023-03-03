@@ -1,5 +1,5 @@
-FUENTE = tfg
-PRUEBA = hola.cpp
+FUENTE = scanner
+PRUEBA = prueba2.cpp
 
 all: compile run
 

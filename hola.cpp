@@ -1,5 +1,6 @@
-#include <iostream>
-int main=
-	cout<<"Hello World";
-	return 0;
+#include <iostream>// para poder usar cout, endl
+using namespace std;//usamos el estándar
+
+int main(){
+  cout << "hola mundo";
 }
