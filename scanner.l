@@ -10,17 +10,16 @@ stringquote \"[^\'\n]*\"
 cs #{digit}+
 
 %%
-integer {return INTEGER;}
+int {return INTEGER;}
 float {return FLOAT;}
 string {return STRING;}
-boolean {return BOOLEAN;}
+bool {return BOOLEAN;}
 char {return CHAR;}
-True {return TRUEVAL;}
-False {return FALSEVAL;}
+true {return TRUEVAL;}
+false {return FALSEVAL;}
 (\-)?{digit}+ {yylval.valString = strdup(yytext); return INTNUM;}
 (\-)?{digit}+(\.{digit}+)?([eE][+\-]{digit}+)? {yylval.valString = strdup(yytext); return REALNUM;}
 "#include" {return PROGRAM;}
-CONST {return CONST;}
 VAR {return VAR;}
 (?i:value) {return VALUE;}
 \( {return LPAREN;}
@@ -42,7 +41,7 @@ or {return OR;}
 \< {return LOWER;}
 \> {return HIGHER;}
 (?i:for) {return FOR;}
-do {return DO;}
+(?i:do) {return DO;}
 (?i:while) {return WHILE;}
 \+ {return PLUS;}
 \- {return HYPHEN;}
@@ -52,7 +51,11 @@ div {return DIVINT;}
 mod {return MOD;}
 not {return NOT;}
 (?i:cout) {return WRITE;}
+(?i:endl) {return ENDL;}
 stringquote {return STRINGQUOTE;}
+(?i:return) {return RETURN;}
+"#define" {return DEFINE;}
+const {return CONST;}
 ({letter}|\_)({letter}|{digit}|\_)* {yylval.valString = strdup(yytext); return STRINGV;}
 ({stringquote}|{cs})+ {yylval.valString = strdup(yytext); return QUOTESTRING;}
 \n ;

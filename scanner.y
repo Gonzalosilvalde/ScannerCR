@@ -23,6 +23,7 @@ void deleteCurly(char *);
 void deleteNewLines(char *);
 
 %}
+
 %define parse.error verbose
 %union {
     char * valString;
@@ -31,13 +32,11 @@ void deleteNewLines(char *);
 }
 %token WHILE
 %token FOR
+%token DO
 %token TO
 %token DOWNTO
-%token DO
-%token REPEAT
-%token UNTIL
 %token WRITE
-%token WRITELN
+%token ENDL
 %token READ
 %token READLN
 %token PROGRAM
@@ -64,6 +63,7 @@ void deleteNewLines(char *);
 %token <valString>MULTILINE
 %token VAR
 %token CONST
+%token DEFINE
 %token VALUE
 %token LPAREN
 %token STRINGQUOTE
@@ -76,7 +76,6 @@ void deleteNewLines(char *);
 %token CLOSECURLYBRACKET
 %token BOOLEAN
 %token CHAR
-%token COUT
 %token <valString> STRING
 %token <valString> STRINGV
 %token <valString> QUOTESTRING
@@ -84,6 +83,7 @@ void deleteNewLines(char *);
 %token FALSEVAL
 %token <valString> INTNUM
 %token <valString> REALNUM
+%token RETURN
 
 %left SEMICOLON
 %left EQ
@@ -94,9 +94,8 @@ void deleteNewLines(char *);
 %left AND OR
 %right NOT
 
-%type constantes constdef
-%type cabecera variables vardef
-%type <valString> names values
+%type cabecera vardef
+%type <valString>  values
 %type <valInt> type
 %type <valString> lines_program line_program
 %type <valString> contentWrite programa
@@ -106,35 +105,39 @@ void deleteNewLines(char *);
 %start S 
 %%
 S : 
-        cabecera constantes variables programa {;}
-        | cabecera constantes programa {;}
-        | cabecera variables programa {;}
-        | cabecera programa {; }
+        /*cabecera subcabecera constantes vardef programa {;}
+        | cabecera subcabecera constantes programa {;}
+        | cabecera subcabecera vardef programa {;}
+        cabecera subcabecera programa {; }*/
+        cabecera comment subcabecera comment programa {;}
+
 ;
 
+comment:
+         COMMENTLINE {;}
+        | MULTILINE {;}
+        | {;}
+;
+
+subcabecera:
+        STRINGV SEMICOLON {;}
+        |STRINGV subcabecera {;}
+
+;
 cabecera : PROGRAM LOWER STRINGV HIGHER {;}
 		|  PROGRAM STRINGQUOTE {;}
 ;
 
-constantes : 
-        CONST constdef {;}
-;
 constdef : 
-        names EQ TRUEVAL SEMICOLON constdef{;}
-        | names EQ FALSEVAL SEMICOLON constdef{;}
-        | names EQ INTNUM SEMICOLON constdef{;}
-        | names EQ REALNUM SEMICOLON constdef{;}
-        | names EQ QUOTESTRING SEMICOLON constdef{;}
-        | {;}
+        DEFINE STRINGV values SEMICOLON {;}
+        |CONST type STRINGV EQ values SEMICOLON {;}
 ;
-variables : 
-        VAR vardef {}
-;
+
 vardef : 
-        /*type names VALUE values SEMICOLON vardef{;}
-        | type names SEMICOLON vardef {;}
-        | */type names SEMICOLON {;}
-        | type names VALUE values SEMICOLON {;}
+        type STRINGV SEMICOLON {;}
+        | type STRINGV EQ values SEMICOLON comment{;}
+        | type STRINGV EQ STRINGV SEMICOLON comment{;}
+        
 ;
 
 type : 
@@ -145,8 +148,7 @@ type :
         | BOOLEAN {;}
 ;
 
-names : STRINGV {;}
-;
+
 
 values : 
         TRUEVAL {;}
@@ -159,11 +161,14 @@ programa : type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYB
         |type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{;}
         |type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET programa{;}
         |type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET programa{;}
+        | vardef programa {;}
+        | constdef programa {;}
+
 ;
 
 args : 
-		type STRINGV COMMA args
-		|type STRINGV
+	type STRINGV COMMA args
+	|type STRINGV
 ;
 
 lines_program : 
@@ -171,18 +176,30 @@ lines_program :
         | line_program {;}
 ;
 
+
+
 line_program : 
-        COUT LOWER LOWER contentWrite SEMICOLON {;}
-        /*| WRITELN LPAREN contentWrite RPAREN SEMICOLON {;}
+        WRITE LOWER LOWER contentWrite SEMICOLON {;}
+        |WRITE LOWER LOWER contentWrite LOWER LOWER ENDL SEMICOLON{;}
+        /*
         | READ LPAREN contentRead RPAREN SEMICOLON {;}
         | READLN LPAREN contentRead RPAREN SEMICOLON {;}*/
         | assignation {;}
-        | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET ELSE OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
-        | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
-        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
+        | IF LPAREN exp RPAREN OPENCURLYBRACKET line_program CLOSECURLYBRACKET line_program {;}
+        | ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET line_program CLOSECURLYBRACKET line_program {;}
+        | ELSE OPENCURLYBRACKET line_program CLOSECURLYBRACKET {;}
+        /*| IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET ELSE OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
+        | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
+        | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}*/
+        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
+        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON assignation  RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
+        | DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON{;}
         | WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{;}
         | COMMENTLINE {;}
         | MULTILINE {;}
+        | vardef {;}
+        | constdef {;}
+        | RETURN exp SEMICOLON {;}
 ;
 
 contentWrite : 
@@ -197,6 +214,7 @@ contentWrite :
 
 assignation :
         STRINGV EQ exp SEMICOLON {;}
+        |STRINGV EQ exp {;}
 ;
 
 exp : 
@@ -213,9 +231,9 @@ term :
 
 operand : 
         PLUS {;}
-		|PLUS operand {;}
+	|PLUS operand {;}
         |HYPHEN {;}
-		|HYPHEN operand {;}
+	|HYPHEN operand {;}
         |PROD {;}
         |DIV {;}
         |DIVINT {;}

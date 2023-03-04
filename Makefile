@@ -1,5 +1,5 @@
 FUENTE = scanner
-PRUEBA = prueba2.cpp
+PRUEBA = hola.cpp
 
 all: compile run
 
