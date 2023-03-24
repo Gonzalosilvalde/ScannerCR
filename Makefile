@@ -8,10 +8,7 @@ compile:
 	bison -o $(FUENTE).tab.c $(FUENTE).y -yd --report=all -v
 	gcc -o $(FUENTE) list.o lex.yy.c $(FUENTE).tab.c -lfl -ly -g
 
-compile2:
-	flex $(FUENTE).l
-	bison -o $(FUENTE).tab.c $(FUENTE).y -yd -v -g
-	gcc -o $(FUENTE) lex.yy.c $(FUENTE).tab.c -lfl -ly
+
 
 run:
 	./$(FUENTE) $(PRUEBA) 

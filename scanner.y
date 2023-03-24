@@ -101,7 +101,8 @@ void deleteNewLines(char *);
 %type <valString>  values
 %type <valInt> type
 %type <valString> lines_program line_program
-%type <valString> contentWrite programa
+%type <valString> contentWrite programa 
+%type <valString> comment
 %type <valString> assignation atom
 %type <valString> operand 
 %type <valString> exp term
@@ -113,17 +114,26 @@ S :
         | cabecera subcabecera vardef programa {;}
         cabecera subcabecera programa {; }*/
         cabecera comment subcabecera comment programa { 
-                FILE *fp = fopen(outputName, "a");
-        if(fp!=NULL){
-                fputs("", fp);
-                fclose(fp);
-        };}
+                
+                FILE *fp = fopen(outputName, "w");
+				char * variables = getVariables(&typelist);
+                
+                if (fp!=NULL) {
+                    fputs(strcat($2,"\n"),fp);
+                    fputs(variables, fp);
+                    fclose(fp);    
+                }
+                free($5);
+        }
         
 
 ;
 
 comment:
-         COMMENTLINE {;}
+         COMMENTLINE {
+                deleteNewLines($1);
+                $$ = $1;
+                }
         | MULTILINE {;}
         | {;}
         
@@ -177,7 +187,7 @@ vardef :
                 Node node;
                 strcpy(node.name, $2);
                 char value[10];
-                node.isConstant = 1;
+                node.isConstant = 0;
                 node.isValue = 1;
                 node.type = $1;
                 strcpy(node.value, $4);
@@ -189,7 +199,7 @@ vardef :
                 Node node;
                 strcpy(node.name, $2);
                 char value[10];
-                node.isConstant = 1;
+                node.isConstant = 0;
                 node.isValue = 1;
                 node.type = $1;
                 strcpy(node.value, $4);
@@ -217,14 +227,32 @@ values :
         | REALNUM {$$ = $1;}
         | QUOTESTRING {;}
 ;
-programa : type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment {;}
-        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment{;}
-        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment programa{;}
-        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment programa{;}
-        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment programa {;}
-        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment programa {;}
-        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment  {;}
-        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment  {;}
+programa : type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment {
+                ;
+                
+                
+                }
+        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment{
+                ;
+                }
+        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment programa{
+                ;
+                }
+        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment programa{
+                ;
+                }
+        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment programa {
+                ;
+                }
+        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment programa {
+                ;
+        }
+        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment  {
+                ;
+        }
+        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment  {
+                ;
+        }
         | vardef programa {;}
         | constdef programa {;}
         
@@ -232,13 +260,23 @@ programa : type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYB
 ;
 
 args : 
-	type STRINGV COMMA args
-	|type STRINGV
+	type STRINGV COMMA args {;}
+	|type STRINGV {;}
 ;
 
 lines_program : 
-        line_program lines_program {;}
-        | line_program {;}
+        line_program lines_program {
+                char * final = malloc(strlen($1) * sizeof(char) + strlen($2) * sizeof(char) + sizeof("\n") + 3);
+                strcpy(final, $1);
+                strcat(final, "\n");
+                strcat(final, $2);
+                free($1);
+                free($2);
+                $$ = final;
+                }
+        | line_program {
+                $$ = $1;
+                }
 ;
 
 
@@ -271,8 +309,42 @@ line_program :
 ;
 
 contentWrite : 
-        contentWrite COMMA QUOTESTRING {;}
-        | contentWrite COMMA STRINGV {;}
+        contentWrite COMMA QUOTESTRING {
+			deleteQuotes($3);
+			char * final = malloc ( strlen($1) * sizeof(char) + strlen($3) * sizeof(char) +1);
+			strcpy(final, $1);
+			strcat(final, $3);
+			free($1);
+			free($3);
+			$$ = final;
+		}//para los printf
+        | contentWrite PLUS STRINGV {
+			deleteQuotes($3);
+			char * final = malloc ( strlen($1) * sizeof(char) + strlen($3) * sizeof(char) +1);
+			strcpy(final, $1);
+			strcat(final, $3);
+			free($1);
+			free($3);
+			$$ = final;
+		}//para los cout
+		| contentWrite COMMA STRINGV {
+			if(!checkName(&typelist,$3)) {
+					printf("Error: Variable %s no declarada\n", $3);
+					yyclearin;
+					exit(0); 
+			}     
+			NameNode node;
+			strcpy(node.name, $3);
+			InsertElementN (&queue, &node);
+			int type = SearchType(&typelist, $3);
+			char * typeref = malloc(strlen($1) * sizeof(char) + sizeof("%lf") + 1);
+			char * ty = getRef(type);
+			strcpy(typeref, $1);
+			strcat(typeref, ty);
+			free($1);
+			free(ty);
+			$$ = typeref;
+		}//para los printf
         | QUOTESTRING {;}
         | STRINGV {$$ = strdup($1);}
 ;
@@ -281,27 +353,80 @@ contentWrite :
 ;*/
 
 assignation :
-        STRINGV EQ exp SEMICOLON {;}
-        |STRINGV EQ exp {;}
+//STRINGV COLON EQ exp SEMICOLON
+        STRINGV EQ exp SEMICOLON {
+			if ((!checkName(&typelist, $1))){
+                        printf("Error: Variable %s no declarada\n", $1);
+                        yyclearin;
+                        exit(0);
+                }
+                if(checkConstant(&typelist, $1)) {
+                        printf("Error: %s es una constante, no puedes reasignar su valor\n", $1);
+                        yyclearin;
+                        exit(0);  
+                }
+                if((($3[0] == '\"') && ($3[strlen($3)-1] == '\"')) || ((checkName(&typelist, $3)) && SearchType(&typelist, $3))){
+                        char * final = malloc(strlen($1) * sizeof(char) + sizeof("strcpy(,)") + strlen($3) * sizeof(char) + sizeof(";") + 1);
+                        strcpy(final, "strcpy(");
+                        strcat(final, $1);
+                        strcat(final, ",");
+                        strcat(final, $3);
+                        strcat(final, ");");
+                        $$ = final;
+                }else{
+                        char * final = malloc(strlen($1) * sizeof(char) + sizeof(" = ") + strlen($3) * sizeof(char) + sizeof(";") + 1);
+                        strcpy(final, $1);
+                        strcat(final, " = ");
+                        strcat(final, $3);
+                        strcat(final, ";"); 
+                        $$ = final;
+                }
+		}
+
 ;
 
 exp : //exp operand term {;}
-        term {;}
+        term {
+			$$ = $1;	
+			}
 
 ;
 
 term :
-        atom {;}
-        | LPAREN exp RPAREN {;}
-        | HYPHEN atom {;}
-        | EX exp {;}
+        atom {
+			$$ = $1;
+			}
+        | LPAREN exp RPAREN {
+			char * final = malloc(strlen($2) * sizeof(char) + sizeof("()") + 1);
+			strcpy(final, "(");
+			strcat(final, $2);
+			strcat(final, ")");
+			free($2);
+			$$ = final;
+		}
+        | HYPHEN atom {
+			char * final = malloc(strlen($2) * sizeof(char) + sizeof("-()") + 1);
+                strcpy(final, "-(");
+                strcat(final, $2);
+                strcat(final, ")");
+                free($2);
+                $$ = final;
+		}
+        | EX exp {
+			char * final = malloc(strlen($2) * sizeof(char) + sizeof("!()") + 1);
+                strcpy(final, "!(");
+                strcat(final, $2);
+                strcat(final, ")");
+                free($2);
+                $$ = final;
+		}
 ;
 
 operand : 
         PLUS {$$ = strdup(" + ");}
-	|PLUS EQ {$$ = strdup(" += ");;}
+		|PLUS EQ {$$ = strdup(" += ");;}
         |HYPHEN {$$ = strdup(" - ");}
-	|HYPHEN EQ {$$ = strdup(" -= ");;}
+		|HYPHEN EQ {$$ = strdup(" -= ");;}
         |PROD {$$ = strdup(" * ");}
         |DIV {$$ = strdup(" / ");}
         |DIVINT {$$ = strdup(" / ");}
@@ -317,8 +442,17 @@ operand :
 
 atom :
 
-        STRINGV {;}
-        | values {;}
+        STRINGV {
+			if (!checkName(&typelist, $1)){
+                        printf("Error: Variable %s no declarada\n", $1);
+                        yyclearin;
+                        exit(0);
+            }
+            $$ = $1;
+		}
+        | values {
+			$$ = $1;
+		}
 ;
 
 %%
@@ -527,6 +661,6 @@ int main(int argc, char *argv[]){
                         break;
 		default: printf("ERROR: Demasiados argumentos.\nSyntax : ./traductorP <archivoPascal> [-s size_string]\n\n");
 	}
-        ShowListT(&typelist);
+        //ShowListT(&typelist);
 	return 0;
 }

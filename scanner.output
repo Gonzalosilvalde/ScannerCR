@@ -82,12 +82,12 @@ Grammar
    52             | RETURN exp SEMICOLON
 
    53 contentWrite: contentWrite COMMA QUOTESTRING
-   54             | contentWrite COMMA STRINGV
-   55             | QUOTESTRING
-   56             | STRINGV
+   54             | contentWrite PLUS STRINGV
+   55             | contentWrite COMMA STRINGV
+   56             | QUOTESTRING
+   57             | STRINGV
 
-   57 assignation: STRINGV EQ exp SEMICOLON
-   58            | STRINGV EQ exp
+   58 assignation: STRINGV EQ exp SEMICOLON
 
    59 exp: term
 
@@ -139,15 +139,15 @@ Terminals, with rules where they appear
     OR (274) 78
     LOWER (275) 7 38 39 72 74
     HIGHER (276) 7 73 75
-    PLUS (277) 64 65
+    PLUS (277) 54 64 65
     HYPHEN (278) 62 66 67
     PROD (279) 68
     DIV (280) 69
     DIVINT (281) 70
     MOD (282) 71
-    COMMA (283) 34 53 54
+    COMMA (283) 34 53 55
     DOT (284)
-    EQ (285) 10 12 13 44 45 57 58 65 67 74 75 76
+    EQ (285) 10 12 13 44 45 58 65 67 74 75 76
     COMMENTLINE <valString> (286) 2 48
     MULTILINE <valString> (287) 3 49
     VAR (288)
@@ -158,7 +158,7 @@ Terminals, with rules where they appear
     STRINGQUOTE (293) 8
     RPAREN (294) 24 25 26 27 28 29 30 31 41 42 44 45 46 47 61
     COLON (295)
-    SEMICOLON (296) 5 9 10 11 12 13 38 39 44 45 46 52 57
+    SEMICOLON (296) 5 9 10 11 12 13 38 39 44 45 46 52 58
     INTEGER (297) 14
     FLOAT (298) 15
     EX (299) 63
@@ -167,8 +167,8 @@ Terminals, with rules where they appear
     BOOLEAN (302) 18
     CHAR (303) 17
     STRING <valString> (304) 16
-    STRINGV <valString> (305) 5 6 7 9 10 11 12 13 24 25 26 27 28 29 30 31 34 35 44 45 54 56 57 58 79
-    QUOTESTRING <valString> (306) 23 53 55
+    STRINGV <valString> (305) 5 6 7 9 10 11 12 13 24 25 26 27 28 29 30 31 34 35 44 45 54 55 57 58 79
+    QUOTESTRING <valString> (306) 23 53 56
     TRUEVAL (307) 19
     FALSEVAL (308) 20
     INTNUM <valString> (309) 21 44 45
@@ -183,7 +183,7 @@ Nonterminals, with rules where they appear
     S (58)
         on left: 1
         on right: 0
-    comment (59)
+    comment <valString> (59)
         on left: 2 3 4
         on right: 1 24 25 26 27 28 29 30 31
     subcabecera (60)
@@ -217,14 +217,14 @@ Nonterminals, with rules where they appear
         on left: 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52
         on right: 36 37 43
     contentWrite <valString> (70)
-        on left: 53 54 55 56
-        on right: 38 39 53 54
+        on left: 53 54 55 56 57
+        on right: 38 39 53 54 55
     assignation <valString> (71)
-        on left: 57 58
+        on left: 58
         on right: 40 45
     exp <valString> (72)
         on left: 59
-        on right: 41 42 44 45 46 47 52 57 58 61 63
+        on right: 41 42 44 45 46 47 52 58 61 63
     term <valString> (73)
         on left: 60 61 62 63
         on right: 59
@@ -864,8 +864,7 @@ State 53
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE              shift, and go to state 57
     FOR                shift, and go to state 58
@@ -999,8 +998,7 @@ State 65
 
 State 66
 
-   57 assignation: STRINGV • EQ exp SEMICOLON
-   58            | STRINGV • EQ exp
+   58 assignation: STRINGV • EQ exp SEMICOLON
 
     EQ  shift, and go to state 84
 
@@ -1099,8 +1097,7 @@ State 72
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE        shift, and go to state 57
     FOR          shift, and go to state 58
@@ -1191,8 +1188,7 @@ State 75
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE              shift, and go to state 57
     FOR                shift, and go to state 58
@@ -1302,8 +1298,7 @@ State 78
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE        shift, and go to state 57
     FOR          shift, and go to state 58
@@ -1406,8 +1401,7 @@ State 82
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE        shift, and go to state 57
     FOR          shift, and go to state 58
@@ -1482,8 +1476,7 @@ State 84
    21       | • INTNUM
    22       | • REALNUM
    23       | • QUOTESTRING
-   57 assignation: STRINGV EQ • exp SEMICOLON
-   58            | STRINGV EQ • exp
+   58 assignation: STRINGV EQ • exp SEMICOLON
    59 exp: • term
    60 term: • atom
    61     | • LPAREN exp RPAREN
@@ -1720,9 +1713,10 @@ State 102
    38 line_program: WRITE LOWER LOWER • contentWrite SEMICOLON
    39             | WRITE LOWER LOWER • contentWrite LOWER LOWER ENDL SEMICOLON
    53 contentWrite: • contentWrite COMMA QUOTESTRING
-   54             | • contentWrite COMMA STRINGV
-   55             | • QUOTESTRING
-   56             | • STRINGV
+   54             | • contentWrite PLUS STRINGV
+   55             | • contentWrite COMMA STRINGV
+   56             | • QUOTESTRING
+   57             | • STRINGV
 
     STRINGV      shift, and go to state 118
     QUOTESTRING  shift, and go to state 119
@@ -1785,12 +1779,9 @@ State 106
 
 State 107
 
-   57 assignation: STRINGV EQ exp • SEMICOLON
-   58            | STRINGV EQ exp •  [WHILE, FOR, DO, WRITE, IF, ELSE, COMMENTLINE, MULTILINE, CONST, DEFINE, RPAREN, INTEGER, FLOAT, CLOSECURLYBRACKET, BOOLEAN, CHAR, STRING, STRINGV, RETURN]
+   58 assignation: STRINGV EQ exp • SEMICOLON
 
     SEMICOLON  shift, and go to state 124
-
-    $default  reduce using rule 58 (assignation)
 
 
 State 108
@@ -1943,16 +1934,16 @@ State 117
 
 State 118
 
-   56 contentWrite: STRINGV •
+   57 contentWrite: STRINGV •
 
-    $default  reduce using rule 56 (contentWrite)
+    $default  reduce using rule 57 (contentWrite)
 
 
 State 119
 
-   55 contentWrite: QUOTESTRING •
+   56 contentWrite: QUOTESTRING •
 
-    $default  reduce using rule 55 (contentWrite)
+    $default  reduce using rule 56 (contentWrite)
 
 
 State 120
@@ -1960,25 +1951,27 @@ State 120
    38 line_program: WRITE LOWER LOWER contentWrite • SEMICOLON
    39             | WRITE LOWER LOWER contentWrite • LOWER LOWER ENDL SEMICOLON
    53 contentWrite: contentWrite • COMMA QUOTESTRING
-   54             | contentWrite • COMMA STRINGV
+   54             | contentWrite • PLUS STRINGV
+   55             | contentWrite • COMMA STRINGV
 
     LOWER      shift, and go to state 132
-    COMMA      shift, and go to state 133
-    SEMICOLON  shift, and go to state 134
+    PLUS       shift, and go to state 133
+    COMMA      shift, and go to state 134
+    SEMICOLON  shift, and go to state 135
 
 
 State 121
 
    41 line_program: IF LPAREN exp RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 135
+    OPENCURLYBRACKET  shift, and go to state 136
 
 
 State 122
 
    42 line_program: ELSE IF LPAREN exp • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    RPAREN  shift, and go to state 136
+    RPAREN  shift, and go to state 137
 
 
 State 123
@@ -1990,9 +1983,9 @@ State 123
 
 State 124
 
-   57 assignation: STRINGV EQ exp SEMICOLON •
+   58 assignation: STRINGV EQ exp SEMICOLON •
 
-    $default  reduce using rule 57 (assignation)
+    $default  reduce using rule 58 (assignation)
 
 
 State 125
@@ -2054,7 +2047,7 @@ State 128
     constdef  go to state 24
     vardef    go to state 25
     type      go to state 26
-    programa  go to state 137
+    programa  go to state 138
 
 
 State 129
@@ -2087,8 +2080,7 @@ State 129
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE        shift, and go to state 57
     FOR          shift, and go to state 58
@@ -2111,7 +2103,7 @@ State 129
     constdef       go to state 68
     vardef         go to state 69
     type           go to state 70
-    lines_program  go to state 138
+    lines_program  go to state 139
     line_program   go to state 72
     assignation    go to state 73
 
@@ -2121,40 +2113,47 @@ State 130
    44 line_program: FOR LPAREN type STRINGV EQ • INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    45             | FOR LPAREN type STRINGV EQ • INTNUM SEMICOLON exp SEMICOLON assignation RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    INTNUM  shift, and go to state 139
+    INTNUM  shift, and go to state 140
 
 
 State 131
 
    46 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE • LPAREN exp RPAREN SEMICOLON
 
-    LPAREN  shift, and go to state 140
+    LPAREN  shift, and go to state 141
 
 
 State 132
 
    39 line_program: WRITE LOWER LOWER contentWrite LOWER • LOWER ENDL SEMICOLON
 
-    LOWER  shift, and go to state 141
+    LOWER  shift, and go to state 142
 
 
 State 133
 
-   53 contentWrite: contentWrite COMMA • QUOTESTRING
-   54             | contentWrite COMMA • STRINGV
+   54 contentWrite: contentWrite PLUS • STRINGV
 
-    STRINGV      shift, and go to state 142
-    QUOTESTRING  shift, and go to state 143
+    STRINGV  shift, and go to state 143
 
 
 State 134
+
+   53 contentWrite: contentWrite COMMA • QUOTESTRING
+   55             | contentWrite COMMA • STRINGV
+
+    STRINGV      shift, and go to state 144
+    QUOTESTRING  shift, and go to state 145
+
+
+State 135
 
    38 line_program: WRITE LOWER LOWER contentWrite SEMICOLON •
 
     $default  reduce using rule 38 (line_program)
 
 
-State 135
+State 136
 
     9 constdef: • DEFINE STRINGV values SEMICOLON
    10         | • CONST type STRINGV EQ values SEMICOLON
@@ -2184,8 +2183,7 @@ State 135
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE        shift, and go to state 57
     FOR          shift, and go to state 58
@@ -2208,41 +2206,41 @@ State 135
     constdef       go to state 68
     vardef         go to state 69
     type           go to state 70
-    lines_program  go to state 144
+    lines_program  go to state 146
     line_program   go to state 72
     assignation    go to state 73
 
 
-State 136
+State 137
 
    42 line_program: ELSE IF LPAREN exp RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 145
+    OPENCURLYBRACKET  shift, and go to state 147
 
 
-State 137
+State 138
 
    27 programa: type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment programa •
 
     $default  reduce using rule 27 (programa)
 
 
-State 138
+State 139
 
    47 line_program: WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    CLOSECURLYBRACKET  shift, and go to state 146
+    CLOSECURLYBRACKET  shift, and go to state 148
 
 
-State 139
+State 140
 
    44 line_program: FOR LPAREN type STRINGV EQ INTNUM • SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    45             | FOR LPAREN type STRINGV EQ INTNUM • SEMICOLON exp SEMICOLON assignation RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    SEMICOLON  shift, and go to state 147
+    SEMICOLON  shift, and go to state 149
 
 
-State 140
+State 141
 
    19 values: • TRUEVAL
    20       | • FALSEVAL
@@ -2269,40 +2267,47 @@ State 140
     REALNUM      shift, and go to state 38
 
     values  go to state 89
-    exp     go to state 148
+    exp     go to state 150
     term    go to state 91
     atom    go to state 92
 
 
-State 141
+State 142
 
    39 line_program: WRITE LOWER LOWER contentWrite LOWER LOWER • ENDL SEMICOLON
 
-    ENDL  shift, and go to state 149
+    ENDL  shift, and go to state 151
 
 
-State 142
+State 143
 
-   54 contentWrite: contentWrite COMMA STRINGV •
+   54 contentWrite: contentWrite PLUS STRINGV •
 
     $default  reduce using rule 54 (contentWrite)
 
 
-State 143
+State 144
+
+   55 contentWrite: contentWrite COMMA STRINGV •
+
+    $default  reduce using rule 55 (contentWrite)
+
+
+State 145
 
    53 contentWrite: contentWrite COMMA QUOTESTRING •
 
     $default  reduce using rule 53 (contentWrite)
 
 
-State 144
+State 146
 
    41 line_program: IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    CLOSECURLYBRACKET  shift, and go to state 150
+    CLOSECURLYBRACKET  shift, and go to state 152
 
 
-State 145
+State 147
 
     9 constdef: • DEFINE STRINGV values SEMICOLON
    10         | • CONST type STRINGV EQ values SEMICOLON
@@ -2332,8 +2337,7 @@ State 145
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE        shift, and go to state 57
     FOR          shift, and go to state 58
@@ -2356,19 +2360,19 @@ State 145
     constdef       go to state 68
     vardef         go to state 69
     type           go to state 70
-    lines_program  go to state 151
+    lines_program  go to state 153
     line_program   go to state 72
     assignation    go to state 73
 
 
-State 146
+State 148
 
    47 line_program: WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
     $default  reduce using rule 47 (line_program)
 
 
-State 147
+State 149
 
    19 values: • TRUEVAL
    20       | • FALSEVAL
@@ -2396,92 +2400,90 @@ State 147
     REALNUM      shift, and go to state 38
 
     values  go to state 89
-    exp     go to state 152
+    exp     go to state 154
     term    go to state 91
     atom    go to state 92
 
 
-State 148
+State 150
 
    46 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp • RPAREN SEMICOLON
 
-    RPAREN  shift, and go to state 153
+    RPAREN  shift, and go to state 155
 
 
-State 149
+State 151
 
    39 line_program: WRITE LOWER LOWER contentWrite LOWER LOWER ENDL • SEMICOLON
 
-    SEMICOLON  shift, and go to state 154
+    SEMICOLON  shift, and go to state 156
 
 
-State 150
+State 152
 
    41 line_program: IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
     $default  reduce using rule 41 (line_program)
 
 
-State 151
+State 153
 
    42 line_program: ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    CLOSECURLYBRACKET  shift, and go to state 155
+    CLOSECURLYBRACKET  shift, and go to state 157
 
 
-State 152
+State 154
 
    44 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp • SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    45             | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp • SEMICOLON assignation RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    SEMICOLON  shift, and go to state 156
+    SEMICOLON  shift, and go to state 158
 
 
-State 153
+State 155
 
    46 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN • SEMICOLON
 
-    SEMICOLON  shift, and go to state 157
+    SEMICOLON  shift, and go to state 159
 
 
-State 154
+State 156
 
    39 line_program: WRITE LOWER LOWER contentWrite LOWER LOWER ENDL SEMICOLON •
 
     $default  reduce using rule 39 (line_program)
 
 
-State 155
+State 157
 
    42 line_program: ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
     $default  reduce using rule 42 (line_program)
 
 
-State 156
+State 158
 
    44 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON • STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    45             | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON • assignation RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
-    STRINGV  shift, and go to state 158
+    STRINGV  shift, and go to state 160
 
-    assignation  go to state 159
+    assignation  go to state 161
 
 
-State 157
+State 159
 
    46 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON •
 
     $default  reduce using rule 46 (line_program)
 
 
-State 158
+State 160
 
    44 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV • operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
-   57 assignation: STRINGV • EQ exp SEMICOLON
-   58            | STRINGV • EQ exp
+   58 assignation: STRINGV • EQ exp SEMICOLON
    64 operand: • PLUS
    65        | • PLUS EQ
    66        | • HYPHEN
@@ -2498,119 +2500,118 @@ State 158
    77        | • AND
    78        | • OR
 
-    AND     shift, and go to state 160
-    OR      shift, and go to state 161
-    LOWER   shift, and go to state 162
-    HIGHER  shift, and go to state 163
-    PLUS    shift, and go to state 164
-    HYPHEN  shift, and go to state 165
-    PROD    shift, and go to state 166
-    DIV     shift, and go to state 167
-    DIVINT  shift, and go to state 168
-    MOD     shift, and go to state 169
-    EQ      shift, and go to state 170
+    AND     shift, and go to state 162
+    OR      shift, and go to state 163
+    LOWER   shift, and go to state 164
+    HIGHER  shift, and go to state 165
+    PLUS    shift, and go to state 166
+    HYPHEN  shift, and go to state 167
+    PROD    shift, and go to state 168
+    DIV     shift, and go to state 169
+    DIVINT  shift, and go to state 170
+    MOD     shift, and go to state 171
+    EQ      shift, and go to state 172
 
-    operand  go to state 171
+    operand  go to state 173
 
 
-State 159
+State 161
 
    45 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON assignation • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    RPAREN  shift, and go to state 172
+    RPAREN  shift, and go to state 174
 
 
-State 160
+State 162
 
    77 operand: AND •
 
     $default  reduce using rule 77 (operand)
 
 
-State 161
+State 163
 
    78 operand: OR •
 
     $default  reduce using rule 78 (operand)
 
 
-State 162
+State 164
 
    72 operand: LOWER •  [RPAREN]
    74        | LOWER • EQ
 
-    EQ  shift, and go to state 173
+    EQ  shift, and go to state 175
 
     $default  reduce using rule 72 (operand)
 
 
-State 163
+State 165
 
    73 operand: HIGHER •  [RPAREN]
    75        | HIGHER • EQ
 
-    EQ  shift, and go to state 174
+    EQ  shift, and go to state 176
 
     $default  reduce using rule 73 (operand)
 
 
-State 164
+State 166
 
    64 operand: PLUS •  [RPAREN]
    65        | PLUS • EQ
 
-    EQ  shift, and go to state 175
+    EQ  shift, and go to state 177
 
     $default  reduce using rule 64 (operand)
 
 
-State 165
+State 167
 
    66 operand: HYPHEN •  [RPAREN]
    67        | HYPHEN • EQ
 
-    EQ  shift, and go to state 176
+    EQ  shift, and go to state 178
 
     $default  reduce using rule 66 (operand)
 
 
-State 166
+State 168
 
    68 operand: PROD •
 
     $default  reduce using rule 68 (operand)
 
 
-State 167
+State 169
 
    69 operand: DIV •
 
     $default  reduce using rule 69 (operand)
 
 
-State 168
+State 170
 
    70 operand: DIVINT •
 
     $default  reduce using rule 70 (operand)
 
 
-State 169
+State 171
 
    71 operand: MOD •
 
     $default  reduce using rule 71 (operand)
 
 
-State 170
+State 172
 
    19 values: • TRUEVAL
    20       | • FALSEVAL
    21       | • INTNUM
    22       | • REALNUM
    23       | • QUOTESTRING
-   57 assignation: STRINGV EQ • exp SEMICOLON
-   58            | STRINGV EQ • exp
+   58 assignation: STRINGV EQ • exp SEMICOLON
    59 exp: • term
    60 term: • atom
    61     | • LPAREN exp RPAREN
@@ -2638,56 +2639,56 @@ State 170
     atom    go to state 92
 
 
-State 171
+State 173
 
    44 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    RPAREN  shift, and go to state 177
+    RPAREN  shift, and go to state 179
 
 
-State 172
+State 174
 
    45 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON assignation RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 178
+    OPENCURLYBRACKET  shift, and go to state 180
 
 
-State 173
+State 175
 
    74 operand: LOWER EQ •
 
     $default  reduce using rule 74 (operand)
 
 
-State 174
+State 176
 
    75 operand: HIGHER EQ •
 
     $default  reduce using rule 75 (operand)
 
 
-State 175
+State 177
 
    65 operand: PLUS EQ •
 
     $default  reduce using rule 65 (operand)
 
 
-State 176
+State 178
 
    67 operand: HYPHEN EQ •
 
     $default  reduce using rule 67 (operand)
 
 
-State 177
+State 179
 
    44 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 179
+    OPENCURLYBRACKET  shift, and go to state 181
 
 
-State 178
+State 180
 
     9 constdef: • DEFINE STRINGV values SEMICOLON
    10         | • CONST type STRINGV EQ values SEMICOLON
@@ -2717,8 +2718,7 @@ State 178
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE        shift, and go to state 57
     FOR          shift, and go to state 58
@@ -2741,12 +2741,12 @@ State 178
     constdef       go to state 68
     vardef         go to state 69
     type           go to state 70
-    lines_program  go to state 180
+    lines_program  go to state 182
     line_program   go to state 72
     assignation    go to state 73
 
 
-State 179
+State 181
 
     9 constdef: • DEFINE STRINGV values SEMICOLON
    10         | • CONST type STRINGV EQ values SEMICOLON
@@ -2776,8 +2776,7 @@ State 179
    50             | • vardef
    51             | • constdef
    52             | • RETURN exp SEMICOLON
-   57 assignation: • STRINGV EQ exp SEMICOLON
-   58            | • STRINGV EQ exp
+   58 assignation: • STRINGV EQ exp SEMICOLON
 
     WHILE        shift, and go to state 57
     FOR          shift, and go to state 58
@@ -2800,33 +2799,33 @@ State 179
     constdef       go to state 68
     vardef         go to state 69
     type           go to state 70
-    lines_program  go to state 181
+    lines_program  go to state 183
     line_program   go to state 72
     assignation    go to state 73
 
 
-State 180
+State 182
 
    45 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON assignation RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    CLOSECURLYBRACKET  shift, and go to state 182
+    CLOSECURLYBRACKET  shift, and go to state 184
 
 
-State 181
+State 183
 
    44 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    CLOSECURLYBRACKET  shift, and go to state 183
+    CLOSECURLYBRACKET  shift, and go to state 185
 
 
-State 182
+State 184
 
    45 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON assignation RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
     $default  reduce using rule 45 (line_program)
 
 
-State 183
+State 185
 
    44 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
