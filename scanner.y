@@ -3,20 +3,23 @@
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+#include <ctype.h>
+#include "list.h"
+
 extern int yylex(void);
 
-char outputName[100] = "salida.c";
+char outputName[100] = "salida.rs";
 char sizeS[8] = "200";
-/*
+
 //typeList será la tabla de tipos y constantes.
 TypeList typelist;
 //queue será la cola a través de la cual recogeremos y volcaremos las variables de los printf 
 NodeList queue;
-*/
+
 void yyerror(char const *);
-/*char * getVariables(TypeList *);
+char * getVariables(TypeList *);
 char * getEndings(NodeList *);
-char * getEndingsR(NodeList *);*/
+char * getEndingsR(NodeList *);
 char * getRef (int);
 void deleteQuotes (char *);
 void deleteCurly(char *);
@@ -47,7 +50,6 @@ void deleteNewLines(char *);
 %token ELSE
 %token AND
 %token OR
-%token NOT
 %token LOWER
 %token HIGHER
 %token PLUS
@@ -72,6 +74,7 @@ void deleteNewLines(char *);
 %token SEMICOLON
 %token INTEGER
 %token FLOAT
+%token EX
 %token OPENCURLYBRACKET
 %token CLOSECURLYBRACKET
 %token BOOLEAN
@@ -92,7 +95,7 @@ void deleteNewLines(char *);
 %left PROD DIV
 %left DIVINT MOD
 %left AND OR
-%right NOT
+
 
 %type cabecera vardef
 %type <valString>  values
@@ -109,7 +112,13 @@ S :
         | cabecera subcabecera constantes programa {;}
         | cabecera subcabecera vardef programa {;}
         cabecera subcabecera programa {; }*/
-        cabecera comment subcabecera comment programa {;}
+        cabecera comment subcabecera comment programa { 
+                FILE *fp = fopen(outputName, "a");
+        if(fp!=NULL){
+                fputs("", fp);
+                fclose(fp);
+        };}
+        
 
 ;
 
@@ -117,6 +126,7 @@ comment:
          COMMENTLINE {;}
         | MULTILINE {;}
         | {;}
+        
 ;
 
 subcabecera:
@@ -129,40 +139,95 @@ cabecera : PROGRAM LOWER STRINGV HIGHER {;}
 ;
 
 constdef : 
-        DEFINE STRINGV values SEMICOLON {;}
-        |CONST type STRINGV EQ values SEMICOLON {;}
+        DEFINE STRINGV values SEMICOLON {
+                Node node;
+                strcpy(node.name, $2);
+                node.isConstant = 1;
+                node.isValue = 1;
+                node.type = 0;
+                strcpy(node.value, $3);
+                InsertElementT(&typelist, &node);
+                free($2);
+                free($3);
+                }
+        |CONST type STRINGV EQ values SEMICOLON {
+                Node node;
+                strcpy(node.name, $3);
+                node.isConstant = 1;
+                node.isValue = 1;
+                node.type = $2;
+                strcpy(node.value, $5);
+                InsertElementT(&typelist, &node);
+                free($3);
+                free($5);
+                }
 ;
 
 vardef : 
-        type STRINGV SEMICOLON {;}
-        | type STRINGV EQ values SEMICOLON comment{;}
-        | type STRINGV EQ STRINGV SEMICOLON comment{;}
+        type STRINGV SEMICOLON {
+                Node node;
+                strcpy(node.name, $2);
+                node.type = $1;
+                node.isValue = 0;
+                node.isConstant = 0;
+                InsertElementT(&typelist, &node);
+                free($2);
+                }
+        | type STRINGV EQ values SEMICOLON {
+                Node node;
+                strcpy(node.name, $2);
+                char value[10];
+                node.isConstant = 1;
+                node.isValue = 1;
+                node.type = $1;
+                strcpy(node.value, $4);
+                InsertElementT(&typelist, &node);
+                free($2);
+                free($4);
+                }
+        | type STRINGV EQ STRINGV SEMICOLON {
+                Node node;
+                strcpy(node.name, $2);
+                char value[10];
+                node.isConstant = 1;
+                node.isValue = 1;
+                node.type = $1;
+                strcpy(node.value, $4);
+                InsertElementT(&typelist, &node);
+                free($2);
+                free($4);
+                }
         
 ;
 
 type : 
-        INTEGER {;}
-        | FLOAT {;}
-        | STRING {;}
-        | CHAR {;}
-        | BOOLEAN {;}
+        INTEGER {$$ = 0;}
+        | FLOAT {$$ = 1;}
+        | STRING {$$ = 2;}
+        | CHAR {$$ = 3;}
+        | BOOLEAN {$$ = 0;}
 ;
 
 
 
 values : 
-        TRUEVAL {;}
-        | FALSEVAL {;}
-        | INTNUM {;}
-        | REALNUM {;}
+        TRUEVAL {$$ = strdup("1");}
+        | FALSEVAL {$$ = strdup("0");}
+        | INTNUM {$$ = $1;}
+        | REALNUM {$$ = $1;}
         | QUOTESTRING {;}
 ;
-programa : type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
-        |type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{;}
-        |type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET programa{;}
-        |type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET programa{;}
+programa : type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment {;}
+        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment{;}
+        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment programa{;}
+        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment programa{;}
+        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment programa {;}
+        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment programa {;}
+        | type STRINGV LPAREN args RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment  {;}
+        | type STRINGV LPAREN RPAREN OPENCURLYBRACKET CLOSECURLYBRACKET comment  {;}
         | vardef programa {;}
         | constdef programa {;}
+        
 
 ;
 
@@ -172,7 +237,7 @@ args :
 ;
 
 lines_program : 
-        lines_program line_program {;}
+        line_program lines_program {;}
         | line_program {;}
 ;
 
@@ -185,13 +250,15 @@ line_program :
         | READ LPAREN contentRead RPAREN SEMICOLON {;}
         | READLN LPAREN contentRead RPAREN SEMICOLON {;}*/
         | assignation {;}
-        | IF LPAREN exp RPAREN OPENCURLYBRACKET line_program CLOSECURLYBRACKET line_program {;}
-        | ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET line_program CLOSECURLYBRACKET line_program {;}
+        | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET /*line_program*/ {;}
+        | ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET /*line_program */{;}
         | ELSE OPENCURLYBRACKET line_program CLOSECURLYBRACKET {;}
         /*| IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET ELSE OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
         | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
         | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}*/
-        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
+        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+                
+                ;}
         | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON assignation  RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {;}
         | DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON{;}
         | WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{;}
@@ -200,13 +267,14 @@ line_program :
         | vardef {;}
         | constdef {;}
         | RETURN exp SEMICOLON {;}
+        
 ;
 
 contentWrite : 
         contentWrite COMMA QUOTESTRING {;}
         | contentWrite COMMA STRINGV {;}
         | QUOTESTRING {;}
-        | STRINGV {;}
+        | STRINGV {$$ = strdup($1);}
 ;
 /*contentRead : 
          STRINGV {; }
@@ -217,35 +285,34 @@ assignation :
         |STRINGV EQ exp {;}
 ;
 
-exp : 
-        exp operand term {;}
-        | term {;}
+exp : //exp operand term {;}
+        term {;}
+
 ;
 
 term :
         atom {;}
         | LPAREN exp RPAREN {;}
         | HYPHEN atom {;}
-        | NOT exp {;}
+        | EX exp {;}
 ;
 
 operand : 
-        PLUS {;}
-	|PLUS operand {;}
-        |HYPHEN {;}
-	|HYPHEN operand {;}
-        |PROD {;}
-        |DIV {;}
-        |DIVINT {;}
-        |MOD {;}
-        |LOWER {;}
-        |HIGHER {;}
-        |LOWER EQ {;}
-        |HIGHER EQ {;}
-        |EQ {;}
-        |LOWER HIGHER { ;}
-        |AND {;}
-        |OR{;}
+        PLUS {$$ = strdup(" + ");}
+	|PLUS EQ {$$ = strdup(" += ");;}
+        |HYPHEN {$$ = strdup(" - ");}
+	|HYPHEN EQ {$$ = strdup(" -= ");;}
+        |PROD {$$ = strdup(" * ");}
+        |DIV {$$ = strdup(" / ");}
+        |DIVINT {$$ = strdup(" / ");}
+        |MOD {$$ = strdup(" % ");}
+        |LOWER {$$ = strdup(" < ");}
+        |HIGHER {$$ = strdup(" > ");}
+        |LOWER EQ {$$ = strdup(" <= ");}
+        |HIGHER EQ {$$ = strdup(" >= ");}
+        |EQ {$$ = strdup(" == ");}
+        |AND {$$ = strdup(" && ");}
+        |OR{$$ = strdup(" || ");;}
 ;
 
 atom :
@@ -258,7 +325,6 @@ atom :
 
 
 /* Funciones auxiliares de borrado de caracteres */
-/*
 void deleteQuotes(char * stringq) {
         int reader = 0; int writer = 0;
 
@@ -300,9 +366,8 @@ void deleteNewLines(char * stringq){
         stringq[writer] = 0;
         return;
 }
-*/
+
 /* Procesa los elementos a incluir en el string de Write */
-/*
 char * getEndings (NodeList * queue) {
         int size = (*queue).end;
         char * final = malloc(size*100*sizeof(char) + size * sizeof("&") + 1);
@@ -317,9 +382,8 @@ char * getEndings (NodeList * queue) {
         }
         return final;
 }
-*/
+
 /* Procesa los elementos a incluir en el string de Read */
-/*
 char * getEndingsR (NodeList * queue) {
         int size = (*queue).end;
         char * final = malloc(size*100*sizeof(char) + size * sizeof("&") + 1);
@@ -337,9 +401,8 @@ char * getEndingsR (NodeList * queue) {
         }
         return final;
 }
-*/
+
 /* Recupera las variables declaradas */
-/*
 char * getVariables (TypeList * queue) {
         int size = (*queue).end;
         char * final = malloc(size * (109*sizeof(char) + sizeof("=;\n") + 100 *sizeof(char) + sizeof("[100]") + sizeof("const ")) +1);
@@ -398,9 +461,8 @@ char * getVariables (TypeList * queue) {
         free(temp);
         return final;
 }
-*/
+
 /*0=int, 1=double, 2=string, 3=char*/
-/*
 char * getRef (int type){
         char * ref = malloc (sizeof("%lf") + 1);
         switch (type){
@@ -423,6 +485,13 @@ int isNumber(char * stringq) {
 }
 
 int main(int argc, char *argv[]){
+        FILE *fp = fopen(outputName, "w");
+        if(fp!=NULL){
+                        
+                        fputs("", fp);
+                        fclose(fp);
+                }
+
         extern FILE *yyin;
         InitializeListT(&typelist);
         InitializeListN(&queue);
@@ -458,34 +527,6 @@ int main(int argc, char *argv[]){
                         break;
 		default: printf("ERROR: Demasiados argumentos.\nSyntax : ./traductorP <archivoPascal> [-s size_string]\n\n");
 	}
-
+        ShowListT(&typelist);
 	return 0;
-}*/
-int main(int argc, char *argv[]) {
-extern FILE *yyin;
-extern FILE **yyout;
-
-	switch (argc) {
-		case 1:	yyin=stdin;
-			yyparse();
-			printf("\n");
-			printf("\033[0;32m");
-			printf("Successful code conversion!\n");
-			printf("\n");
-			break;
-		case 2: yyin = fopen(argv[1], "r");
-			if (yyin == NULL) {
-				printf("\033[0;31m");
-				printf("ERROR: File could not be opened.\n");
-			}
-			else {
-				yyparse();
-				fclose(yyin);
-			}
-			break;
-		default: printf("\033[0;31m");printf("ERROR: Too many arguments.\nSintax: %s [fichero_entrada] \n\n", argv[0]);
-	}
-	
-	return 0;
-	
 }

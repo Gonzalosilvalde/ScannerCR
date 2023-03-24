@@ -33,6 +33,7 @@ VAR {return VAR;}
 \; {return SEMICOLON;}
 \, {return COMMA;}
 \. {return DOT;}
+! {return EX;}
 (?i:if) {return IF;}
 (?i:then) {return THEN;}
 (?i:else) {return ELSE;}
@@ -49,7 +50,6 @@ or {return OR;}
 \/ {return DIV;}
 div {return DIVINT;}
 mod {return MOD;}
-not {return NOT;}
 (?i:cout) {return WRITE;}
 (?i:endl) {return ENDL;}
 stringquote {return STRINGQUOTE;}
