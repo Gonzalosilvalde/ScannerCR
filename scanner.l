@@ -6,7 +6,7 @@
 
 letter [a-zA-Z]
 digit [0-9]
-stringquote \"[^\'\n]*\"
+stringquote \"[^"^\'\n]*\"
 cs #{digit}+
 
 %%
@@ -34,11 +34,11 @@ VAR {return VAR;}
 \, {return COMMA;}
 \. {return DOT;}
 ! {return EX;}
-(?i:if) {return IF;}
+if {return IF;}
 (?i:then) {return THEN;}
 (?i:else) {return ELSE;}
-and {return AND;}
-or {return OR;}
+&& {return AND;}
+"||" {return OR;}
 \< {return LOWER;}
 \> {return HIGHER;}
 (?i:for) {return FOR;}
@@ -56,7 +56,11 @@ stringquote {return STRINGQUOTE;}
 (?i:return) {return RETURN;}
 "#define" {return DEFINE;}
 const {return CONST;}
-({letter}|\_)({letter}|{digit}|\_)* {yylval.valString = strdup(yytext); return STRINGV;}
+({letter}|\_)({letter}|{digit}|\_)*  {
+    yylval.valString = strdup(yytext);
+
+        return STRINGV;
+}
 ({stringquote}|{cs})+ {yylval.valString = strdup(yytext); return QUOTESTRING;}
 \n ;
 . ;

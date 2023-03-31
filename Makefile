@@ -9,6 +9,11 @@ compile:
 	gcc -o $(FUENTE) list.o lex.yy.c $(FUENTE).tab.c -lfl -ly -g
 
 
+valgrind:
+	flex $(FUENTE).l
+	bison -o $(FUENTE).tab.c $(FUENTE).y -yd --report=all -v
+	gcc -o $(FUENTE) list.o lex.yy.c $(FUENTE).tab.c -lfl -ly -g
+	valgrind --leak-check=full ./scanner hola.cpp
 
 run:
 	./$(FUENTE) $(PRUEBA) 
