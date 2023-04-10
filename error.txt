@@ -33,3 +33,7 @@ int main () {
     cout << "aqui se llega porque lo del if es cierto" << endl;
   }
 }
+
+int suma(int a, int b) {
+    return a + b;
+}

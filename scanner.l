@@ -8,22 +8,32 @@ letter [a-zA-Z]
 digit [0-9]
 stringquote \"[^"^\'\n]*\"
 cs #{digit}+
+realnum (\-)?{digit}+(\.{digit}+)?([eE][+\-]{digit}+)?
+intnum (\-)?{digit}+
 
 %%
-int {return INTEGER;}
-float {return FLOAT;}
+int {return INTEGER;}//32
+short {return SHORT;}//16
+long {return LONG;}//64
+"unsigned int" {return UNSIGNED_INT;}
+"unsigned short" {return UNSIGNED_SHORT;}
+"unsigned long" {return UNSIGNED_LONG;}
+float {return FLOAT;}//32
+double {return DOUBLE;}//64
 string {return STRING;}
 bool {return BOOLEAN;}
 char {return CHAR;}
 true {return TRUEVAL;}
 false {return FALSEVAL;}
-(\-)?{digit}+ {yylval.valString = strdup(yytext); return INTNUM;}
-(\-)?{digit}+(\.{digit}+)?([eE][+\-]{digit}+)? {yylval.valString = strdup(yytext); return REALNUM;}
+{intnum} {yylval.valString = strdup(yytext); return INTNUM;}
+{realnum} {yylval.valString = strdup(yytext); return REALNUM;}
 "#include" {return PROGRAM;}
 VAR {return VAR;}
 (?i:value) {return VALUE;}
 \( {return LPAREN;}
 \) {return RPAREN;}
+\[ {return LSQUAREPAREN;}
+\] {return RSQUAREPAREN;}
 "//"[^\/\n]*\n {yylval.valString = strdup(yytext); return COMMENTLINE;}
 "/*"[^\{\}]*"*/" {yylval.valString = strdup(yytext); return MULTILINE;}
 \{ {return OPENCURLYBRACKET;}
@@ -56,6 +66,7 @@ stringquote {return STRINGQUOTE;}
 (?i:return) {return RETURN;}
 "#define" {return DEFINE;}
 const {return CONST;}
+
 ({letter}|\_)({letter}|{digit}|\_)*  {
     yylval.valString = strdup(yytext);
 
