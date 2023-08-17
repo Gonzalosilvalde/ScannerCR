@@ -437,31 +437,32 @@ programa :
 
                 strcat(final, "fn () ");
                 strcat(final, $2);
-                if($1 == 0){
-                        strcat(final, "-> i32 {");
-                } else if ($1 == 1){
-                        strcat(final, "-> i16 {");
-                }else if ($1 == 2){
-                        strcat(final, "-> i64 {");
-                }else if ($1 == 3){
-                        strcat(final, "-> u32 {");
-                }else if ($1 == 4){
-                        strcat(final, "-> u16 {");
-                }else if ($1 == 5){
-                        strcat(final, "-> u64 {");
-                }else if ($1 == 6){
-                        strcat(final, "-> f32 {");
-                }else if ($1 == 7){
-                        strcat(final, "-> f64 {");
-                }else if ($1 == 8){
-                        strcat(final, "-> String {");
-                }else if ($1 == 9){
-                        strcat(final, "-> char {");
-                }else if ($1 == 10){
-                        strcat(final, "-> bool {");
-                }else{
-                        printf("otra cosa\n");
+                switch ($1) {
+                case 0:strcat(final, "-> i32 {");
+                        break;
+                case 1:strcat(final, "-> i16 {");
+                        break;
+                case 2:strcat(final, "-> i64 {");
+                        break;
+                case 3:strcat(final, "-> u32 {");
+                        break;
+                case 4:strcat(final, "-> u16 {");
+                        break;
+                case 5:strcat(final, "-> u64 {");
+                        break;
+                case 6:strcat(final, "-> f32 {");
+                        break;
+                case 7:strcat(final, "-> f64 {");
+                        break;
+                case 8:strcat(final, "-> String {");
+                        break;
+                case 9:strcat(final, "-> char {");
+                        break;
+                case 10:strcat(final, "-> bool {");
+                        break;
+                default:break;
                 }
+
                 strcat(final, "\n");
                 strcat(final, $6);
                 strcat(final, "\n}\n\n");
