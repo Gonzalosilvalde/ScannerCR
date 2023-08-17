@@ -2,21 +2,21 @@ let falso:f32 =5.5;
 
 let flotante:f32 =7.7;
 
-fn multiplicacion (i32 b, i32 a, i32 b, i32 a, i32 b, i32 a) -> f32 {
+fn multiplicacion (i32  b, i32  a, i32  b, i32  a, i32  b, i32  a) -> f32 {
 a + b
 }
 
 
 
-fn suma (i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a) -> i32 {
+fn suma (i32  b, i32  a, i32  b, i32  a, i32  b, i32  a, i32  b, i32  a, i32  b, i32  a, i32  b, i32  a) -> i32 {
 a + b
 }
 
-fn multiplicacion (i32 b, i32 a, i32 b, i32 a, i32 b, i32 a) -> f32 {
+fn multiplicacion (i32  b, i32  a, i32  b, i32  a, i32  b, i32  a) -> f32 {
 a * b
 }
 
-fn suma (i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a) -> i32 {
+fn suma (i32  b, i32  a, i32  b, i32  a, i32  b, i32  a, i32  b, i32  a, i32  b, i32  a, i32  b, i32  a) -> i32 {
 a + b
 }
 
@@ -72,6 +72,7 @@ let mi_arreglo: [i32 :5] =[1,2,3,4,5];
 
 // Salida de los resultados
 
+print!("hola");
 print!("El resultado de la suma es: {}",resultado_suma);
 print!("El resultado de la multiplicacion es: {}",resultado_multiplicacion);
 let mi_arreglo: [i32 :5] =[1,2,3,4,5];

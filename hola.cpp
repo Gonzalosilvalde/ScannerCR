@@ -46,6 +46,7 @@ int main() {
     int mi_arreglo[5] = {1, 2, 3, 4, 5};
     int mi_arreglo[5] = {1, 2, 3, 4, 5};
     // Salida de los resultados
+    printf("hola");
     cout << "El resultado de la suma es: " << resultado_suma ;
     cout << "El resultado de la multiplicacion es: " << resultado_multiplicacion;
     int mi_arreglo[5] = {1, 2, 3, 4, 5};

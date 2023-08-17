@@ -24,6 +24,7 @@ void yyerror(char const *);
 char * getVariables(TypeList *);
 char * getEndings(NodeList *);
 char * getEndingsR(NodeList *);
+char * obtenerTipo(int valor);
 char * getRef (int);
 void deleteQuotes (char *);
 void deleteCurly(char *);
@@ -92,6 +93,7 @@ char* getEndNumber(char* number);
 %token CLOSECURLYBRACKET
 %token BOOLEAN
 %token CHAR
+%token PRINTF
 %token <valString> STRING
 %token <valString> STRINGV
 %token <valString> QUOTESTRING
@@ -219,21 +221,7 @@ constdef :
 
 fvardef : 
         type STRINGV SEMICOLON {
-                char * tipo;
-                switch ($1){
-                        case 0: tipo  = "i32 ";break;
-                        case 1: tipo = "i16 ";break;
-                        case 2: tipo = "i64 ";break;
-                        case 3: tipo = "u32 ";break;
-                        case 4: tipo = "u16 ";break;
-                        case 5: tipo = "u64 ";break;
-                        case 6: tipo = "f32 ";break;
-                        case 7: tipo = "f64 ";break;
-                        case 8: tipo = "String ";break;
-                        case 9: tipo = "char ";break;
-                        case 10: tipo = "bool ";break;
-                        default: break;
-                }
+                char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen(tipo)*sizeof(char) + strlen($2)*sizeof(char) + strlen("let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
@@ -245,21 +233,7 @@ fvardef :
 
         }
         | type STRINGV EQ values SEMICOLON {
-                char * tipo;
-                switch ($1){
-                        case 0: tipo  = "i32 ";break;
-                        case 1: tipo = "i16 ";break;
-                        case 2: tipo = "i64 ";break;
-                        case 3: tipo = "u32 ";break;
-                        case 4: tipo = "u16 ";break;
-                        case 5: tipo = "u64 ";break;
-                        case 6: tipo = "f32 ";break;
-                        case 7: tipo = "f64 ";break;
-                        case 8: tipo = "String ";break;
-                        case 9: tipo = "char ";break;
-                        case 10: tipo = "bool ";break;
-                        default: break;
-                }
+                char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
@@ -273,21 +247,7 @@ fvardef :
                 $$ = final;
         }
         | type STRINGV EQ STRINGV SEMICOLON {
-                char * tipo;
-                switch ($1){
-                        case 0: tipo  = "i32 ";break;
-                        case 1: tipo = "i16 ";break;
-                        case 2: tipo = "i64 ";break;
-                        case 3: tipo = "u32 ";break;
-                        case 4: tipo = "u16 ";break;
-                        case 5: tipo = "u64 ";break;
-                        case 6: tipo = "f32 ";break;
-                        case 7: tipo = "f64 ";break;
-                        case 8: tipo = "String ";break;
-                        case 9: tipo = "char ";break;
-                        case 10: tipo = "bool ";break;
-                        default: break;
-                }
+                char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
@@ -301,21 +261,7 @@ fvardef :
                 $$ = final;
         }
         | type STRINGV LSQUAREPAREN INTNUM RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON{
-                char * tipo;
-                switch ($1){
-                        case 0: tipo  = "i32 ";break;
-                        case 1: tipo = "i16 ";break;
-                        case 2: tipo = "i64 ";break;
-                        case 3: tipo = "u32 ";break;
-                        case 4: tipo = "u16 ";break;
-                        case 5: tipo = "u64 ";break;
-                        case 6: tipo = "f32 ";break;
-                        case 7: tipo = "f64 ";break;
-                        case 8: tipo = "String ";break;
-                        case 9: tipo = "char ";break;
-                        case 10: tipo = "bool ";break;
-                        default: break;
-                }
+                char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen($2)*sizeof(char) + strlen(tipo)*sizeof(char)+ strlen($4)*sizeof(char) + strlen($8)*sizeof(char) + sizeof("let ::[] [] ; \n"));
                 memset(final,0,sizeof(final));
                 
@@ -337,21 +283,7 @@ fvardef :
 
 vardef : 
         type STRINGV SEMICOLON {
-                char * tipo;
-                switch ($1){
-                        case 0: tipo  = "i32 ";break;
-                        case 1: tipo = "i16 ";break;
-                        case 2: tipo = "i64 ";break;
-                        case 3: tipo = "u32 ";break;
-                        case 4: tipo = "u16 ";break;
-                        case 5: tipo = "u64 ";break;
-                        case 6: tipo = "f32 ";break;
-                        case 7: tipo = "f64 ";break;
-                        case 8: tipo = "String ";break;
-                        case 9: tipo = "char ";break;
-                        case 10: tipo = "bool ";break;
-                        default: break;
-                }
+                char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen(tipo)*sizeof(char) + strlen($2)*sizeof(char) + strlen("let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
@@ -363,21 +295,7 @@ vardef :
 
         }
         | type STRINGV EQ values SEMICOLON {
-                char * tipo;
-                switch ($1){
-                        case 0: tipo  = "i32 ";break;
-                        case 1: tipo = "i16 ";break;
-                        case 2: tipo = "i64 ";break;
-                        case 3: tipo = "u32 ";break;
-                        case 4: tipo = "u16 ";break;
-                        case 5: tipo = "u64 ";break;
-                        case 6: tipo = "f32 ";break;
-                        case 7: tipo = "f64 ";break;
-                        case 8: tipo = "String ";break;
-                        case 9: tipo = "char ";break;
-                        case 10: tipo = "bool ";break;
-                        default: break;
-                }
+                char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
@@ -390,21 +308,7 @@ vardef :
                 $$ = final;
         }
         | type STRINGV EQ STRINGV SEMICOLON {
-                char * tipo;
-                switch ($1){
-                        case 0: tipo  = "i32 ";break;
-                        case 1: tipo = "i16 ";break;
-                        case 2: tipo = "i64 ";break;
-                        case 3: tipo = "u32 ";break;
-                        case 4: tipo = "u16 ";break;
-                        case 5: tipo = "u64 ";break;
-                        case 6: tipo = "f32 ";break;
-                        case 7: tipo = "f64 ";break;
-                        case 8: tipo = "String ";break;
-                        case 9: tipo = "char ";break;
-                        case 10: tipo = "bool ";break;
-                        default: break;
-                }
+                char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n : ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
@@ -635,32 +539,7 @@ args :
 	type STRINGV COMMA args {
                 char * final;
                 
-                char * tipo;
-                if($1 == 0){
-                        tipo = "i32";
-                } else if ($1 == 1){
-                        tipo = "i16";
-                }else if ($1 == 2){
-                        tipo = "i64";
-                }else if ($1 == 3){
-                        tipo = "u32";
-                }else if ($1 == 4){
-                        tipo = "u16";
-                }else if ($1 == 5){
-                        tipo = "i64";
-                }else if ($1 == 6){
-                        tipo = "f32";
-                }else if ($1 == 7){
-                        tipo = "f64";
-                }else if ($1 == 8){
-                        tipo = "String";
-                }else if ($1 == 9){
-                        tipo = "char";
-                }else if ($1 == 10){
-                        tipo = "bool";
-                }else {
-                        printf("pasa por aqui \n");
-                }
+                char * tipo = obtenerTipo($1);
                 final = malloc(strlen(tipo)  + strlen($2) * sizeof(char) + strlen($4) * sizeof(char) + sizeof(",  ") + 3*sizeof(char));
                 memset(final, 0, sizeof(final));
                 strcat(final, $4);
@@ -675,32 +554,7 @@ args :
                 }
 	|type STRINGV {
                 char * final;
-                char * tipo;
-                if($1 == 0){
-                        tipo = "i32";
-                } else if ($1 == 1){
-                        tipo = "i16";
-                }else if ($1 == 2){
-                        tipo = "i64";
-                }else if ($1 == 3){
-                        tipo = "u32";
-                }else if ($1 == 4){
-                        tipo = "u16";
-                }else if ($1 == 5){
-                        tipo = "i64";
-                }else if ($1 == 6){
-                        tipo = "f32";
-                }else if ($1 == 7){
-                        tipo = "f64";
-                }else if ($1 == 8){
-                        tipo = "String";
-                }else if ($1 == 9){
-                        tipo = "char";
-                }else if ($1 == 10){
-                        tipo = "bool";
-                }else {
-                        printf("pasa por aqui \n");
-                }
+                char * tipo = obtenerTipo($1);
                 final = malloc(strlen(tipo) * sizeof(char) + strlen($2) * sizeof(char) );
                 memset(final, 0, sizeof(final));
                 strcat(final, tipo);
@@ -738,6 +592,9 @@ line_program :
                 
                 $$ = $4;
                 
+        }
+        | PRINTF LPAREN precontentWrite RPAREN SEMICOLON {
+                $$ = $3;
         }
         | assignation {
                 $$ = $1;
@@ -1244,6 +1101,24 @@ atom :
 
 %%
 
+char * obtenerTipo(int valor) {
+    char * tipo;
+    switch (valor) {
+        case 0: tipo = "i32 "; break;
+        case 1: tipo = "i16 "; break;
+        case 2: tipo = "i64 "; break;
+        case 3: tipo = "u32 "; break;
+        case 4: tipo = "u16 "; break;
+        case 5: tipo = "u64 "; break;
+        case 6: tipo = "f32 "; break;
+        case 7: tipo = "f64 "; break;
+        case 8: tipo = "String "; break;
+        case 9: tipo = "char "; break;
+        case 10: tipo = "bool "; break;
+        default: tipo = ""; break;
+    }
+    return tipo;
+}
 
 char* getEndNumber(char* number){
                 int len = strlen(number);

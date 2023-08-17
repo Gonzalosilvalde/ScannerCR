@@ -22,6 +22,7 @@ float {return FLOAT;}//32
 double {return DOUBLE;}//64
 string {return STRING;}
 bool {return BOOLEAN;}
+printf {return PRINTF;}
 char {return CHAR;}
 true {return TRUEVAL;}
 false {return FALSEVAL;}

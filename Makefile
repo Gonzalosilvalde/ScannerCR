@@ -3,7 +3,7 @@ PRUEBA = hola.cpp
 
 all: compile run
 
-compile: flex_compile bison_compile link
+compile: bison_compile flex_compile link
 
 flex_compile:
 	flex $(FUENTE).l

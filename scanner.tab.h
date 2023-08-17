@@ -108,15 +108,16 @@ extern int yydebug;
     CLOSECURLYBRACKET = 309,       /* CLOSECURLYBRACKET  */
     BOOLEAN = 310,                 /* BOOLEAN  */
     CHAR = 311,                    /* CHAR  */
-    STRING = 312,                  /* STRING  */
-    STRINGV = 313,                 /* STRINGV  */
-    QUOTESTRING = 314,             /* QUOTESTRING  */
-    TRUEVAL = 315,                 /* TRUEVAL  */
-    FALSEVAL = 316,                /* FALSEVAL  */
-    INTNUM = 317,                  /* INTNUM  */
-    REALNUM = 318,                 /* REALNUM  */
-    RETURN = 319,                  /* RETURN  */
-    EX = 320                       /* EX  */
+    PRINTF = 312,                  /* PRINTF  */
+    STRING = 313,                  /* STRING  */
+    STRINGV = 314,                 /* STRINGV  */
+    QUOTESTRING = 315,             /* QUOTESTRING  */
+    TRUEVAL = 316,                 /* TRUEVAL  */
+    FALSEVAL = 317,                /* FALSEVAL  */
+    INTNUM = 318,                  /* INTNUM  */
+    REALNUM = 319,                 /* REALNUM  */
+    RETURN = 320,                  /* RETURN  */
+    EX = 321                       /* EX  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -125,13 +126,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 36 "scanner.y"
+#line 37 "scanner.y"
 
     char * valString;
     int valInt;
     double valDouble;
 
-#line 135 "scanner.tab.h"
+#line 136 "scanner.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
