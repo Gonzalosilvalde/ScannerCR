@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.8.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -120,74 +120,6 @@ extern int yydebug;
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Token kinds.  */
-#define YYEMPTY -2
-#define YYEOF 0
-#define YYerror 256
-#define YYUNDEF 257
-#define WHILE 258
-#define FOR 259
-#define DO 260
-#define TO 261
-#define DOWNTO 262
-#define WRITE 263
-#define ENDL 264
-#define READ 265
-#define READLN 266
-#define PROGRAM 267
-#define BEG 268
-#define END 269
-#define IF 270
-#define THEN 271
-#define ELSE 272
-#define AND 273
-#define OR 274
-#define LOWER 275
-#define HIGHER 276
-#define PLUS 277
-#define HYPHEN 278
-#define PROD 279
-#define DIV 280
-#define DIVINT 281
-#define MOD 282
-#define COMMA 283
-#define DOT 284
-#define EQ 285
-#define COMMENTLINE 286
-#define MULTILINE 287
-#define VAR 288
-#define CONST 289
-#define DEFINE 290
-#define LISTCONTENT 291
-#define VALUE 292
-#define LPAREN 293
-#define STRINGQUOTE 294
-#define RPAREN 295
-#define RSQUAREPAREN 296
-#define LSQUAREPAREN 297
-#define COLON 298
-#define SEMICOLON 299
-#define INTEGER 300
-#define SHORT 301
-#define LONG 302
-#define UNSIGNED_INT 303
-#define UNSIGNED_SHORT 304
-#define UNSIGNED_LONG 305
-#define FLOAT 306
-#define DOUBLE 307
-#define OPENCURLYBRACKET 308
-#define CLOSECURLYBRACKET 309
-#define BOOLEAN 310
-#define CHAR 311
-#define STRING 312
-#define STRINGV 313
-#define QUOTESTRING 314
-#define TRUEVAL 315
-#define FALSEVAL 316
-#define INTNUM 317
-#define REALNUM 318
-#define RETURN 319
-#define EX 320
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -199,7 +131,7 @@ union YYSTYPE
     int valInt;
     double valDouble;
 
-#line 203 "scanner.tab.h"
+#line 135 "scanner.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -210,12 +142,6 @@ typedef union YYSTYPE YYSTYPE;
 
 extern YYSTYPE yylval;
 
-#if !defined yyerror && !defined YYERROR_IS_DECLARED
-void yyerror (const char *msg);
-#endif
-#if !defined yylex && !defined YYLEX_IS_DECLARED
-int yylex (void);
-#endif
 
 int yyparse (void);
 

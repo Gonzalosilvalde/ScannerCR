@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.8.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison implementation for Yacc-like parsers in C
 
@@ -46,10 +46,10 @@
    USER NAME SPACE" below.  */
 
 /* Identify Bison output, and Bison version.  */
-#define YYBISON 30800
+#define YYBISON 30802
 
 /* Bison version string.  */
-#define YYBISON_VERSION "3.8"
+#define YYBISON_VERSION "3.8.2"
 
 /* Skeleton name.  */
 #define YYSKELETON_NAME "yacc.c"
@@ -611,15 +611,15 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,   130,   130,   140,   151,   163,   177,   180,   186,   187,
-     190,   191,   195,   206,   221,   248,   275,   302,   336,   363,
-     390,   421,   422,   423,   424,   425,   426,   427,   428,   429,
-     430,   431,   437,   440,   441,   442,   443,   447,   455,   464,
-     525,   616,   625,   632,   673,   711,   723,   734,   739,   743,
-     756,   768,   777,   797,   820,   835,   848,   849,   858,   866,
-     878,   888,   893,   959,  1022,  1040,  1052,  1070,  1083,  1086,
-    1091,  1102,  1152,  1165,  1172,  1174,  1183,  1192,  1204,  1207,
-    1208,  1209,  1210,  1211,  1212,  1213,  1214,  1215,  1216,  1217,
-    1218,  1219,  1220,  1221,  1226,  1234
+     190,   191,   195,   206,   221,   247,   275,   303,   339,   365,
+     392,   424,   425,   426,   427,   428,   429,   430,   431,   432,
+     433,   434,   440,   443,   444,   445,   446,   450,   458,   467,
+     528,   619,   628,   635,   676,   714,   726,   737,   742,   746,
+     759,   771,   780,   800,   823,   838,   851,   852,   861,   869,
+     883,   893,   898,   964,  1027,  1045,  1057,  1075,  1088,  1091,
+    1096,  1107,  1157,  1170,  1177,  1179,  1188,  1197,  1209,  1212,
+    1213,  1214,  1215,  1216,  1217,  1218,  1219,  1220,  1221,  1222,
+    1223,  1224,  1225,  1226,  1231,  1239
 };
 #endif
 
@@ -1830,22 +1830,21 @@ yyreduce:
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen("let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen("let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,(yyvsp[-1].valString));
                 strcat(final,":");
                 strcat(final,tipo);
                 strcat(final,";\n");
-
                 (yyval.valString) = final;
 
         }
-#line 1845 "scanner.tab.c"
+#line 1844 "scanner.tab.c"
     break;
 
   case 15: /* fvardef: type STRINGV EQ values SEMICOLON  */
-#line 248 "scanner.y"
+#line 247 "scanner.y"
                                            {
                 char * tipo;
                 switch ((yyvsp[-4].valInt)){
@@ -1862,7 +1861,7 @@ yyreduce:
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("= let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,(yyvsp[-3].valString));
@@ -1871,6 +1870,7 @@ yyreduce:
                 strcat(final,"=");
                 strcat(final,(yyvsp[-1].valString));
                 strcat(final,";\n");
+                printf("%s",final);
                 (yyval.valString) = final;
         }
 #line 1877 "scanner.tab.c"
@@ -1894,7 +1894,7 @@ yyreduce:
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("= let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,(yyvsp[-3].valString));
@@ -1903,13 +1903,14 @@ yyreduce:
                 strcat(final,"=");
                 strcat(final,(yyvsp[-1].valString));
                 strcat(final,";\n");
+                
                 (yyval.valString) = final;
         }
-#line 1909 "scanner.tab.c"
+#line 1910 "scanner.tab.c"
     break;
 
   case 17: /* fvardef: type STRINGV LSQUAREPAREN INTNUM RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON  */
-#line 302 "scanner.y"
+#line 303 "scanner.y"
                                                                                                              {
                 char * tipo;
                 switch ((yyvsp[-9].valInt)){
@@ -1926,8 +1927,9 @@ yyreduce:
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen((yyvsp[-8].valString))*sizeof(char) + strlen(tipo)*sizeof(char)+ strlen((yyvsp[-6].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("[] [] ; \n"));
+                char * final = malloc(strlen((yyvsp[-8].valString))*sizeof(char) + strlen(tipo)*sizeof(char)+ strlen((yyvsp[-6].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("let ::[] [] ; \n"));
                 memset(final,0,sizeof(final));
+                
                 strcat(final,"let ");
                 strcat(final,(yyvsp[-8].valString));
                 strcat(final,": [");
@@ -1938,13 +1940,14 @@ yyreduce:
                 strcat(final,"[");
                 strcat(final,(yyvsp[-2].valString));
                 strcat(final,"];\n");
+                printf("%s",final);
                 (yyval.valString) = final;
         }
-#line 1944 "scanner.tab.c"
+#line 1947 "scanner.tab.c"
     break;
 
   case 18: /* vardef: type STRINGV SEMICOLON  */
-#line 336 "scanner.y"
+#line 339 "scanner.y"
                                {
                 char * tipo;
                 switch ((yyvsp[-2].valInt)){
@@ -1961,22 +1964,21 @@ yyreduce:
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen("let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen("let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,(yyvsp[-1].valString));
                 strcat(final,":");
                 strcat(final,tipo);
                 strcat(final,";\n");
-
                 (yyval.valString) = final;
 
         }
-#line 1976 "scanner.tab.c"
+#line 1978 "scanner.tab.c"
     break;
 
   case 19: /* vardef: type STRINGV EQ values SEMICOLON  */
-#line 363 "scanner.y"
+#line 365 "scanner.y"
                                            {
                 char * tipo;
                 switch ((yyvsp[-4].valInt)){
@@ -1993,7 +1995,7 @@ yyreduce:
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("= let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,(yyvsp[-3].valString));
@@ -2004,11 +2006,11 @@ yyreduce:
                 strcat(final,";\n");
                 (yyval.valString) = final;
         }
-#line 2008 "scanner.tab.c"
+#line 2010 "scanner.tab.c"
     break;
 
   case 20: /* vardef: type STRINGV EQ STRINGV SEMICOLON  */
-#line 390 "scanner.y"
+#line 392 "scanner.y"
                                             {
                 char * tipo;
                 switch ((yyvsp[-4].valInt)){
@@ -2025,7 +2027,7 @@ yyreduce:
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("= let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("=let\n : ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,(yyvsp[-3].valString));
@@ -2034,111 +2036,112 @@ yyreduce:
                 strcat(final,"=");
                 strcat(final,(yyvsp[-1].valString));
                 strcat(final,";\n");
+                
                 (yyval.valString) = final;
         }
-#line 2040 "scanner.tab.c"
+#line 2043 "scanner.tab.c"
     break;
 
   case 21: /* type: INTEGER  */
-#line 421 "scanner.y"
+#line 424 "scanner.y"
                 {(yyval.valInt) = 0;}
-#line 2046 "scanner.tab.c"
+#line 2049 "scanner.tab.c"
     break;
 
   case 22: /* type: SHORT  */
-#line 422 "scanner.y"
+#line 425 "scanner.y"
                 {(yyval.valInt) = 1;}
-#line 2052 "scanner.tab.c"
+#line 2055 "scanner.tab.c"
     break;
 
   case 23: /* type: LONG  */
-#line 423 "scanner.y"
+#line 426 "scanner.y"
                {(yyval.valInt) = 2;}
-#line 2058 "scanner.tab.c"
+#line 2061 "scanner.tab.c"
     break;
 
   case 24: /* type: UNSIGNED_INT  */
-#line 424 "scanner.y"
+#line 427 "scanner.y"
                        {(yyval.valInt) = 3;}
-#line 2064 "scanner.tab.c"
+#line 2067 "scanner.tab.c"
     break;
 
   case 25: /* type: UNSIGNED_SHORT  */
-#line 425 "scanner.y"
+#line 428 "scanner.y"
                          {(yyval.valInt) = 4;}
-#line 2070 "scanner.tab.c"
+#line 2073 "scanner.tab.c"
     break;
 
   case 26: /* type: UNSIGNED_LONG  */
-#line 426 "scanner.y"
+#line 429 "scanner.y"
                         {(yyval.valInt) = 5;}
-#line 2076 "scanner.tab.c"
+#line 2079 "scanner.tab.c"
     break;
 
   case 27: /* type: FLOAT  */
-#line 427 "scanner.y"
+#line 430 "scanner.y"
                 {(yyval.valInt) = 6;}
-#line 2082 "scanner.tab.c"
+#line 2085 "scanner.tab.c"
     break;
 
   case 28: /* type: DOUBLE  */
-#line 428 "scanner.y"
+#line 431 "scanner.y"
                  {(yyval.valInt) = 7;}
-#line 2088 "scanner.tab.c"
+#line 2091 "scanner.tab.c"
     break;
 
   case 29: /* type: STRING  */
-#line 429 "scanner.y"
+#line 432 "scanner.y"
                  {(yyval.valInt) = 8;}
-#line 2094 "scanner.tab.c"
+#line 2097 "scanner.tab.c"
     break;
 
   case 30: /* type: CHAR  */
-#line 430 "scanner.y"
+#line 433 "scanner.y"
                {(yyval.valInt) = 9;}
-#line 2100 "scanner.tab.c"
+#line 2103 "scanner.tab.c"
     break;
 
   case 31: /* type: BOOLEAN  */
-#line 431 "scanner.y"
+#line 434 "scanner.y"
                   {(yyval.valInt) = 10;}
-#line 2106 "scanner.tab.c"
+#line 2109 "scanner.tab.c"
     break;
 
   case 32: /* values: TRUEVAL  */
-#line 437 "scanner.y"
+#line 440 "scanner.y"
                 {
                 (yyval.valString) = strdup("true");
         }
-#line 2114 "scanner.tab.c"
+#line 2117 "scanner.tab.c"
     break;
 
   case 33: /* values: FALSEVAL  */
-#line 440 "scanner.y"
+#line 443 "scanner.y"
                    {(yyval.valString) = (yyvsp[0].valString);}
-#line 2120 "scanner.tab.c"
+#line 2123 "scanner.tab.c"
     break;
 
   case 34: /* values: INTNUM  */
-#line 441 "scanner.y"
+#line 444 "scanner.y"
                  {(yyval.valString) = (yyvsp[0].valString);}
-#line 2126 "scanner.tab.c"
+#line 2129 "scanner.tab.c"
     break;
 
   case 35: /* values: REALNUM  */
-#line 442 "scanner.y"
+#line 445 "scanner.y"
                   {(yyval.valString) = (yyvsp[0].valString);}
-#line 2132 "scanner.tab.c"
+#line 2135 "scanner.tab.c"
     break;
 
   case 36: /* values: QUOTESTRING  */
-#line 443 "scanner.y"
+#line 446 "scanner.y"
                       {(yyval.valString) = (yyvsp[0].valString);}
-#line 2138 "scanner.tab.c"
+#line 2141 "scanner.tab.c"
     break;
 
   case 37: /* preprograma: preprograma programa  */
-#line 447 "scanner.y"
+#line 450 "scanner.y"
                             {
                 char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[0].valString))*sizeof(char));
                 memset(final,0,sizeof(final));
@@ -2147,11 +2150,11 @@ yyreduce:
 
                 (yyval.valString) = final;
         }
-#line 2151 "scanner.tab.c"
+#line 2154 "scanner.tab.c"
     break;
 
   case 38: /* preprograma: programa  */
-#line 455 "scanner.y"
+#line 458 "scanner.y"
                  {
                 char * final = malloc(strlen((yyvsp[0].valString))*sizeof(char));
                 memset(final,0,sizeof(final));
@@ -2160,11 +2163,11 @@ yyreduce:
 
                 (yyval.valString) = final;
         }
-#line 2164 "scanner.tab.c"
+#line 2167 "scanner.tab.c"
     break;
 
   case 39: /* programa: type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment  */
-#line 464 "scanner.y"
+#line 467 "scanner.y"
                                                                                                 {                        
                         
                         
@@ -2225,11 +2228,11 @@ yyreduce:
                         $$ = final;
                 }*/
         }
-#line 2229 "scanner.tab.c"
+#line 2232 "scanner.tab.c"
     break;
 
   case 40: /* programa: type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET comment  */
-#line 525 "scanner.y"
+#line 528 "scanner.y"
                                                                                              {
                 
                         
@@ -2274,11 +2277,11 @@ yyreduce:
                                 
                 
         }
-#line 2278 "scanner.tab.c"
+#line 2281 "scanner.tab.c"
     break;
 
   case 41: /* programa: vardef programa  */
-#line 616 "scanner.y"
+#line 619 "scanner.y"
                           {
                 char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[0].valString))*sizeof(char) + sizeof("\n\n"));
                 strcat(final,(yyvsp[-1].valString));
@@ -2288,19 +2291,19 @@ yyreduce:
                 
                 (yyval.valString) = final;
         }
-#line 2292 "scanner.tab.c"
+#line 2295 "scanner.tab.c"
     break;
 
   case 42: /* programa: constdef programa  */
-#line 625 "scanner.y"
+#line 628 "scanner.y"
                             {
                 
                 (yyval.valString) = (yyvsp[0].valString);}
-#line 2300 "scanner.tab.c"
+#line 2303 "scanner.tab.c"
     break;
 
   case 43: /* args: type STRINGV COMMA args  */
-#line 632 "scanner.y"
+#line 635 "scanner.y"
                                 {
                 char * final;
                 
@@ -2342,11 +2345,11 @@ yyreduce:
                 (yyval.valString) = final;
                 
                 }
-#line 2346 "scanner.tab.c"
+#line 2349 "scanner.tab.c"
     break;
 
   case 44: /* args: type STRINGV  */
-#line 673 "scanner.y"
+#line 676 "scanner.y"
                       {
                 char * final;
                 char * tipo;
@@ -2382,11 +2385,11 @@ yyreduce:
                 strcat(final, (yyvsp[0].valString));
                 (yyval.valString) = final;
         }
-#line 2386 "scanner.tab.c"
+#line 2389 "scanner.tab.c"
     break;
 
   case 45: /* lines_program: lines_program line_program  */
-#line 711 "scanner.y"
+#line 714 "scanner.y"
                                    {
                 
                 char * final = malloc(strlen((yyvsp[-1].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + sizeof("\n") + 3*sizeof(char));
@@ -2399,38 +2402,38 @@ yyreduce:
                 free((yyvsp[0].valString));
                 (yyval.valString) = final;
         }
-#line 2403 "scanner.tab.c"
+#line 2406 "scanner.tab.c"
     break;
 
   case 46: /* lines_program: line_program  */
-#line 723 "scanner.y"
+#line 726 "scanner.y"
                        {
                 (yyval.valString) = (yyvsp[0].valString);
                 
                 }
-#line 2412 "scanner.tab.c"
+#line 2415 "scanner.tab.c"
     break;
 
   case 47: /* line_program: WRITE LOWER LOWER precontentWrite SEMICOLON  */
-#line 734 "scanner.y"
+#line 737 "scanner.y"
                                                     {
                 
                 (yyval.valString) = (yyvsp[-1].valString);
                 
         }
-#line 2422 "scanner.tab.c"
+#line 2425 "scanner.tab.c"
     break;
 
   case 48: /* line_program: assignation  */
-#line 739 "scanner.y"
+#line 742 "scanner.y"
                       {
                 (yyval.valString) = (yyvsp[0].valString);
         }
-#line 2430 "scanner.tab.c"
+#line 2433 "scanner.tab.c"
     break;
 
   case 49: /* line_program: IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 743 "scanner.y"
+#line 746 "scanner.y"
                                                                                  {
                 char * final = malloc(strlen((yyvsp[-4].valString))* sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("if ( ) { } \t \n \n"));
                 memset(final, 0, sizeof(final));
@@ -2444,11 +2447,11 @@ yyreduce:
                 (yyval.valString) = final;
 
         }
-#line 2448 "scanner.tab.c"
+#line 2451 "scanner.tab.c"
     break;
 
   case 50: /* line_program: ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 756 "scanner.y"
+#line 759 "scanner.y"
                                                                                      {
                 char * final = malloc(strlen((yyvsp[-4].valString))* sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("else if ( ) { } \t \n \n"));
                 memset(final, 0, sizeof(final));
@@ -2461,11 +2464,11 @@ yyreduce:
                 free((yyvsp[-1].valString));
                 (yyval.valString) = final;
         }
-#line 2465 "scanner.tab.c"
+#line 2468 "scanner.tab.c"
     break;
 
   case 51: /* line_program: ELSE OPENCURLYBRACKET line_program CLOSECURLYBRACKET  */
-#line 768 "scanner.y"
+#line 771 "scanner.y"
                                                                {
                 char* final = malloc(strlen((yyvsp[-1].valString))*sizeof(char)+ sizeof("else {} \n \n \t"));
                 memset(final, 0, sizeof(final));
@@ -2475,11 +2478,11 @@ yyreduce:
                 (yyval.valString) = final;
         
         }
-#line 2479 "scanner.tab.c"
+#line 2482 "scanner.tab.c"
     break;
 
   case 52: /* line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 777 "scanner.y"
+#line 780 "scanner.y"
                                                                                                                                             {
                 char * final = malloc((yyvsp[-12].valInt)*sizeof(int) + strlen((yyvsp[-7].valString))*sizeof(char) +
                                 sizeof("for ; ; {}")+strlen((yyvsp[-11].valString))*sizeof(char)+ strlen((yyvsp[-9].valString))*sizeof(char) + strlen((yyvsp[-5].valString))*sizeof(char) + 
@@ -2499,11 +2502,11 @@ yyreduce:
                 strcat(final, "\n}");
                 (yyval.valString)=final;
                 ;}
-#line 2503 "scanner.tab.c"
+#line 2506 "scanner.tab.c"
     break;
 
   case 53: /* line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON assignation RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 797 "scanner.y"
+#line 800 "scanner.y"
                                                                                                                                          {
                 char * final = malloc ((yyvsp[-11].valInt)*sizeof(int) + strlen((yyvsp[-10].valString))*sizeof(char) + strlen((yyvsp[-8].valString))*sizeof(char) + strlen((yyvsp[-6].valString))*sizeof(char)  +
                                         strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char)+ sizeof("for ; ; {} .step_by( )"));
@@ -2527,11 +2530,11 @@ yyreduce:
         
         
         }
-#line 2531 "scanner.tab.c"
+#line 2534 "scanner.tab.c"
     break;
 
   case 54: /* line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON  */
-#line 820 "scanner.y"
+#line 823 "scanner.y"
                                                                                                {
                 char * final = malloc( strlen((yyvsp[-6].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("loop {} if() == {} break; \n") );
                 memset(final, 0 , sizeof(final));
@@ -2547,11 +2550,11 @@ yyreduce:
                 (yyval.valString) = final;
         
         }
-#line 2551 "scanner.tab.c"
+#line 2554 "scanner.tab.c"
     break;
 
   case 55: /* line_program: WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 835 "scanner.y"
+#line 838 "scanner.y"
                                                                                   {
                 char * final = malloc(strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("while () {} \n\n"));
                 memset(final, 0, sizeof(final));
@@ -2564,17 +2567,17 @@ yyreduce:
                 (yyval.valString) = final;
                 
         }
-#line 2568 "scanner.tab.c"
+#line 2571 "scanner.tab.c"
     break;
 
   case 56: /* line_program: comment  */
-#line 848 "scanner.y"
+#line 851 "scanner.y"
                  {;}
-#line 2574 "scanner.tab.c"
+#line 2577 "scanner.tab.c"
     break;
 
   case 57: /* line_program: STRINGV operand SEMICOLON  */
-#line 849 "scanner.y"
+#line 852 "scanner.y"
                                    {
                 char * final = malloc (strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char));
                 memset(final, 0, sizeof(final));
@@ -2584,11 +2587,11 @@ yyreduce:
 
                 (yyval.valString) = final;
         }
-#line 2588 "scanner.tab.c"
+#line 2591 "scanner.tab.c"
     break;
 
   case 58: /* line_program: RETURN exp SEMICOLON  */
-#line 858 "scanner.y"
+#line 861 "scanner.y"
                                {
                 char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char) );
                 memset(final, 0 , sizeof(final));
@@ -2597,24 +2600,26 @@ yyreduce:
                 (yyval.valString)=final;
                 
         }
-#line 2601 "scanner.tab.c"
+#line 2604 "scanner.tab.c"
     break;
 
   case 59: /* line_program: fvardef  */
-#line 866 "scanner.y"
+#line 869 "scanner.y"
                  {
                 char * final = malloc(strlen((yyvsp[0].valString))*sizeof(char)  + sizeof("\n"));
+                memset(final,0,sizeof(final));
                 strcat(final,(yyvsp[0].valString));
                 strcat(final,"\n");
 
                 
                 (yyval.valString) = final;
+                
         }
-#line 2614 "scanner.tab.c"
+#line 2619 "scanner.tab.c"
     break;
 
   case 60: /* array: values COMMA array  */
-#line 878 "scanner.y"
+#line 883 "scanner.y"
                           {
                 char * final = malloc(strlen((yyvsp[-2].valString))*sizeof(char) + strlen((yyvsp[0].valString))*sizeof(char)) ;
                 memset(final,0,sizeof(final));
@@ -2625,19 +2630,19 @@ yyreduce:
                 (yyval.valString) = final;
 
         }
-#line 2629 "scanner.tab.c"
+#line 2634 "scanner.tab.c"
     break;
 
   case 61: /* array: values  */
-#line 888 "scanner.y"
+#line 893 "scanner.y"
                {
                 (yyval.valString) = (yyvsp[0].valString);
         }
-#line 2637 "scanner.tab.c"
+#line 2642 "scanner.tab.c"
     break;
 
   case 62: /* precontentWrite: contentWrite  */
-#line 893 "scanner.y"
+#line 898 "scanner.y"
                     {
                 if(strlen(printV) ==0){
                         char * final = malloc(strlen((yyvsp[0].valString))*sizeof(char) + strlen(printV)*sizeof(char)+strlen("print!();") * sizeof(char) );
@@ -2704,11 +2709,11 @@ yyreduce:
 
 
         }
-#line 2708 "scanner.tab.c"
+#line 2713 "scanner.tab.c"
     break;
 
   case 63: /* precontentWrite: contentWrite LOWER LOWER ENDL  */
-#line 959 "scanner.y"
+#line 964 "scanner.y"
                                       {
                 if(strlen(printV) ==0){
                         char * final = malloc(strlen((yyvsp[-3].valString))*sizeof(char) + strlen(printV)*sizeof(char)+strlen("println!();") * sizeof(char) );
@@ -2768,11 +2773,11 @@ yyreduce:
                         (yyval.valString) = final;
                 }
         }
-#line 2772 "scanner.tab.c"
+#line 2777 "scanner.tab.c"
     break;
 
   case 64: /* contentWrite: contentWrite LOWER LOWER QUOTESTRING  */
-#line 1022 "scanner.y"
+#line 1027 "scanner.y"
                                             {
                 char * final = malloc(strlen((yyvsp[-3].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + strlen("{}") * sizeof(char)+strlen("println!(\"")); 
                 memset(final, 0, sizeof(final));
@@ -2791,11 +2796,11 @@ yyreduce:
 
                 (yyval.valString) = final;
         }
-#line 2795 "scanner.tab.c"
+#line 2800 "scanner.tab.c"
     break;
 
   case 65: /* contentWrite: contentWrite LOWER LOWER STRINGV  */
-#line 1040 "scanner.y"
+#line 1045 "scanner.y"
                                          {
                 char * final = malloc(strlen((yyvsp[-3].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + strlen("{}") * sizeof(char)); 
                 memset(final, 0, sizeof(final));
@@ -2808,11 +2813,11 @@ yyreduce:
                 deleteQuotes(final);
                 (yyval.valString) = final;
         }
-#line 2812 "scanner.tab.c"
+#line 2817 "scanner.tab.c"
     break;
 
   case 66: /* contentWrite: contentWrite PLUS QUOTESTRING  */
-#line 1052 "scanner.y"
+#line 1057 "scanner.y"
                                       {
                 char * final = malloc(strlen((yyvsp[-2].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + strlen("{}") * sizeof(char)); 
                 memset(final, 0, sizeof(final));
@@ -2831,11 +2836,11 @@ yyreduce:
                 free((yyvsp[-2].valString));
                 (yyval.valString) = final;
         }
-#line 2835 "scanner.tab.c"
+#line 2840 "scanner.tab.c"
     break;
 
   case 67: /* contentWrite: contentWrite PLUS STRINGV  */
-#line 1070 "scanner.y"
+#line 1075 "scanner.y"
                                   {
                 char * final = malloc(strlen((yyvsp[-2].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + strlen("{}") * sizeof(char)); 
                 memset(final, 0, sizeof(final));
@@ -2848,26 +2853,26 @@ yyreduce:
                 deleteQuotes(final);
                 (yyval.valString) = (yyvsp[-2].valString);
         }
-#line 2852 "scanner.tab.c"
+#line 2857 "scanner.tab.c"
     break;
 
   case 68: /* contentWrite: QUOTESTRING  */
-#line 1083 "scanner.y"
+#line 1088 "scanner.y"
                       {
 
                 (yyval.valString) = (yyvsp[0].valString);}
-#line 2860 "scanner.tab.c"
+#line 2865 "scanner.tab.c"
     break;
 
   case 69: /* contentWrite: STRINGV  */
-#line 1086 "scanner.y"
+#line 1091 "scanner.y"
                   {
                 (yyval.valString) = (yyvsp[0].valString);}
-#line 2867 "scanner.tab.c"
+#line 2872 "scanner.tab.c"
     break;
 
   case 70: /* assignation: STRINGV EQ exp SEMICOLON  */
-#line 1091 "scanner.y"
+#line 1096 "scanner.y"
                                  {
                 char * final = malloc(strlen((yyvsp[-3].valString)) * sizeof(char) + sizeof(" = ") + strlen((yyvsp[-1].valString)) * sizeof(char) + sizeof(";") + 1);
                 memset(final, 0, sizeof(final));
@@ -2879,11 +2884,11 @@ yyreduce:
                 free((yyvsp[-3].valString));
                 (yyval.valString) = final;
         }
-#line 2883 "scanner.tab.c"
+#line 2888 "scanner.tab.c"
     break;
 
   case 71: /* assignation: STRINGV EQ exp  */
-#line 1102 "scanner.y"
+#line 1107 "scanner.y"
                        {
                 char * final = malloc(strlen((yyvsp[-2].valString)) * sizeof(char) + sizeof(" = ") + strlen((yyvsp[0].valString)) * sizeof(char)  + 1);
                 memset(final, 0, sizeof(final));
@@ -2894,11 +2899,11 @@ yyreduce:
                 free((yyvsp[-2].valString));
                 (yyval.valString) = final;
         }
-#line 2898 "scanner.tab.c"
+#line 2903 "scanner.tab.c"
     break;
 
   case 72: /* exp: exp operand term  */
-#line 1152 "scanner.y"
+#line 1157 "scanner.y"
                          {
                 
                 char * final = malloc(strlen((yyvsp[-2].valString)) * sizeof(char) +strlen((yyvsp[-1].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + 1);
@@ -2912,26 +2917,26 @@ yyreduce:
                 (yyval.valString) = final;
                 
         }
-#line 2916 "scanner.tab.c"
+#line 2921 "scanner.tab.c"
     break;
 
   case 73: /* exp: term  */
-#line 1165 "scanner.y"
+#line 1170 "scanner.y"
               {
         	(yyval.valString) = (yyvsp[0].valString);
 			}
-#line 2924 "scanner.tab.c"
+#line 2929 "scanner.tab.c"
     break;
 
   case 74: /* term: atom  */
-#line 1172 "scanner.y"
+#line 1177 "scanner.y"
              {
                 (yyval.valString) = (yyvsp[0].valString);}
-#line 2931 "scanner.tab.c"
+#line 2936 "scanner.tab.c"
     break;
 
   case 75: /* term: LPAREN exp RPAREN  */
-#line 1174 "scanner.y"
+#line 1179 "scanner.y"
                             {
                 char * final = malloc(strlen((yyvsp[-1].valString)) * sizeof(char) + sizeof("()") + 1);
                 memset(final, 0, sizeof(final));
@@ -2941,11 +2946,11 @@ yyreduce:
                 free((yyvsp[-1].valString));
                 (yyval.valString) = final;
                 }
-#line 2945 "scanner.tab.c"
+#line 2950 "scanner.tab.c"
     break;
 
   case 76: /* term: HYPHEN atom  */
-#line 1183 "scanner.y"
+#line 1188 "scanner.y"
                       {
                 char * final = malloc(strlen((yyvsp[0].valString)) * sizeof(char) + sizeof("-()") + 1);
                 memset(final, 0, sizeof(final));
@@ -2955,11 +2960,11 @@ yyreduce:
                 free((yyvsp[0].valString));
                 (yyval.valString) = final;
                 }
-#line 2959 "scanner.tab.c"
+#line 2964 "scanner.tab.c"
     break;
 
   case 77: /* term: EX exp  */
-#line 1192 "scanner.y"
+#line 1197 "scanner.y"
                  {
                 char * final = malloc(strlen((yyvsp[0].valString)) * sizeof(char) + sizeof("!()") + 1);
                 memset(final, 0, sizeof(final));
@@ -2969,109 +2974,109 @@ yyreduce:
                 free((yyvsp[0].valString));
                 (yyval.valString) = final;
                 }
-#line 2973 "scanner.tab.c"
+#line 2978 "scanner.tab.c"
     break;
 
   case 78: /* operand: PLUS  */
-#line 1204 "scanner.y"
+#line 1209 "scanner.y"
              {
                 (yyval.valString) = strdup(" + ");
         }
-#line 2981 "scanner.tab.c"
+#line 2986 "scanner.tab.c"
     break;
 
   case 79: /* operand: PLUS EQ  */
-#line 1207 "scanner.y"
+#line 1212 "scanner.y"
                  {(yyval.valString) = strdup(" += ");}
-#line 2987 "scanner.tab.c"
+#line 2992 "scanner.tab.c"
     break;
 
   case 80: /* operand: HYPHEN  */
-#line 1208 "scanner.y"
+#line 1213 "scanner.y"
                 {(yyval.valString) = strdup(" - ");}
-#line 2993 "scanner.tab.c"
+#line 2998 "scanner.tab.c"
     break;
 
   case 81: /* operand: HYPHEN EQ  */
-#line 1209 "scanner.y"
+#line 1214 "scanner.y"
                    {(yyval.valString) = strdup(" -= ");}
-#line 2999 "scanner.tab.c"
+#line 3004 "scanner.tab.c"
     break;
 
   case 82: /* operand: PROD  */
-#line 1210 "scanner.y"
+#line 1215 "scanner.y"
               {(yyval.valString) = strdup(" * ");}
-#line 3005 "scanner.tab.c"
+#line 3010 "scanner.tab.c"
     break;
 
   case 83: /* operand: DIV  */
-#line 1211 "scanner.y"
+#line 1216 "scanner.y"
              {(yyval.valString) = strdup(" / ");}
-#line 3011 "scanner.tab.c"
+#line 3016 "scanner.tab.c"
     break;
 
   case 84: /* operand: DIVINT  */
-#line 1212 "scanner.y"
+#line 1217 "scanner.y"
                 {(yyval.valString) = strdup(" / ");}
-#line 3017 "scanner.tab.c"
+#line 3022 "scanner.tab.c"
     break;
 
   case 85: /* operand: MOD  */
-#line 1213 "scanner.y"
+#line 1218 "scanner.y"
              {(yyval.valString) = strdup(" % ");}
-#line 3023 "scanner.tab.c"
+#line 3028 "scanner.tab.c"
     break;
 
   case 86: /* operand: LOWER  */
-#line 1214 "scanner.y"
+#line 1219 "scanner.y"
                {(yyval.valString) = strdup(" < ");}
-#line 3029 "scanner.tab.c"
+#line 3034 "scanner.tab.c"
     break;
 
   case 87: /* operand: HIGHER  */
-#line 1215 "scanner.y"
+#line 1220 "scanner.y"
                 {(yyval.valString) = strdup(" > ");}
-#line 3035 "scanner.tab.c"
+#line 3040 "scanner.tab.c"
     break;
 
   case 88: /* operand: LOWER EQ  */
-#line 1216 "scanner.y"
+#line 1221 "scanner.y"
                   {(yyval.valString) = strdup(" <= ");}
-#line 3041 "scanner.tab.c"
+#line 3046 "scanner.tab.c"
     break;
 
   case 89: /* operand: HIGHER EQ  */
-#line 1217 "scanner.y"
+#line 1222 "scanner.y"
                    {(yyval.valString) = strdup(" >= ");}
-#line 3047 "scanner.tab.c"
+#line 3052 "scanner.tab.c"
     break;
 
   case 90: /* operand: EQ  */
-#line 1218 "scanner.y"
+#line 1223 "scanner.y"
             {(yyval.valString) = strdup(" == ");}
-#line 3053 "scanner.tab.c"
+#line 3058 "scanner.tab.c"
     break;
 
   case 91: /* operand: AND  */
-#line 1219 "scanner.y"
+#line 1224 "scanner.y"
              {(yyval.valString) = strdup(" && ");}
-#line 3059 "scanner.tab.c"
+#line 3064 "scanner.tab.c"
     break;
 
   case 92: /* operand: PLUS PLUS  */
-#line 1220 "scanner.y"
+#line 1225 "scanner.y"
                    {(yyval.valString) = strdup(" ++ ");}
-#line 3065 "scanner.tab.c"
+#line 3070 "scanner.tab.c"
     break;
 
   case 93: /* operand: OR  */
-#line 1221 "scanner.y"
+#line 1226 "scanner.y"
            {(yyval.valString) = strdup(" || ");}
-#line 3071 "scanner.tab.c"
+#line 3076 "scanner.tab.c"
     break;
 
   case 94: /* atom: STRINGV  */
-#line 1226 "scanner.y"
+#line 1231 "scanner.y"
                 {
 			/*if (!checkName(&typelist, $1)){
                         printf("Error: Variable %s no declarada\n", $1);
@@ -3080,20 +3085,20 @@ yyreduce:
             }
             $$ = $1;*/
 		}
-#line 3084 "scanner.tab.c"
+#line 3089 "scanner.tab.c"
     break;
 
   case 95: /* atom: values  */
-#line 1234 "scanner.y"
+#line 1239 "scanner.y"
                  {
                         
 			(yyval.valString) = (yyvsp[0].valString);
 		}
-#line 3093 "scanner.tab.c"
+#line 3098 "scanner.tab.c"
     break;
 
 
-#line 3097 "scanner.tab.c"
+#line 3102 "scanner.tab.c"
 
       default: break;
     }
@@ -3317,7 +3322,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 1240 "scanner.y"
+#line 1245 "scanner.y"
 
 
 
@@ -3512,7 +3517,9 @@ int isNumber(char * stringq) {
         }
         return 1;
 }
-
+void yyerror(const char* msg) {
+    fprintf(stderr, "Error: %s\n", msg);
+}
 int main(int argc, char *argv[]){
         FILE *fp = fopen(outputName, "w");
         if(fp!=NULL){

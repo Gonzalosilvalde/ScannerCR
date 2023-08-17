@@ -234,14 +234,13 @@ fvardef :
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($2)*sizeof(char) + strlen("let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($2)*sizeof(char) + strlen("let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,$2);
                 strcat(final,":");
                 strcat(final,tipo);
                 strcat(final,";\n");
-
                 $$ = final;
 
         }
@@ -261,7 +260,7 @@ fvardef :
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("= let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,$2);
@@ -270,6 +269,7 @@ fvardef :
                 strcat(final,"=");
                 strcat(final,$4);
                 strcat(final,";\n");
+                printf("%s",final);
                 $$ = final;
         }
         | type STRINGV EQ STRINGV SEMICOLON {
@@ -288,7 +288,7 @@ fvardef :
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("= let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,$2);
@@ -297,6 +297,7 @@ fvardef :
                 strcat(final,"=");
                 strcat(final,$4);
                 strcat(final,";\n");
+                
                 $$ = final;
         }
         | type STRINGV LSQUAREPAREN INTNUM RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON{
@@ -315,8 +316,9 @@ fvardef :
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen($2)*sizeof(char) + strlen(tipo)*sizeof(char)+ strlen($4)*sizeof(char) + strlen($8)*sizeof(char) + sizeof("[] [] ; \n"));
+                char * final = malloc(strlen($2)*sizeof(char) + strlen(tipo)*sizeof(char)+ strlen($4)*sizeof(char) + strlen($8)*sizeof(char) + sizeof("let ::[] [] ; \n"));
                 memset(final,0,sizeof(final));
+                
                 strcat(final,"let ");
                 strcat(final,$2);
                 strcat(final,": [");
@@ -327,6 +329,7 @@ fvardef :
                 strcat(final,"[");
                 strcat(final,$8);
                 strcat(final,"];\n");
+                printf("%s",final);
                 $$ = final;
         }
         
@@ -349,14 +352,13 @@ vardef :
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($2)*sizeof(char) + strlen("let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($2)*sizeof(char) + strlen("let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,$2);
                 strcat(final,":");
                 strcat(final,tipo);
                 strcat(final,";\n");
-
                 $$ = final;
 
         }
@@ -376,7 +378,7 @@ vardef :
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("= let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,$2);
@@ -403,7 +405,7 @@ vardef :
                         case 10: tipo = "bool ";break;
                         default: break;
                 }
-                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("= let \n : ;"));
+                char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n : ;"));
                 memset(final,0,sizeof(final));
                 strcat(final,"let ");
                 strcat(final,$2);
@@ -412,6 +414,7 @@ vardef :
                 strcat(final,"=");
                 strcat(final,$4);
                 strcat(final,";\n");
+                
                 $$ = final;
         }
         
@@ -865,11 +868,13 @@ line_program :
         }
         | fvardef{
                 char * final = malloc(strlen($1)*sizeof(char)  + sizeof("\n"));
+                memset(final,0,sizeof(final));
                 strcat(final,$1);
                 strcat(final,"\n");
 
                 
                 $$ = final;
+                
         }
 
 ;
@@ -1431,7 +1436,9 @@ int isNumber(char * stringq) {
         }
         return 1;
 }
-
+void yyerror(const char* msg) {
+    fprintf(stderr, "Error: %s\n", msg);
+}
 int main(int argc, char *argv[]){
         FILE *fp = fopen(outputName, "w");
         if(fp!=NULL){

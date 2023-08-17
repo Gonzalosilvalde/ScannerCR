@@ -13,7 +13,7 @@ a + b
 }
 
 fn multiplicacion (i32 b, i32 a, i32 b, i32 a, i32 b, i32 a) -> f32 {
-a + b
+a * b
 }
 
 fn suma (i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a, i32 b, i32 a) -> i32 {
@@ -23,7 +23,7 @@ a + b
 fn () main-> i32 {
 // Variables de diferentes tipos de datos
 
-let numero_entero:i32 =10;
+let numero_entero:i32 =100;
 
 
 let numero_corto:i16 =100;

@@ -17,7 +17,7 @@ int suma(int a, int b, int a, int b, int a, int b,int a, int b, int a, int b, in
 }
 //hola
 float multiplicacion(int a, int b, int a, int b, int a, int b) {
-    return a+b;
+    return a*b;
 }
 //hola
 int suma(int a, int b, int a, int b, int a, int b,int a, int b, int a, int b, int a, int b) {
@@ -26,7 +26,7 @@ int suma(int a, int b, int a, int b, int a, int b,int a, int b, int a, int b, in
 //hola
 int main() {
     // Variables de diferentes tipos de datos
-    int numero_entero = 10;
+    int numero_entero = 100;
     short numero_corto = 100;
     long numero_largo = 10000;
     unsigned int entero_sin_signo = 20;
