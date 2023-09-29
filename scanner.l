@@ -22,7 +22,9 @@ float {return FLOAT;}//32
 double {return DOUBLE;}//64
 string {return STRING;}
 bool {return BOOLEAN;}
+void {return VOID;}
 printf {return PRINTF;}
+scanf {return SCANF;}
 char {return CHAR;}
 true {return TRUEVAL;}
 false {return FALSEVAL;}

@@ -1,16 +1,24 @@
 FUENTE = scanner
-PRUEBA = hola.cpp
+PRUEBA = hola.c
 
 all: compile run
 
 compile: bison_compile flex_compile link
+
+all_counter: compile_counter run
+
+compile_counter: bison_counter flex_compile link
 
 flex_compile:
 	flex $(FUENTE).l
 	gcc -c lex.yy.c -o lex.yy.o
 
 bison_compile:
-	bison -d $(FUENTE).y
+	bison -d $(FUENTE).y 
+	gcc -c $(FUENTE).tab.c -o $(FUENTE).tab.o
+
+bison_counter:
+	bison -d $(FUENTE).y -Wcounterexamples
 	gcc -c $(FUENTE).tab.c -o $(FUENTE).tab.o
 
 link:
@@ -21,6 +29,9 @@ run:
 
 list.o : list.h list.c
 	gcc -c list.c -Wall
+
+valgrind: 
+	valgrind --leak-check=full ./$(FUENTE) $(PRUEBA)
 
 clean:
 	rm -f $(FUENTE) lex.yy.c $(FUENTE).tab.c $(FUENTE).tab.h *.o
