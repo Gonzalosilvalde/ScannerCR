@@ -162,7 +162,7 @@ int searchString(char **arr, char *toFind, int size);
 %type <valString> comment
 %type <valString> atom
 %type <valString> operand 
-%type <valString> term
+%type <valString> exp term
 %start S 
 %%
 S : 
@@ -329,7 +329,7 @@ vardef :
                 strcat(final,";\n");
                 $$ = final;
         }
-        | type STRINGV EQ term SEMICOLON {//2
+        | type STRINGV EQ exp SEMICOLON {//2
                 char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen(tipo)*sizeof(char) + strlen($4)*sizeof(char) + strlen($2)*sizeof(char) + strlen("=let\n: ;"));
                 memset(final,0,sizeof(final));
@@ -360,7 +360,7 @@ vardef :
                 strcat(final,"];\n");
                 $$ = final;
         }
-        | type STRINGV LSQUAREPAREN RSQUAREPAREN EQ term SEMICOLON{//4
+        | type STRINGV LSQUAREPAREN RSQUAREPAREN EQ exp SEMICOLON{//4
                 char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen($2)*sizeof(char) + strlen(tipo)*sizeof(char) + strlen($6)*sizeof(char) + sizeof("let ::[] [] ; \n"));
                 memset(final,0,sizeof(final));
@@ -446,7 +446,7 @@ vardef :
 
                 
         }
-        | type STRINGV EQ term COMMA vardef{//8
+        | type STRINGV EQ exp COMMA vardef{//8
                 char * tipo = obtenerTipo($1);
                 char * final = malloc(strlen($2)*sizeof(char) + strlen($4)*sizeof(char)+ strlen($6)*sizeof(char)+ strlen(tipo)*sizeof(char) + sizeof(", "));
                 memset(final, 0 , sizeof(final));
@@ -489,16 +489,18 @@ vardef :
                         // Manejar el error si la primera llamada a reemplazar falla
                 }
         }
-        |term COMMA vardef{//9
-                char * final = malloc(strlen($1)*sizeof(char) + sizeof("; : let \n") + strlen($3)*sizeof(char) );
+        |STRINGV operand exp COMMA vardef{//9
+                char * final = malloc(strlen($1)*sizeof(char) + sizeof("; : let \n") + strlen($3)*sizeof(char)+ strlen($5)*sizeof(char) );
                 memset(final, 0, sizeof(final));
                 strcat(final, "let ");
                 strcat(final, $1);
-                strcat(final,";\n");
+                strcat(final, ":=");
                 strcat(final, $3);
+                strcat(final,";\n");
+                strcat(final, $5);
                 $$ = final;
         }
-        /*|STRINGV COMMA vardef{//10
+        |STRINGV COMMA vardef{//10
                 char * final = malloc(strlen($1)*sizeof(char) + sizeof("; : let \n") + strlen($3)* sizeof(char));
                 memset(final, 0, sizeof(final));
                 strcat(final, "let ");
@@ -506,7 +508,7 @@ vardef :
                 strcat(final, ":;\n");;
                 strcat(final, $3);
                 $$ = final;
-        }*/
+        }
         |STRINGV SEMICOLON{//11
 
                 char * final = malloc(strlen($1)*sizeof(char) + sizeof("; : let \n") );
@@ -516,7 +518,7 @@ vardef :
                 strcat(final, ":;\n");;
                 $$ = final;
         }
-        /*|STRINGV EQ term SEMICOLON{//12
+        |STRINGV EQ exp SEMICOLON{//12
                 char * final = malloc(strlen($1)*sizeof(char) + sizeof("; : let \n") + strlen($3)*sizeof(char) );
                 memset(final, 0, sizeof(final));
                 strcat(final, "let ");
@@ -525,7 +527,7 @@ vardef :
                 strcat(final, $3);
                 strcat(final,";\n");
                 $$ = final;
-        }*/
+        }
         
         
         
@@ -796,7 +798,7 @@ line_program :
                 $$ = $3;
         }
         
-        /*|STRINGV LPAREN array RPAREN SEMICOLON{
+        |STRINGV LPAREN array RPAREN SEMICOLON{
                 char * final = malloc(strlen($1)* sizeof(char) + strlen($3)*sizeof(char) + sizeof("();") + 1);
                 memset(final,0, sizeof(final));
                 strcat(final, $1);
@@ -805,7 +807,7 @@ line_program :
                 strcat(final,");");
                 $$ = final;
 
-        }*/
+        }
         |STRINGV LPAREN RPAREN SEMICOLON{
                 char * final = malloc(strlen($1)* sizeof(char) +  sizeof("();") + 1);
                 memset(final,0, sizeof(final));
@@ -816,7 +818,7 @@ line_program :
 
         }
         
-        | IF LPAREN term RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  {
+        | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  {
                 char * final = malloc(strlen($3)* sizeof(char) + strlen($6)*sizeof(char) + sizeof("if ( ) { } \t \n \n"));
                 memset(final, 0, sizeof(final));
                 strcat(final, "if (");
@@ -829,7 +831,7 @@ line_program :
                 $$ = final;
 
         }
-        | ELSE IF LPAREN term RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+        | ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
                 char * final = malloc(strlen($4)* sizeof(char) + strlen($7)*sizeof(char) + sizeof("else if ( ) { } \t \n \n"));
                 memset(final, 0, sizeof(final));
                 strcat(final, "else if (");
@@ -850,7 +852,7 @@ line_program :
                 $$ = final;
         
         }
-        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON term STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
                 char * final = malloc($3*sizeof(int) + strlen($8)*sizeof(char) +
                                 sizeof("for ; ; {}")+strlen($4)*sizeof(char)+ strlen($6)*sizeof(char) + strlen($9)*sizeof(char) + 
                                 strlen($10)*sizeof(char) + strlen($13)*sizeof(char));
@@ -870,7 +872,7 @@ line_program :
                 $$=final;
                 ;}
         //for ( int i = 8 ; i<20 ; i = i + 1) { lines}
-        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON term SEMICOLON vardef  RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef  RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
                 char * final = malloc ($3*sizeof(int) + strlen($4)*sizeof(char) + strlen($6)*sizeof(char) + strlen($8)*sizeof(char)  +
                                         strlen($10)*sizeof(char) + strlen($13)*sizeof(char)+ sizeof("for ; ; {} .step_by( )"));
                 memset(final,0, strlen(final));
@@ -893,7 +895,7 @@ line_program :
         
         
         }
-        | DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN term RPAREN SEMICOLON{
+        | DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON{
                 char * final = malloc( strlen($3)*sizeof(char) + strlen($7)*sizeof(char) + sizeof("loop {} if() == {} break; \n") );
                 memset(final, 0 , sizeof(final));
 
@@ -908,7 +910,7 @@ line_program :
                 $$ = final;
         
         }
-        | WHILE LPAREN term RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{
+        | WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{
                 char * final = malloc(strlen($3)*sizeof(char) + strlen($6)*sizeof(char) + sizeof("while () {} \n\n"));
                 memset(final, 0, sizeof(final));
 
@@ -931,7 +933,7 @@ line_program :
 
                 $$ = final;
         }
-        | RETURN term SEMICOLON {
+        | RETURN exp SEMICOLON {
                 char * final = malloc(strlen($2)*sizeof(char) );
                 memset(final, 0 , sizeof(final));
                 
@@ -984,7 +986,7 @@ line_program :
 
 array :
        
-        term COMMA array{
+        exp COMMA array{
                 char * final = malloc(strlen($1)*sizeof(char) + strlen($3)*sizeof(char)) ;
                 memset(final,0,sizeof(final));
 
@@ -993,7 +995,7 @@ array :
                 strcat(final,$3);
                 $$ = final;
         }
-        |term{
+        |exp{
                 $$ = $1;
         }
         
@@ -1167,7 +1169,7 @@ contentWrite :
 
 
 
-/*exp :   exp operand term {
+exp :   exp operand term {
                 
                 char * final = malloc(strlen($1) * sizeof(char) +strlen($2) * sizeof(char) + strlen($3) * sizeof(char) + 1);
                 memset(final, 0, sizeof(final));
@@ -1184,12 +1186,12 @@ contentWrite :
         	$$ = $1;
 			}
 
-;*/
+;
 
 term :
         atom {
                 $$ = $1;}
-        | LPAREN term RPAREN {
+        | LPAREN exp RPAREN {
                 char * final = malloc(strlen($2) * sizeof(char) + sizeof("()") + 1);
                 memset(final, 0, sizeof(final));
                 strcpy(final, "(");
@@ -1207,7 +1209,7 @@ term :
                 free($2);
                 $$ = final;
                 }
-        | EX term {
+        | EX exp {
                 char * final = malloc(strlen($2) * sizeof(char) + sizeof("!()") + 1);
                 memset(final, 0, sizeof(final));
                 strcpy(final, "!(");
@@ -1216,15 +1218,7 @@ term :
                 free($2);
                 $$ = final;
                 }
-        /*| term operand term SEMICOLON{
-                char * final = malloc(strlen($1) * sizeof(char) + strlen($3) * sizeof(char) + strlen($2) * sizeof(char));
-                memset(final, 0 , sizeof(final));
-                strcat(final, $1);
-                strcat(final, $2);
-                strcat(final, $3);
-                $$ = final;
-        }*/
-        | term operand term {
+        | term operand term SEMICOLON{
                 char * final = malloc(strlen($1) * sizeof(char) + strlen($3) * sizeof(char) + strlen($2) * sizeof(char));
                 memset(final, 0 , sizeof(final));
                 strcat(final, $1);
