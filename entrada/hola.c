@@ -1,6 +1,22 @@
 #include <stdio.h>
+#include "archivo1.h"
+#include "archivo2.h"
+#include "archivo3.h"
+#include "archivo4.h"
 
+
+
+struct Persona {
+    char nombre;
+    int edad;
+    float altura;
+    };
 void hanoi(int n, char desde, char auxiliar, char hacia) {
+    struct Persona {
+    char nombre;
+    int edad;
+    float altura;
+    };
     if (n == 1) {
         printf("Mueva el disco 1 desde el poste %c hacia el poste %c\n", desde, hacia);
         return;

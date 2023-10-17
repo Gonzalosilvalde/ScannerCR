@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "scanner.tab.h"
+int i = 0;
 %}
 
 letter [a-zA-Z]
@@ -37,13 +38,16 @@ VAR {return VAR;}
 \) {return RPAREN;}
 \[ {return LSQUAREPAREN;}
 \] {return RSQUAREPAREN;}
+struct {return STRUCT;}
 "//"[^\/\n]*\n {yylval.valString = strdup(yytext); return COMMENTLINE;}
 "/*"[^\{\}]*"*/" {yylval.valString = strdup(yytext); return MULTILINE;}
 \{ {return OPENCURLYBRACKET;}
 \} {return CLOSECURLYBRACKET;}
 \= {return EQ;}
 \: {return COLON;}
-\; {return SEMICOLON;}
+\; {printf("%i\n",i);
+    i = i +1;
+    return SEMICOLON;}
 \, {return COMMA;}
 \. {return DOT;}
 ! {return EX;}
@@ -72,10 +76,15 @@ const {return CONST;}
 
 ({letter}|\_)({letter}|{digit}|\_)*  {
     yylval.valString = strdup(yytext);
-
+        
         return STRINGV;
 }
 ({stringquote}|{cs})+ {yylval.valString = strdup(yytext); return QUOTESTRING;}
 \n ;
 . ;
 %%
+YY_BUFFER_STATE yy_current_buffer(){
+    return YY_CURRENT_BUFFER;
+}
+
+

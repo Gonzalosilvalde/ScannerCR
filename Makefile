@@ -1,5 +1,5 @@
 FUENTE = scanner
-PRUEBA = hola.c
+PRUEBA = archivo4.c
 
 all: compile run
 
@@ -11,7 +11,7 @@ compile_counter: bison_counter flex_compile link
 
 flex_compile:
 	flex $(FUENTE).l
-	gcc -c lex.yy.c -o lex.yy.o
+	gcc -c lex.yy.c -o lex.yy.o -lfl
 
 bison_compile:
 	bison -d $(FUENTE).y 
@@ -22,7 +22,7 @@ bison_counter:
 	gcc -c $(FUENTE).tab.c -o $(FUENTE).tab.o
 
 link:
-	gcc -o $(FUENTE) list.o lex.yy.o $(FUENTE).tab.o -L. -lfl -ly -g
+	gcc -o $(FUENTE) list.o lex.yy.o $(FUENTE).tab.o -L. -lfl -ly -g -pthread -fopenmp
 
 run:
 	./$(FUENTE) $(PRUEBA)

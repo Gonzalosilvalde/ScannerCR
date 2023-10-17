@@ -1,1 +1,0 @@
-        · al ser una variable de un nombre mas grande que 1 char, pone coma entre cada letra
