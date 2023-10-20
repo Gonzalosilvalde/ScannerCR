@@ -120,7 +120,8 @@ extern int yydebug;
     REALNUM = 321,                 /* REALNUM  */
     RETURN = 322,                  /* RETURN  */
     STRUCT = 323,                  /* STRUCT  */
-    EX = 324                       /* EX  */
+    AMPERSAND = 324,               /* AMPERSAND  */
+    EX = 325                       /* EX  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -129,13 +130,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 72 "scanner.y"
+#line 75 "scanner.y"
 
     char * valString;
     int valInt;
     double valDouble;
 
-#line 139 "scanner.tab.h"
+#line 140 "scanner.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

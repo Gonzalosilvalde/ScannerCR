@@ -27,8 +27,8 @@ int main() {
         printf("Enter name of student %d: ", i + 1);
         scanf("%s", students[i].name);
 
-        printf("Enter id of student %d: ", i + 1);
-        scanf("%d", &students[i].id);
+        printf("Enter id of student %d: ", i);
+        scanf("%d", student);
 
         printf("Enter grades for student %d:\n", i + 1);
         for (int j = 0; j < MAX_SUBJECTS; j++) {

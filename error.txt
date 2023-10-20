@@ -9,10 +9,6 @@ puede que haya .c sin cabeceras, deberia ser añadir 2 cositas al principio nada
 EL paralelo funciona, pero hay que ver de hacer otra cosa que no sea el uso de cabeceras.txt para ejecutar el programa y que no caiga en bucle infinito
 
 hay que añadir:
-    las flechas de los struct
-    que las variables se puedan definir como int loquesea[algo];
-    que se puedan definir variables poniendo, por ejemplo struct STRINGV STRINGV aqui pues que pueda tener eq o ; o lo que sea 
-    que se puedan definir constantes
     objetos para c++
 
 

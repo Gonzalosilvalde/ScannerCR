@@ -54,7 +54,8 @@ struct {return STRUCT;}
 if {return IF;}
 (?i:then) {return THEN;}
 (?i:else) {return ELSE;}
-&& {return AND;}
+&& {return AND;}//& {return AMPERSAND;}
+
 "||" {return OR;}
 \< {return LOWER;}
 \> {return HIGHER;}
@@ -74,7 +75,7 @@ stringquote {return STRINGQUOTE;}
 "#define" {return DEFINE;}
 const {return CONST;}
 
-({letter}|\_)({letter}|{digit}|\_)*  {
+({letter}|\_|&)({letter}|{digit}|\_)*  {
     yylval.valString = strdup(yytext);
         
         return STRINGV;
