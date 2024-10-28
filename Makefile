@@ -1,5 +1,5 @@
 FUENTE = scanner
-PRUEBA = archivo3.c
+PRUEBA = archivo1.c
 
 all: compile run
 

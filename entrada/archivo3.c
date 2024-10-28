@@ -1,15 +1,36 @@
 #include <stdio.h>
-#include "archivo4.h"
 
-// Declaración de la función
-void funcion3() {
-    printf("Esta es la función 3.\n");
-    printf("Esta es la función 3.\n");
-
+void ordenarBurbuja(int arr[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
 }
 
 int main() {
-    printf("Hola desde el archivo3.c\n");
-    funcion3(hola); // Llama a la función 3
+    int n;
+    printf("Introduce el número de elementos en el arreglo: ");
+    scanf("%d", &n);
+
+    int arr[n];
+    printf("Introduce los elementos del arreglo:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    ordenarBurbuja(arr, n);
+
+    printf("Arreglo ordenado en orden ascendente:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
     return 0;
 }
+

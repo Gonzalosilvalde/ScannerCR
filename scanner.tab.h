@@ -69,59 +69,63 @@ extern int yydebug;
     IF = 270,                      /* IF  */
     THEN = 271,                    /* THEN  */
     ELSE = 272,                    /* ELSE  */
-    AND = 273,                     /* AND  */
-    OR = 274,                      /* OR  */
-    LOWER = 275,                   /* LOWER  */
-    HIGHER = 276,                  /* HIGHER  */
-    PLUS = 277,                    /* PLUS  */
-    HYPHEN = 278,                  /* HYPHEN  */
-    PROD = 279,                    /* PROD  */
-    DIV = 280,                     /* DIV  */
-    DIVINT = 281,                  /* DIVINT  */
-    MOD = 282,                     /* MOD  */
-    COMMA = 283,                   /* COMMA  */
-    DOT = 284,                     /* DOT  */
-    EQ = 285,                      /* EQ  */
-    COMMENTLINE = 286,             /* COMMENTLINE  */
-    MULTILINE = 287,               /* MULTILINE  */
-    VAR = 288,                     /* VAR  */
-    CONST = 289,                   /* CONST  */
-    DEFINE = 290,                  /* DEFINE  */
-    LISTCONTENT = 291,             /* LISTCONTENT  */
-    VALUE = 292,                   /* VALUE  */
-    LPAREN = 293,                  /* LPAREN  */
-    STRINGQUOTE = 294,             /* STRINGQUOTE  */
-    RPAREN = 295,                  /* RPAREN  */
-    RSQUAREPAREN = 296,            /* RSQUAREPAREN  */
-    LSQUAREPAREN = 297,            /* LSQUAREPAREN  */
-    COLON = 298,                   /* COLON  */
-    SEMICOLON = 299,               /* SEMICOLON  */
-    INTEGER = 300,                 /* INTEGER  */
-    SHORT = 301,                   /* SHORT  */
-    LONG = 302,                    /* LONG  */
-    UNSIGNED_INT = 303,            /* UNSIGNED_INT  */
-    UNSIGNED_SHORT = 304,          /* UNSIGNED_SHORT  */
-    UNSIGNED_LONG = 305,           /* UNSIGNED_LONG  */
-    FLOAT = 306,                   /* FLOAT  */
-    DOUBLE = 307,                  /* DOUBLE  */
-    VOID = 308,                    /* VOID  */
-    OPENCURLYBRACKET = 309,        /* OPENCURLYBRACKET  */
-    CLOSECURLYBRACKET = 310,       /* CLOSECURLYBRACKET  */
-    BOOLEAN = 311,                 /* BOOLEAN  */
-    CHAR = 312,                    /* CHAR  */
-    PRINTF = 313,                  /* PRINTF  */
-    SCANF = 314,                   /* SCANF  */
-    STRING = 315,                  /* STRING  */
-    STRINGV = 316,                 /* STRINGV  */
-    QUOTESTRING = 317,             /* QUOTESTRING  */
-    TRUEVAL = 318,                 /* TRUEVAL  */
-    FALSEVAL = 319,                /* FALSEVAL  */
-    INTNUM = 320,                  /* INTNUM  */
-    REALNUM = 321,                 /* REALNUM  */
-    RETURN = 322,                  /* RETURN  */
-    STRUCT = 323,                  /* STRUCT  */
-    AMPERSAND = 324,               /* AMPERSAND  */
-    EX = 325                       /* EX  */
+    SWITCH = 273,                  /* SWITCH  */
+    CASE = 274,                    /* CASE  */
+    DEFAULT = 275,                 /* DEFAULT  */
+    AND = 276,                     /* AND  */
+    OR = 277,                      /* OR  */
+    LOWER = 278,                   /* LOWER  */
+    HIGHER = 279,                  /* HIGHER  */
+    PLUS = 280,                    /* PLUS  */
+    HYPHEN = 281,                  /* HYPHEN  */
+    PROD = 282,                    /* PROD  */
+    DIV = 283,                     /* DIV  */
+    DIVINT = 284,                  /* DIVINT  */
+    MOD = 285,                     /* MOD  */
+    COMMA = 286,                   /* COMMA  */
+    DOT = 287,                     /* DOT  */
+    PERCENT = 288,                 /* PERCENT  */
+    EQ = 289,                      /* EQ  */
+    COMMENTLINE = 290,             /* COMMENTLINE  */
+    MULTILINE = 291,               /* MULTILINE  */
+    VAR = 292,                     /* VAR  */
+    CONST = 293,                   /* CONST  */
+    DEFINE = 294,                  /* DEFINE  */
+    LISTCONTENT = 295,             /* LISTCONTENT  */
+    VALUE = 296,                   /* VALUE  */
+    LPAREN = 297,                  /* LPAREN  */
+    STRINGQUOTE = 298,             /* STRINGQUOTE  */
+    RPAREN = 299,                  /* RPAREN  */
+    RSQUAREPAREN = 300,            /* RSQUAREPAREN  */
+    LSQUAREPAREN = 301,            /* LSQUAREPAREN  */
+    COLON = 302,                   /* COLON  */
+    SEMICOLON = 303,               /* SEMICOLON  */
+    INTEGER = 304,                 /* INTEGER  */
+    SHORT = 305,                   /* SHORT  */
+    LONG = 306,                    /* LONG  */
+    UNSIGNED_INT = 307,            /* UNSIGNED_INT  */
+    UNSIGNED_SHORT = 308,          /* UNSIGNED_SHORT  */
+    UNSIGNED_LONG = 309,           /* UNSIGNED_LONG  */
+    FLOAT = 310,                   /* FLOAT  */
+    DOUBLE = 311,                  /* DOUBLE  */
+    VOID = 312,                    /* VOID  */
+    OPENCURLYBRACKET = 313,        /* OPENCURLYBRACKET  */
+    CLOSECURLYBRACKET = 314,       /* CLOSECURLYBRACKET  */
+    BOOLEAN = 315,                 /* BOOLEAN  */
+    CHAR = 316,                    /* CHAR  */
+    PRINTF = 317,                  /* PRINTF  */
+    SCANF = 318,                   /* SCANF  */
+    STRING = 319,                  /* STRING  */
+    STRINGV = 320,                 /* STRINGV  */
+    QUOTESTRING = 321,             /* QUOTESTRING  */
+    TRUEVAL = 322,                 /* TRUEVAL  */
+    FALSEVAL = 323,                /* FALSEVAL  */
+    INTNUM = 324,                  /* INTNUM  */
+    REALNUM = 325,                 /* REALNUM  */
+    RETURN = 326,                  /* RETURN  */
+    STRUCT = 327,                  /* STRUCT  */
+    AMPERSAND = 328,               /* AMPERSAND  */
+    EX = 329                       /* EX  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -136,7 +140,7 @@ union YYSTYPE
     int valInt;
     double valDouble;
 
-#line 140 "scanner.tab.h"
+#line 144 "scanner.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

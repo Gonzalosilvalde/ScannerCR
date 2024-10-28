@@ -95,6 +95,9 @@ char* getStringFromExp(char* str);
 %token IF
 %token THEN
 %token ELSE
+%token SWITCH 
+%token CASE
+%token DEFAULT
 %token AND
 %token OR
 %token LOWER
@@ -107,6 +110,7 @@ char* getStringFromExp(char* str);
 %token MOD
 %token COMMA
 %token DOT
+%token PERCENT
 %token EQ
 %token <valString>COMMENTLINE
 %token <valString>MULTILINE
@@ -151,18 +155,24 @@ char* getStringFromExp(char* str);
 %left <valString>SEMICOLON
 %left <valString>EQ
 %left LOWER HIGHER
-%left <valString>PLUS HYPHEN
+%left <valString>PLUS HYPHEN PERCENT
 %left PROD DIV
 %left DIVINT MOD
 %left AND OR
 %right EX
-%right LPAREN
-%left RPAREN
+%left LPAREN RPAREN
+%left STRINGV 
 %left DOT
+%left IF
+%left SWITCH
+%right COMMENTLINE
+%right MULTILINE
+%left INTEGER
+%right ELSE
 
 
-%type <valString> vardef constdef args 
-%type <valString> preprograma
+%type <valString> vardef constdef args if_statement fun_cre 
+%type <valString> preprograma case_chain
 
 %type <valString>  values array
 %type <valInt> type
@@ -491,7 +501,7 @@ vardef :
 		free($6);
                 $$ = final;
         }
-        | type STRINGV EQ STRINGV LPAREN array RPAREN SEMICOLON{//5
+       /* | type STRINGV EQ fun_cre SEMICOLON{//5
                 char *tipo;
                 if (strcmp(obtenerTipo($1), "struct") == 0) {
                         tipo = tipoStruct;
@@ -500,45 +510,19 @@ vardef :
                         tipo = obtenerTipo($1);
 
                 }                
-		char * final = malloc(strlen($2)*sizeof(char) +strlen($4)*sizeof(char) + strlen(tipo)*sizeof(char) + strlen($6)*sizeof(char) + sizeof("let = ();"));
+		char * final = malloc(strlen($2)*sizeof(char) +strlen($4)*sizeof(char) + strlen(tipo)*sizeof(char) + sizeof("let = ();"));
                 memset(final,0, sizeof(final));
 
                 strcat(final, "let ");
                 strcat(final, $2);
                 strcat(final, "=");
                 strcat(final, $4);
-                strcat(final,"(");
-                strcat(final, $6);
-                strcat(final, ");");
 		free($2);
 		free($4);
-		free($6);
                 $$ = final;
 
-        }
-        | type STRINGV EQ STRINGV LPAREN RPAREN SEMICOLON{//6
-                char *tipo;
-                if (strcmp(obtenerTipo($1), "struct") == 0) {
-                        tipo = tipoStruct;
-                        
-                }else{
-                        tipo = obtenerTipo($1);
-
-                }                
-		char * final = malloc(strlen($2)*sizeof(char) +strlen($4)*sizeof(char) + strlen(tipo)*sizeof(char)  + sizeof("let = ();"));
-                memset(final,0, sizeof(final));
-
-                strcat(final, "let ");
-                strcat(final, $2);
-                strcat(final, "=");
-                strcat(final, $4);
-                strcat(final,"();");
-        	free($2);
-		free($4);
-
-                $$ = final;
-
-        }
+        }*/
+        
         | type STRINGV COMMA vardef{//7
                 char *tipo;
                 if (strcmp(obtenerTipo($1), "struct") == 0) {
@@ -1059,7 +1043,162 @@ lines_program :
         
 ;
 
+if_statement :
+       	 IF LPAREN exp RPAREN line_program {
+                char * final = malloc(strlen($3)* sizeof(char) + strlen($5)*sizeof(char) + sizeof("if ( ) { } \t \n \n"));
+                memset(final, 0, sizeof(final));
+                strcat(final, "if (");
+                strcat(final, $3);
+                strcat(final, "){\n");
+                strcat(final, $5);
+                strcat(final, "\n}");
+                free($3);
+                free($5);
+                $$ = final;
 
+	} 
+        | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  {
+                char * final = malloc(strlen($3)* sizeof(char) + strlen($6)*sizeof(char) + sizeof("if ( ) { } \t \n \n"));
+                memset(final, 0, sizeof(final));
+                strcat(final, "if (");
+                strcat(final, $3);
+                strcat(final, "){\n");
+                strcat(final, $6);
+                strcat(final, "\n}");
+                free($3);
+                free($6);
+                $$ = final;
+
+        }
+        | ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+                char * final = malloc(strlen($4)* sizeof(char) + strlen($7)*sizeof(char) + sizeof("else if ( ) { } \t \n \n"));
+                memset(final, 0, sizeof(final));
+                strcat(final, "else if (");
+                strcat(final, $4);
+                strcat(final, "){\n\t");
+                strcat(final, $7);
+                strcat(final, "\n}");
+                free($4);
+                free($7);
+                $$ = final;
+        }
+        | ELSE OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+                char* final = malloc(strlen($3)*sizeof(char)+ sizeof("else {} \n \n \t"));
+                memset(final, 0, sizeof(final));
+                strcat(final, "else{\n\t");
+                strcat(final, $3);
+                strcat(final, "}\n");
+                $$ = final;
+        
+        }
+	| SWITCH exp OPENCURLYBRACKET case_chain CLOSECURLYBRACKET{
+		char *final = malloc(strlen("match {}\n\n") + strlen($2) + strlen($4) + 1);
+		final[0] = '\0';
+		strcat(final, "match ");
+		strcat(final, $2);
+		strcat(final, "{\n");
+		strcat(final, $4);
+		strcat(final, "}\n");
+		free($2);
+		free($4);
+		$$ = final;
+ 
+	}
+
+
+;
+
+case_chain :
+	CASE values COLON lines_program case_chain{
+		char *final = malloc(strlen("=> ,  \n\n") + strlen($2) + strlen($4) + strlen($5)+ 1);
+		final[0] = '\0';
+		strcat(final, $2);
+		strcat(final, " => {\n");
+		strcat(final, $4);
+		strcat(final, "\n}, ");
+		strcat(final, $5);
+		free($2);
+		free($4);
+		free($5);
+		$$ = final;
+		
+	}
+	| CASE values COLON lines_program{
+		char *final = malloc(strlen("=> ,  \n") + strlen($2) + strlen($4) + 1);
+		final[0] = '\0';
+		strcat(final, $2);
+		strcat(final, " => {\n");
+		strcat(final, $4);
+		strcat(final, "\n}");
+		free($2);
+		free($4);
+		$$ = final;
+	}
+	| CASE STRINGV COLON lines_program case_chain{
+		char *final = malloc(strlen("=> ,  \n\n") + strlen($2) + strlen($4) + strlen($5)+ 1);
+		final[0] = '\0';
+		strcat(final, $2);
+		strcat(final, " => {\n");
+		strcat(final, $4);
+		strcat(final, "\n}, ");
+		strcat(final, $5);
+		free($2);
+		free($4);
+		free($5);
+		$$ = final;
+
+	}
+	| CASE STRINGV COLON lines_program{
+		char *final = malloc(strlen("=> ,  \n") + strlen($2) + strlen($4) + 1);
+		final[0] = '\0';
+		strcat(final, $2);
+		strcat(final, " => {\n");
+		strcat(final, $4);
+		strcat(final, "\n}");
+		free($2);
+		free($4);
+		$$ = final;
+
+	}
+	| DEFAULT COLON lines_program{
+		char *final = malloc(strlen("_ => ,  \n") + strlen($3) + 1);
+		final[0] = '\0';
+		strcat(final, "_ => {\n");
+		strcat(final, $3);
+		strcat(final, "\n}");
+		free($3);
+		$$ = final;
+
+	}
+;
+
+fun_cre :
+        
+	 STRINGV LPAREN array RPAREN{
+                char * final = malloc(strlen($1)* sizeof(char) + strlen($3)*sizeof(char) + sizeof("()") + 1);
+                memset(final,0, sizeof(final));
+                strcat(final, $1);
+                strcat(final, "(");
+                strcat(final,$3);
+                strcat(final,")");
+		free($1);
+		free($3);
+                $$ = final;
+
+        }
+        |STRINGV LPAREN RPAREN{
+                char * final = malloc(strlen($1)* sizeof(char) +  sizeof("()") + 1);
+                memset(final,0, sizeof(final));
+                strcat(final, $1);
+                strcat(final, "(");
+                strcat(final,")");
+		free($1);
+                $$ = final;
+
+        }
+
+
+;
 
 line_program : 
         WRITE LOWER LOWER precontentWrite SEMICOLON {
@@ -1086,65 +1225,13 @@ line_program :
 		free($3);
                 $$ = final;
         }
-        
-        |STRINGV LPAREN array RPAREN SEMICOLON{
-                char * final = malloc(strlen($1)* sizeof(char) + strlen($3)*sizeof(char) + sizeof("quiere();") + 1);
-                memset(final,0, sizeof(final));
-                strcat(final, $1);
-                strcat(final, "(");
-                strcat(final,$3);
-                strcat(final,");");
-		free($1);
-		free($3);
-                $$ = final;
-
-        }
-        |STRINGV LPAREN RPAREN SEMICOLON{
-                char * final = malloc(strlen($1)* sizeof(char) +  sizeof("();") + 1);
-                memset(final,0, sizeof(final));
-                strcat(final, $1);
-                strcat(final, "(");
-                strcat(final,");");
-		free($1);
-                $$ = final;
-
-        }
-        
-        | IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  {
-                char * final = malloc(strlen($3)* sizeof(char) + strlen($6)*sizeof(char) + sizeof("if ( ) { } \t \n \n"));
-                memset(final, 0, sizeof(final));
-                strcat(final, "if (");
-                strcat(final, $3);
-                strcat(final, "){\n");
-                strcat(final, $6);
-                strcat(final, "\n}");
-                free($3);
-                free($6);
-                $$ = final;
-
-        }
-        | ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
-                char * final = malloc(strlen($4)* sizeof(char) + strlen($7)*sizeof(char) + sizeof("else if ( ) { } \t \n \n"));
-                memset(final, 0, sizeof(final));
-                strcat(final, "else if (");
-                strcat(final, $4);
-                strcat(final, "){\n\t");
-                strcat(final, $7);
-                strcat(final, "\n}");
-                free($4);
-                free($7);
-                $$ = final;
-        }
-        | ELSE OPENCURLYBRACKET line_program CLOSECURLYBRACKET {
-                char* final = malloc(strlen($3)*sizeof(char)+ sizeof("else {} \n \n \t"));
-                memset(final, 0, sizeof(final));
-                strcat(final, "else{\n\t");
-                strcat(final, $3);
-                strcat(final, "}\n");
-                $$ = final;
-        
-        }
-        | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+       	| fun_cre{
+		$$ = $1;
+	} 
+	| if_statement{
+		$$ = $1;
+	}
+	| FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
 		// Calcular el tamaño de `final` correctamente y asegurar espacio para el terminador nulo
 		char str3[12];  // Asumiendo que INT_MAX es el tamaño máximo
 		char str4[12];
@@ -1525,7 +1612,7 @@ exp :   exp operand term {
                                 
 
         	$$ = $1;
-			}
+	}
 
 ;
 
@@ -1534,6 +1621,7 @@ term :
 
                 $$ = $1;
 	}
+
         | LPAREN exp RPAREN {
                 char * final = malloc(strlen($2) * sizeof(char) + sizeof("()") + 1);
                 memset(final, 0, sizeof(final));
@@ -1592,6 +1680,8 @@ operand :
         |PLUS PLUS {$$ = strdup(" ++ ");}
         |OR{$$ = strdup(" || ");}
         |DOT {$$ = strdup(".");}
+	|PERCENT {$$ = strdup(" % ");}
+	|EX EQ {$$ = strdup(" != ");}
 ;
 
 atom :
@@ -1618,6 +1708,10 @@ atom :
 		free($3);
                 $$ = final;
         }
+	| fun_cre{
+		$$ = $1;
+	}
+
 ;
 
 %%

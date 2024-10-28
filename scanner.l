@@ -54,6 +54,9 @@ struct {return STRUCT;}
 if {return IF;}
 (?i:then) {return THEN;}
 (?i:else) {return ELSE;}
+switch {return SWITCH;}
+case {return CASE;}
+default {return DEFAULT;}
 && {return AND;}//& {return AMPERSAND;}
 
 "||" {return OR;}
@@ -65,6 +68,7 @@ if {return IF;}
 \+ {return PLUS;}
 \- {return HYPHEN;}
 \* {return PROD;}
+\% {return PERCENT;}
 \/ {return DIV;}
 div {return DIVINT;}
 mod {return MOD;}
