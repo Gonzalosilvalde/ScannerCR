@@ -1190,7 +1190,7 @@ case 59:
 YY_RULE_SETUP
 #line 78 "scanner.l"
 {
-    yylval.valString = strdup(yytext);
+    	yylval.valString = strdup(yytext);
         
         return STRINGV;
 }
@@ -1198,25 +1198,28 @@ YY_RULE_SETUP
 case 60:
 YY_RULE_SETUP
 #line 83 "scanner.l"
-{yylval.valString = strdup(yytext); return QUOTESTRING;}
+{
+	yylval.valString = strdup(yytext); 
+	return QUOTESTRING;
+}
 	YY_BREAK
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 84 "scanner.l"
+#line 87 "scanner.l"
 ;
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 85 "scanner.l"
+#line 88 "scanner.l"
 ;
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 86 "scanner.l"
+#line 89 "scanner.l"
 ECHO;
 	YY_BREAK
-#line 1220 "lex.yy.c"
+#line 1223 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2221,7 +2224,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 86 "scanner.l"
+#line 89 "scanner.l"
 
 YY_BUFFER_STATE yy_current_buffer(){
     return YY_CURRENT_BUFFER;

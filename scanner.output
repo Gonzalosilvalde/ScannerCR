@@ -1,4 +1,4 @@
-Terminals unused in grammar
+Terminales no usados en la gramática
 
     TO
     DOWNTO
@@ -16,7 +16,7 @@ Terminals unused in grammar
     AMPERSAND
 
 
-Grammar
+Gramática
 
     0 $accept: S $end
 
@@ -147,7 +147,7 @@ Grammar
   107     | STRINGV LSQUAREPAREN atom RSQUAREPAREN
 
 
-Terminals, with rules where they appear
+Terminales con las reglas donde aparecen
 
     $end (0) 0
     error (256)
@@ -221,7 +221,7 @@ Terminals, with rules where they appear
     EX (325) 86
 
 
-Nonterminals, with rules where they appear
+No terminales con las reglas donde aparecen
 
     $accept (71)
         on left: 0
@@ -284,17 +284,17 @@ Nonterminals, with rules where they appear
         on right: 13 15 23 84 107
 
 
-State 0
+Estado 0
 
     0 $accept: • S $end
 
-    PROGRAM  shift, and go to state 1
+    PROGRAM  desplazar e ir al estado 1
 
-    S         go to state 2
-    cabecera  go to state 3
+    S         ir al estado 2
+    cabecera  ir al estado 3
 
 
-State 1
+Estado 1
 
     4 cabecera: PROGRAM • LOWER STRINGV HIGHER
     5         | PROGRAM • LOWER STRINGV DOT STRINGV HIGHER
@@ -303,211 +303,211 @@ State 1
     8         | PROGRAM • LOWER STRINGV DOT STRINGV HIGHER cabecera
     9         | PROGRAM • QUOTESTRING cabecera
 
-    LOWER        shift, and go to state 4
-    QUOTESTRING  shift, and go to state 5
+    LOWER        desplazar e ir al estado 4
+    QUOTESTRING  desplazar e ir al estado 5
 
 
-State 2
+Estado 2
 
     0 $accept: S • $end
 
-    $end  shift, and go to state 6
+    $end  desplazar e ir al estado 6
 
 
-State 3
+Estado 3
 
     1 S: cabecera • preprograma
 
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    CONST           shift, and go to state 9
-    DEFINE          shift, and go to state 10
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 29
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    CONST           desplazar e ir al estado 9
+    DEFINE          desplazar e ir al estado 10
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 29
 
-    comment      go to state 30
-    constdef     go to state 31
-    vardef       go to state 32
-    type         go to state 33
-    values       go to state 34
-    preprograma  go to state 35
-    programa     go to state 36
-    atom         go to state 37
+    comment      ir al estado 30
+    constdef     ir al estado 31
+    vardef       ir al estado 32
+    type         ir al estado 33
+    values       ir al estado 34
+    preprograma  ir al estado 35
+    programa     ir al estado 36
+    atom         ir al estado 37
 
 
-State 4
+Estado 4
 
     4 cabecera: PROGRAM LOWER • STRINGV HIGHER
     5         | PROGRAM LOWER • STRINGV DOT STRINGV HIGHER
     7         | PROGRAM LOWER • STRINGV HIGHER cabecera
     8         | PROGRAM LOWER • STRINGV DOT STRINGV HIGHER cabecera
 
-    STRINGV  shift, and go to state 38
+    STRINGV  desplazar e ir al estado 38
 
 
-State 5
+Estado 5
 
     6 cabecera: PROGRAM QUOTESTRING •
     9         | PROGRAM QUOTESTRING • cabecera
 
-    PROGRAM  shift, and go to state 1
+    PROGRAM  desplazar e ir al estado 1
 
-    $default  reduce using rule 6 (cabecera)
+    $default  reduce usando la regla 6 (cabecera)
 
-    cabecera  go to state 39
+    cabecera  ir al estado 39
 
 
-State 6
+Estado 6
 
     0 $accept: S $end •
 
-    $default  accept
+    $default  aceptar
 
 
-State 7
+Estado 7
 
     2 comment: COMMENTLINE •
 
-    $default  reduce using rule 2 (comment)
+    $default  reduce usando la regla 2 (comment)
 
 
-State 8
+Estado 8
 
     3 comment: MULTILINE •
 
-    $default  reduce using rule 3 (comment)
+    $default  reduce usando la regla 3 (comment)
 
 
-State 9
+Estado 9
 
    11 constdef: CONST • type STRINGV EQ values SEMICOLON
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRUCT          desplazar e ir al estado 40
 
-    type  go to state 41
+    type  ir al estado 41
 
 
-State 10
+Estado 10
 
    10 constdef: DEFINE • STRINGV values
 
-    STRINGV  shift, and go to state 42
+    STRINGV  desplazar e ir al estado 42
 
 
-State 11
+Estado 11
 
    25 type: INTEGER •
 
-    $default  reduce using rule 25 (type)
+    $default  reduce usando la regla 25 (type)
 
 
-State 12
+Estado 12
 
    26 type: SHORT •
 
-    $default  reduce using rule 26 (type)
+    $default  reduce usando la regla 26 (type)
 
 
-State 13
+Estado 13
 
    27 type: LONG •
 
-    $default  reduce using rule 27 (type)
+    $default  reduce usando la regla 27 (type)
 
 
-State 14
+Estado 14
 
    28 type: UNSIGNED_INT •
 
-    $default  reduce using rule 28 (type)
+    $default  reduce usando la regla 28 (type)
 
 
-State 15
+Estado 15
 
    29 type: UNSIGNED_SHORT •
 
-    $default  reduce using rule 29 (type)
+    $default  reduce usando la regla 29 (type)
 
 
-State 16
+Estado 16
 
    30 type: UNSIGNED_LONG •
 
-    $default  reduce using rule 30 (type)
+    $default  reduce usando la regla 30 (type)
 
 
-State 17
+Estado 17
 
    31 type: FLOAT •
 
-    $default  reduce using rule 31 (type)
+    $default  reduce usando la regla 31 (type)
 
 
-State 18
+Estado 18
 
    32 type: DOUBLE •
 
-    $default  reduce using rule 32 (type)
+    $default  reduce usando la regla 32 (type)
 
 
-State 19
+Estado 19
 
    36 type: VOID •
 
-    $default  reduce using rule 36 (type)
+    $default  reduce usando la regla 36 (type)
 
 
-State 20
+Estado 20
 
    35 type: BOOLEAN •
 
-    $default  reduce using rule 35 (type)
+    $default  reduce usando la regla 35 (type)
 
 
-State 21
+Estado 21
 
    34 type: CHAR •
 
-    $default  reduce using rule 34 (type)
+    $default  reduce usando la regla 34 (type)
 
 
-State 22
+Estado 22
 
    33 type: STRING •
 
-    $default  reduce using rule 33 (type)
+    $default  reduce usando la regla 33 (type)
 
 
-State 23
+Estado 23
 
    21 vardef: STRINGV • operand vardef
    22       | STRINGV • COMMA vardef
@@ -515,151 +515,151 @@ State 23
   105 atom: STRINGV •
   107     | STRINGV • LSQUAREPAREN atom RSQUAREPAREN
 
-    AND           shift, and go to state 43
-    OR            shift, and go to state 44
-    LOWER         shift, and go to state 45
-    HIGHER        shift, and go to state 46
-    PLUS          shift, and go to state 47
-    HYPHEN        shift, and go to state 48
-    PROD          shift, and go to state 49
-    DIV           shift, and go to state 50
-    DIVINT        shift, and go to state 51
-    MOD           shift, and go to state 52
-    COMMA         shift, and go to state 53
-    DOT           shift, and go to state 54
-    EQ            shift, and go to state 55
-    LSQUAREPAREN  shift, and go to state 56
+    AND           desplazar e ir al estado 43
+    OR            desplazar e ir al estado 44
+    LOWER         desplazar e ir al estado 45
+    HIGHER        desplazar e ir al estado 46
+    PLUS          desplazar e ir al estado 47
+    HYPHEN        desplazar e ir al estado 48
+    PROD          desplazar e ir al estado 49
+    DIV           desplazar e ir al estado 50
+    DIVINT        desplazar e ir al estado 51
+    MOD           desplazar e ir al estado 52
+    COMMA         desplazar e ir al estado 53
+    DOT           desplazar e ir al estado 54
+    EQ            desplazar e ir al estado 55
+    LSQUAREPAREN  desplazar e ir al estado 56
 
-    $default  reduce using rule 105 (atom)
+    $default  reduce usando la regla 105 (atom)
 
-    operand  go to state 57
+    operand  ir al estado 57
 
 
-State 24
+Estado 24
 
    42 values: QUOTESTRING •
 
-    $default  reduce using rule 42 (values)
+    $default  reduce usando la regla 42 (values)
 
 
-State 25
+Estado 25
 
    38 values: TRUEVAL •
 
-    $default  reduce using rule 38 (values)
+    $default  reduce usando la regla 38 (values)
 
 
-State 26
+Estado 26
 
    39 values: FALSEVAL •
 
-    $default  reduce using rule 39 (values)
+    $default  reduce usando la regla 39 (values)
 
 
-State 27
+Estado 27
 
    40 values: INTNUM •
 
-    $default  reduce using rule 40 (values)
+    $default  reduce usando la regla 40 (values)
 
 
-State 28
+Estado 28
 
    41 values: REALNUM •
 
-    $default  reduce using rule 41 (values)
+    $default  reduce usando la regla 41 (values)
 
 
-State 29
+Estado 29
 
    37 type: STRUCT • STRINGV
    49 programa: STRUCT • STRINGV OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON
 
-    STRINGV  shift, and go to state 58
+    STRINGV  desplazar e ir al estado 58
 
 
-State 30
+Estado 30
 
    51 programa: comment •
 
-    $default  reduce using rule 51 (programa)
+    $default  reduce usando la regla 51 (programa)
 
 
-State 31
+Estado 31
 
    50 programa: constdef • programa
 
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    CONST           shift, and go to state 9
-    DEFINE          shift, and go to state 10
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 29
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    CONST           desplazar e ir al estado 9
+    DEFINE          desplazar e ir al estado 10
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 29
 
-    comment   go to state 30
-    constdef  go to state 31
-    vardef    go to state 32
-    type      go to state 33
-    values    go to state 34
-    programa  go to state 59
-    atom      go to state 37
+    comment   ir al estado 30
+    constdef  ir al estado 31
+    vardef    ir al estado 32
+    type      ir al estado 33
+    values    ir al estado 34
+    programa  ir al estado 59
+    atom      ir al estado 37
 
 
-State 32
+Estado 32
 
    48 programa: vardef • programa
 
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    CONST           shift, and go to state 9
-    DEFINE          shift, and go to state 10
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 29
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    CONST           desplazar e ir al estado 9
+    DEFINE          desplazar e ir al estado 10
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 29
 
-    comment   go to state 30
-    constdef  go to state 31
-    vardef    go to state 32
-    type      go to state 33
-    values    go to state 34
-    programa  go to state 60
-    atom      go to state 37
+    comment   ir al estado 30
+    constdef  ir al estado 31
+    vardef    ir al estado 32
+    type      ir al estado 33
+    values    ir al estado 34
+    programa  ir al estado 60
+    atom      ir al estado 37
 
 
-State 33
+Estado 33
 
    12 vardef: type • STRINGV SEMICOLON
    13       | type • STRINGV LSQUAREPAREN atom RSQUAREPAREN SEMICOLON
@@ -674,329 +674,329 @@ State 33
    46         | type • STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    47         | type • STRINGV LPAREN RPAREN SEMICOLON
 
-    STRINGV  shift, and go to state 61
+    STRINGV  desplazar e ir al estado 61
 
 
-State 34
+Estado 34
 
   106 atom: values •
 
-    $default  reduce using rule 106 (atom)
+    $default  reduce usando la regla 106 (atom)
 
 
-State 35
+Estado 35
 
     1 S: cabecera preprograma •
    43 preprograma: preprograma • programa
 
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    CONST           shift, and go to state 9
-    DEFINE          shift, and go to state 10
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 29
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    CONST           desplazar e ir al estado 9
+    DEFINE          desplazar e ir al estado 10
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 29
 
-    $default  reduce using rule 1 (S)
+    $default  reduce usando la regla 1 (S)
 
-    comment   go to state 30
-    constdef  go to state 31
-    vardef    go to state 32
-    type      go to state 33
-    values    go to state 34
-    programa  go to state 62
-    atom      go to state 37
+    comment   ir al estado 30
+    constdef  ir al estado 31
+    vardef    ir al estado 32
+    type      ir al estado 33
+    values    ir al estado 34
+    programa  ir al estado 62
+    atom      ir al estado 37
 
 
-State 36
+Estado 36
 
    44 preprograma: programa •
 
-    $default  reduce using rule 44 (preprograma)
+    $default  reduce usando la regla 44 (preprograma)
 
 
-State 37
+Estado 37
 
    23 vardef: atom • SEMICOLON
 
-    SEMICOLON  shift, and go to state 63
+    SEMICOLON  desplazar e ir al estado 63
 
 
-State 38
+Estado 38
 
     4 cabecera: PROGRAM LOWER STRINGV • HIGHER
     5         | PROGRAM LOWER STRINGV • DOT STRINGV HIGHER
     7         | PROGRAM LOWER STRINGV • HIGHER cabecera
     8         | PROGRAM LOWER STRINGV • DOT STRINGV HIGHER cabecera
 
-    HIGHER  shift, and go to state 64
-    DOT     shift, and go to state 65
+    HIGHER  desplazar e ir al estado 64
+    DOT     desplazar e ir al estado 65
 
 
-State 39
+Estado 39
 
     9 cabecera: PROGRAM QUOTESTRING cabecera •
 
-    $default  reduce using rule 9 (cabecera)
+    $default  reduce usando la regla 9 (cabecera)
 
 
-State 40
+Estado 40
 
    37 type: STRUCT • STRINGV
 
-    STRINGV  shift, and go to state 66
+    STRINGV  desplazar e ir al estado 66
 
 
-State 41
+Estado 41
 
    11 constdef: CONST type • STRINGV EQ values SEMICOLON
 
-    STRINGV  shift, and go to state 67
+    STRINGV  desplazar e ir al estado 67
 
 
-State 42
+Estado 42
 
    10 constdef: DEFINE STRINGV • values
 
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
 
-    values  go to state 68
+    values  ir al estado 68
 
 
-State 43
+Estado 43
 
   101 operand: AND •
 
-    $default  reduce using rule 101 (operand)
+    $default  reduce usando la regla 101 (operand)
 
 
-State 44
+Estado 44
 
   103 operand: OR •
 
-    $default  reduce using rule 103 (operand)
+    $default  reduce usando la regla 103 (operand)
 
 
-State 45
+Estado 45
 
    96 operand: LOWER •
    98        | LOWER • EQ
 
-    EQ  shift, and go to state 69
+    EQ  desplazar e ir al estado 69
 
-    $default  reduce using rule 96 (operand)
+    $default  reduce usando la regla 96 (operand)
 
 
-State 46
+Estado 46
 
    97 operand: HIGHER •
    99        | HIGHER • EQ
 
-    EQ  shift, and go to state 70
+    EQ  desplazar e ir al estado 70
 
-    $default  reduce using rule 97 (operand)
+    $default  reduce usando la regla 97 (operand)
 
 
-State 47
+Estado 47
 
    87 operand: PLUS •
    88        | PLUS • EQ
   102        | PLUS • PLUS
 
-    PLUS  shift, and go to state 71
-    EQ    shift, and go to state 72
+    PLUS  desplazar e ir al estado 71
+    EQ    desplazar e ir al estado 72
 
-    $default  reduce using rule 87 (operand)
+    $default  reduce usando la regla 87 (operand)
 
 
-State 48
+Estado 48
 
    89 operand: HYPHEN •
    90        | HYPHEN • EQ
    91        | HYPHEN • HIGHER
 
-    HIGHER  shift, and go to state 73
-    EQ      shift, and go to state 74
+    HIGHER  desplazar e ir al estado 73
+    EQ      desplazar e ir al estado 74
 
-    $default  reduce using rule 89 (operand)
+    $default  reduce usando la regla 89 (operand)
 
 
-State 49
+Estado 49
 
    92 operand: PROD •
 
-    $default  reduce using rule 92 (operand)
+    $default  reduce usando la regla 92 (operand)
 
 
-State 50
+Estado 50
 
    93 operand: DIV •
 
-    $default  reduce using rule 93 (operand)
+    $default  reduce usando la regla 93 (operand)
 
 
-State 51
+Estado 51
 
    94 operand: DIVINT •
 
-    $default  reduce using rule 94 (operand)
+    $default  reduce usando la regla 94 (operand)
 
 
-State 52
+Estado 52
 
    95 operand: MOD •
 
-    $default  reduce using rule 95 (operand)
+    $default  reduce usando la regla 95 (operand)
 
 
-State 53
+Estado 53
 
    22 vardef: STRINGV COMMA • vardef
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 40
 
-    vardef  go to state 75
-    type    go to state 76
-    values  go to state 34
-    atom    go to state 37
+    vardef  ir al estado 75
+    type    ir al estado 76
+    values  ir al estado 34
+    atom    ir al estado 37
 
 
-State 54
+Estado 54
 
   104 operand: DOT •
 
-    $default  reduce using rule 104 (operand)
+    $default  reduce usando la regla 104 (operand)
 
 
-State 55
+Estado 55
 
    24 vardef: STRINGV EQ • exp SEMICOLON
   100 operand: EQ • EQ
 
-    EQ           shift, and go to state 77
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    EQ           desplazar e ir al estado 77
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 81
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 81
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 56
+Estado 56
 
   107 atom: STRINGV LSQUAREPAREN • atom RSQUAREPAREN
 
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
 
-    values  go to state 34
-    atom    go to state 84
+    values  ir al estado 34
+    atom    ir al estado 84
 
 
-State 57
+Estado 57
 
    21 vardef: STRINGV operand • vardef
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 40
 
-    vardef  go to state 85
-    type    go to state 76
-    values  go to state 34
-    atom    go to state 37
+    vardef  ir al estado 85
+    type    ir al estado 76
+    values  ir al estado 34
+    atom    ir al estado 37
 
 
-State 58
+Estado 58
 
    37 type: STRUCT STRINGV •
    49 programa: STRUCT STRINGV • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON
 
-    OPENCURLYBRACKET  shift, and go to state 86
+    OPENCURLYBRACKET  desplazar e ir al estado 86
 
-    $default  reduce using rule 37 (type)
+    $default  reduce usando la regla 37 (type)
 
 
-State 59
+Estado 59
 
    50 programa: constdef programa •
 
-    $default  reduce using rule 50 (programa)
+    $default  reduce usando la regla 50 (programa)
 
 
-State 60
+Estado 60
 
    48 programa: vardef programa •
 
-    $default  reduce using rule 48 (programa)
+    $default  reduce usando la regla 48 (programa)
 
 
-State 61
+Estado 61
 
    12 vardef: type STRINGV • SEMICOLON
    13       | type STRINGV • LSQUAREPAREN atom RSQUAREPAREN SEMICOLON
@@ -1011,118 +1011,118 @@ State 61
    46         | type STRINGV • LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    47         | type STRINGV • LPAREN RPAREN SEMICOLON
 
-    COMMA         shift, and go to state 87
-    EQ            shift, and go to state 88
-    LPAREN        shift, and go to state 89
-    LSQUAREPAREN  shift, and go to state 90
-    SEMICOLON     shift, and go to state 91
+    COMMA         desplazar e ir al estado 87
+    EQ            desplazar e ir al estado 88
+    LPAREN        desplazar e ir al estado 89
+    LSQUAREPAREN  desplazar e ir al estado 90
+    SEMICOLON     desplazar e ir al estado 91
 
 
-State 62
+Estado 62
 
    43 preprograma: preprograma programa •
 
-    $default  reduce using rule 43 (preprograma)
+    $default  reduce usando la regla 43 (preprograma)
 
 
-State 63
+Estado 63
 
    23 vardef: atom SEMICOLON •
 
-    $default  reduce using rule 23 (vardef)
+    $default  reduce usando la regla 23 (vardef)
 
 
-State 64
+Estado 64
 
     4 cabecera: PROGRAM LOWER STRINGV HIGHER •
     7         | PROGRAM LOWER STRINGV HIGHER • cabecera
 
-    PROGRAM  shift, and go to state 1
+    PROGRAM  desplazar e ir al estado 1
 
-    $default  reduce using rule 4 (cabecera)
+    $default  reduce usando la regla 4 (cabecera)
 
-    cabecera  go to state 92
+    cabecera  ir al estado 92
 
 
-State 65
+Estado 65
 
     5 cabecera: PROGRAM LOWER STRINGV DOT • STRINGV HIGHER
     8         | PROGRAM LOWER STRINGV DOT • STRINGV HIGHER cabecera
 
-    STRINGV  shift, and go to state 93
+    STRINGV  desplazar e ir al estado 93
 
 
-State 66
+Estado 66
 
    37 type: STRUCT STRINGV •
 
-    $default  reduce using rule 37 (type)
+    $default  reduce usando la regla 37 (type)
 
 
-State 67
+Estado 67
 
    11 constdef: CONST type STRINGV • EQ values SEMICOLON
 
-    EQ  shift, and go to state 94
+    EQ  desplazar e ir al estado 94
 
 
-State 68
+Estado 68
 
    10 constdef: DEFINE STRINGV values •
 
-    $default  reduce using rule 10 (constdef)
+    $default  reduce usando la regla 10 (constdef)
 
 
-State 69
+Estado 69
 
    98 operand: LOWER EQ •
 
-    $default  reduce using rule 98 (operand)
+    $default  reduce usando la regla 98 (operand)
 
 
-State 70
+Estado 70
 
    99 operand: HIGHER EQ •
 
-    $default  reduce using rule 99 (operand)
+    $default  reduce usando la regla 99 (operand)
 
 
-State 71
+Estado 71
 
   102 operand: PLUS PLUS •
 
-    $default  reduce using rule 102 (operand)
+    $default  reduce usando la regla 102 (operand)
 
 
-State 72
+Estado 72
 
    88 operand: PLUS EQ •
 
-    $default  reduce using rule 88 (operand)
+    $default  reduce usando la regla 88 (operand)
 
 
-State 73
+Estado 73
 
    91 operand: HYPHEN HIGHER •
 
-    $default  reduce using rule 91 (operand)
+    $default  reduce usando la regla 91 (operand)
 
 
-State 74
+Estado 74
 
    90 operand: HYPHEN EQ •
 
-    $default  reduce using rule 90 (operand)
+    $default  reduce usando la regla 90 (operand)
 
 
-State 75
+Estado 75
 
    22 vardef: STRINGV COMMA vardef •
 
-    $default  reduce using rule 22 (vardef)
+    $default  reduce usando la regla 22 (vardef)
 
 
-State 76
+Estado 76
 
    12 vardef: type • STRINGV SEMICOLON
    13       | type • STRINGV LSQUAREPAREN atom RSQUAREPAREN SEMICOLON
@@ -1134,289 +1134,289 @@ State 76
    19       | type • STRINGV COMMA vardef
    20       | type • STRINGV EQ exp COMMA vardef
 
-    STRINGV  shift, and go to state 95
+    STRINGV  desplazar e ir al estado 95
 
 
-State 77
+Estado 77
 
   100 operand: EQ EQ •
 
-    $default  reduce using rule 100 (operand)
+    $default  reduce usando la regla 100 (operand)
 
 
-State 78
+Estado 78
 
    85 term: LPAREN • exp RPAREN
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 96
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 96
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 79
+Estado 79
 
   105 atom: STRINGV •
   107     | STRINGV • LSQUAREPAREN atom RSQUAREPAREN
 
-    LSQUAREPAREN  shift, and go to state 56
+    LSQUAREPAREN  desplazar e ir al estado 56
 
-    $default  reduce using rule 105 (atom)
+    $default  reduce usando la regla 105 (atom)
 
 
-State 80
+Estado 80
 
    86 term: EX • exp
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 97
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 97
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 81
+Estado 81
 
    24 vardef: STRINGV EQ exp • SEMICOLON
    82 exp: exp • operand term
 
-    AND        shift, and go to state 43
-    OR         shift, and go to state 44
-    LOWER      shift, and go to state 45
-    HIGHER     shift, and go to state 46
-    PLUS       shift, and go to state 47
-    HYPHEN     shift, and go to state 48
-    PROD       shift, and go to state 49
-    DIV        shift, and go to state 50
-    DIVINT     shift, and go to state 51
-    MOD        shift, and go to state 52
-    DOT        shift, and go to state 54
-    EQ         shift, and go to state 98
-    SEMICOLON  shift, and go to state 99
+    AND        desplazar e ir al estado 43
+    OR         desplazar e ir al estado 44
+    LOWER      desplazar e ir al estado 45
+    HIGHER     desplazar e ir al estado 46
+    PLUS       desplazar e ir al estado 47
+    HYPHEN     desplazar e ir al estado 48
+    PROD       desplazar e ir al estado 49
+    DIV        desplazar e ir al estado 50
+    DIVINT     desplazar e ir al estado 51
+    MOD        desplazar e ir al estado 52
+    DOT        desplazar e ir al estado 54
+    EQ         desplazar e ir al estado 98
+    SEMICOLON  desplazar e ir al estado 99
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 82
+Estado 82
 
    83 exp: term •
 
-    $default  reduce using rule 83 (exp)
+    $default  reduce usando la regla 83 (exp)
 
 
-State 83
+Estado 83
 
    84 term: atom •
 
-    $default  reduce using rule 84 (term)
+    $default  reduce usando la regla 84 (term)
 
 
-State 84
+Estado 84
 
   107 atom: STRINGV LSQUAREPAREN atom • RSQUAREPAREN
 
-    RSQUAREPAREN  shift, and go to state 101
+    RSQUAREPAREN  desplazar e ir al estado 101
 
 
-State 85
+Estado 85
 
    21 vardef: STRINGV operand vardef •
 
-    $default  reduce using rule 21 (vardef)
+    $default  reduce usando la regla 21 (vardef)
 
 
-State 86
+Estado 86
 
    49 programa: STRUCT STRINGV OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET SEMICOLON
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 115
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 115
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 87
+Estado 87
 
    19 vardef: type STRINGV COMMA • vardef
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 40
 
-    vardef  go to state 117
-    type    go to state 76
-    values  go to state 34
-    atom    go to state 37
+    vardef  ir al estado 117
+    type    ir al estado 76
+    values  ir al estado 34
+    atom    ir al estado 37
 
 
-State 88
+Estado 88
 
    14 vardef: type STRINGV EQ • exp SEMICOLON
    17       | type STRINGV EQ • STRINGV LPAREN array RPAREN SEMICOLON
    18       | type STRINGV EQ • STRINGV LPAREN RPAREN SEMICOLON
    20       | type STRINGV EQ • exp COMMA vardef
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 118
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 118
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 119
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 119
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 89
+Estado 89
 
    45 programa: type STRINGV LPAREN • args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    46         | type STRINGV LPAREN • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    47         | type STRINGV LPAREN • RPAREN SEMICOLON
 
-    RPAREN          shift, and go to state 120
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRUCT          shift, and go to state 40
+    RPAREN          desplazar e ir al estado 120
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRUCT          desplazar e ir al estado 40
 
-    type  go to state 121
-    args  go to state 122
+    type  ir al estado 121
+    args  ir al estado 122
 
 
-State 90
+Estado 90
 
    13 vardef: type STRINGV LSQUAREPAREN • atom RSQUAREPAREN SEMICOLON
    15       | type STRINGV LSQUAREPAREN • atom RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON
    16       | type STRINGV LSQUAREPAREN • RSQUAREPAREN EQ exp SEMICOLON
 
-    RSQUAREPAREN  shift, and go to state 123
-    STRINGV       shift, and go to state 79
-    QUOTESTRING   shift, and go to state 24
-    TRUEVAL       shift, and go to state 25
-    FALSEVAL      shift, and go to state 26
-    INTNUM        shift, and go to state 27
-    REALNUM       shift, and go to state 28
+    RSQUAREPAREN  desplazar e ir al estado 123
+    STRINGV       desplazar e ir al estado 79
+    QUOTESTRING   desplazar e ir al estado 24
+    TRUEVAL       desplazar e ir al estado 25
+    FALSEVAL      desplazar e ir al estado 26
+    INTNUM        desplazar e ir al estado 27
+    REALNUM       desplazar e ir al estado 28
 
-    values  go to state 34
-    atom    go to state 124
+    values  ir al estado 34
+    atom    ir al estado 124
 
 
-State 91
+Estado 91
 
    12 vardef: type STRINGV SEMICOLON •
 
-    $default  reduce using rule 12 (vardef)
+    $default  reduce usando la regla 12 (vardef)
 
 
-State 92
+Estado 92
 
     7 cabecera: PROGRAM LOWER STRINGV HIGHER cabecera •
 
-    $default  reduce using rule 7 (cabecera)
+    $default  reduce usando la regla 7 (cabecera)
 
 
-State 93
+Estado 93
 
     5 cabecera: PROGRAM LOWER STRINGV DOT STRINGV • HIGHER
     8         | PROGRAM LOWER STRINGV DOT STRINGV • HIGHER cabecera
 
-    HIGHER  shift, and go to state 125
+    HIGHER  desplazar e ir al estado 125
 
 
-State 94
+Estado 94
 
    11 constdef: CONST type STRINGV EQ • values SEMICOLON
 
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
 
-    values  go to state 126
+    values  ir al estado 126
 
 
-State 95
+Estado 95
 
    12 vardef: type STRINGV • SEMICOLON
    13       | type STRINGV • LSQUAREPAREN atom RSQUAREPAREN SEMICOLON
@@ -1428,145 +1428,145 @@ State 95
    19       | type STRINGV • COMMA vardef
    20       | type STRINGV • EQ exp COMMA vardef
 
-    COMMA         shift, and go to state 87
-    EQ            shift, and go to state 88
-    LSQUAREPAREN  shift, and go to state 90
-    SEMICOLON     shift, and go to state 91
+    COMMA         desplazar e ir al estado 87
+    EQ            desplazar e ir al estado 88
+    LSQUAREPAREN  desplazar e ir al estado 90
+    SEMICOLON     desplazar e ir al estado 91
 
 
-State 96
+Estado 96
 
    82 exp: exp • operand term
    85 term: LPAREN exp • RPAREN
 
-    AND     shift, and go to state 43
-    OR      shift, and go to state 44
-    LOWER   shift, and go to state 45
-    HIGHER  shift, and go to state 46
-    PLUS    shift, and go to state 47
-    HYPHEN  shift, and go to state 48
-    PROD    shift, and go to state 49
-    DIV     shift, and go to state 50
-    DIVINT  shift, and go to state 51
-    MOD     shift, and go to state 52
-    DOT     shift, and go to state 54
-    EQ      shift, and go to state 98
-    RPAREN  shift, and go to state 127
+    AND     desplazar e ir al estado 43
+    OR      desplazar e ir al estado 44
+    LOWER   desplazar e ir al estado 45
+    HIGHER  desplazar e ir al estado 46
+    PLUS    desplazar e ir al estado 47
+    HYPHEN  desplazar e ir al estado 48
+    PROD    desplazar e ir al estado 49
+    DIV     desplazar e ir al estado 50
+    DIVINT  desplazar e ir al estado 51
+    MOD     desplazar e ir al estado 52
+    DOT     desplazar e ir al estado 54
+    EQ      desplazar e ir al estado 98
+    RPAREN  desplazar e ir al estado 127
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 97
+Estado 97
 
    82 exp: exp • operand term
    86 term: EX exp •
 
-    DOT  shift, and go to state 54
+    DOT  desplazar e ir al estado 54
 
-    $default  reduce using rule 86 (term)
+    $default  reduce usando la regla 86 (term)
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 98
+Estado 98
 
   100 operand: EQ • EQ
 
-    EQ  shift, and go to state 77
+    EQ  desplazar e ir al estado 77
 
 
-State 99
+Estado 99
 
    24 vardef: STRINGV EQ exp SEMICOLON •
 
-    $default  reduce using rule 24 (vardef)
+    $default  reduce usando la regla 24 (vardef)
 
 
-State 100
+Estado 100
 
    82 exp: exp operand • term
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    term    go to state 128
-    atom    go to state 83
+    values  ir al estado 34
+    term    ir al estado 128
+    atom    ir al estado 83
 
 
-State 101
+Estado 101
 
   107 atom: STRINGV LSQUAREPAREN atom RSQUAREPAREN •
 
-    $default  reduce using rule 107 (atom)
+    $default  reduce usando la regla 107 (atom)
 
 
-State 102
+Estado 102
 
    69 line_program: WHILE • LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    LPAREN  shift, and go to state 129
+    LPAREN  desplazar e ir al estado 129
 
 
-State 103
+Estado 103
 
    66 line_program: FOR • LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR • LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    LPAREN  shift, and go to state 130
+    LPAREN  desplazar e ir al estado 130
 
 
-State 104
+Estado 104
 
    68 line_program: DO • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON
 
-    OPENCURLYBRACKET  shift, and go to state 131
+    OPENCURLYBRACKET  desplazar e ir al estado 131
 
 
-State 105
+Estado 105
 
    58 line_program: WRITE • LOWER LOWER precontentWrite SEMICOLON
 
-    LOWER  shift, and go to state 132
+    LOWER  desplazar e ir al estado 132
 
 
-State 106
+Estado 106
 
    63 line_program: IF • LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    LPAREN  shift, and go to state 133
+    LPAREN  desplazar e ir al estado 133
 
 
-State 107
+Estado 107
 
    64 line_program: ELSE • IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    65             | ELSE • OPENCURLYBRACKET line_program CLOSECURLYBRACKET
 
-    IF                shift, and go to state 134
-    OPENCURLYBRACKET  shift, and go to state 135
+    IF                desplazar e ir al estado 134
+    OPENCURLYBRACKET  desplazar e ir al estado 135
 
 
-State 108
+Estado 108
 
    59 line_program: PRINTF • LPAREN precontentWrite RPAREN SEMICOLON
 
-    LPAREN  shift, and go to state 136
+    LPAREN  desplazar e ir al estado 136
 
 
-State 109
+Estado 109
 
    60 line_program: SCANF • LPAREN precontentWrite RPAREN SEMICOLON
 
-    LPAREN  shift, and go to state 137
+    LPAREN  desplazar e ir al estado 137
 
 
-State 110
+Estado 110
 
    21 vardef: STRINGV • operand vardef
    22       | STRINGV • COMMA vardef
@@ -1577,2023 +1577,2023 @@ State 110
   105 atom: STRINGV •
   107     | STRINGV • LSQUAREPAREN atom RSQUAREPAREN
 
-    AND           shift, and go to state 43
-    OR            shift, and go to state 44
-    LOWER         shift, and go to state 45
-    HIGHER        shift, and go to state 46
-    PLUS          shift, and go to state 47
-    HYPHEN        shift, and go to state 48
-    PROD          shift, and go to state 49
-    DIV           shift, and go to state 50
-    DIVINT        shift, and go to state 51
-    MOD           shift, and go to state 52
-    COMMA         shift, and go to state 53
-    DOT           shift, and go to state 54
-    EQ            shift, and go to state 55
-    LPAREN        shift, and go to state 138
-    LSQUAREPAREN  shift, and go to state 56
+    AND           desplazar e ir al estado 43
+    OR            desplazar e ir al estado 44
+    LOWER         desplazar e ir al estado 45
+    HIGHER        desplazar e ir al estado 46
+    PLUS          desplazar e ir al estado 47
+    HYPHEN        desplazar e ir al estado 48
+    PROD          desplazar e ir al estado 49
+    DIV           desplazar e ir al estado 50
+    DIVINT        desplazar e ir al estado 51
+    MOD           desplazar e ir al estado 52
+    COMMA         desplazar e ir al estado 53
+    DOT           desplazar e ir al estado 54
+    EQ            desplazar e ir al estado 55
+    LPAREN        desplazar e ir al estado 138
+    LSQUAREPAREN  desplazar e ir al estado 56
 
-    $default  reduce using rule 105 (atom)
+    $default  reduce usando la regla 105 (atom)
 
-    operand  go to state 139
+    operand  ir al estado 139
 
 
-State 111
+Estado 111
 
    72 line_program: RETURN • exp SEMICOLON
    73             | RETURN • SEMICOLON
 
-    LPAREN       shift, and go to state 78
-    SEMICOLON    shift, and go to state 140
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    SEMICOLON    desplazar e ir al estado 140
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 141
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 141
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 112
+Estado 112
 
    37 type: STRUCT • STRINGV
    75 line_program: STRUCT • STRINGV OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON
 
-    STRINGV  shift, and go to state 142
+    STRINGV  desplazar e ir al estado 142
 
 
-State 113
+Estado 113
 
    70 line_program: comment •
 
-    $default  reduce using rule 70 (line_program)
+    $default  reduce usando la regla 70 (line_program)
 
 
-State 114
+Estado 114
 
    74 line_program: vardef •
 
-    $default  reduce using rule 74 (line_program)
+    $default  reduce usando la regla 74 (line_program)
 
 
-State 115
+Estado 115
 
    49 programa: STRUCT STRINGV OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET SEMICOLON
    56 lines_program: lines_program • line_program
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 143
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 143
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 116
+Estado 116
 
    57 lines_program: line_program •
 
-    $default  reduce using rule 57 (lines_program)
+    $default  reduce usando la regla 57 (lines_program)
 
 
-State 117
+Estado 117
 
    19 vardef: type STRINGV COMMA vardef •
 
-    $default  reduce using rule 19 (vardef)
+    $default  reduce usando la regla 19 (vardef)
 
 
-State 118
+Estado 118
 
    17 vardef: type STRINGV EQ STRINGV • LPAREN array RPAREN SEMICOLON
    18       | type STRINGV EQ STRINGV • LPAREN RPAREN SEMICOLON
   105 atom: STRINGV •
   107     | STRINGV • LSQUAREPAREN atom RSQUAREPAREN
 
-    LPAREN        shift, and go to state 145
-    LSQUAREPAREN  shift, and go to state 56
+    LPAREN        desplazar e ir al estado 145
+    LSQUAREPAREN  desplazar e ir al estado 56
 
-    $default  reduce using rule 105 (atom)
+    $default  reduce usando la regla 105 (atom)
 
 
-State 119
+Estado 119
 
    14 vardef: type STRINGV EQ exp • SEMICOLON
    20       | type STRINGV EQ exp • COMMA vardef
    82 exp: exp • operand term
 
-    AND        shift, and go to state 43
-    OR         shift, and go to state 44
-    LOWER      shift, and go to state 45
-    HIGHER     shift, and go to state 46
-    PLUS       shift, and go to state 47
-    HYPHEN     shift, and go to state 48
-    PROD       shift, and go to state 49
-    DIV        shift, and go to state 50
-    DIVINT     shift, and go to state 51
-    MOD        shift, and go to state 52
-    COMMA      shift, and go to state 146
-    DOT        shift, and go to state 54
-    EQ         shift, and go to state 98
-    SEMICOLON  shift, and go to state 147
+    AND        desplazar e ir al estado 43
+    OR         desplazar e ir al estado 44
+    LOWER      desplazar e ir al estado 45
+    HIGHER     desplazar e ir al estado 46
+    PLUS       desplazar e ir al estado 47
+    HYPHEN     desplazar e ir al estado 48
+    PROD       desplazar e ir al estado 49
+    DIV        desplazar e ir al estado 50
+    DIVINT     desplazar e ir al estado 51
+    MOD        desplazar e ir al estado 52
+    COMMA      desplazar e ir al estado 146
+    DOT        desplazar e ir al estado 54
+    EQ         desplazar e ir al estado 98
+    SEMICOLON  desplazar e ir al estado 147
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 120
+Estado 120
 
    46 programa: type STRINGV LPAREN RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    47         | type STRINGV LPAREN RPAREN • SEMICOLON
 
-    SEMICOLON         shift, and go to state 148
-    OPENCURLYBRACKET  shift, and go to state 149
+    SEMICOLON         desplazar e ir al estado 148
+    OPENCURLYBRACKET  desplazar e ir al estado 149
 
 
-State 121
+Estado 121
 
    52 args: type • STRINGV COMMA args
    53     | type • STRINGV
    54     | type • PROD STRINGV COMMA args
    55     | type • PROD STRINGV
 
-    PROD     shift, and go to state 150
-    STRINGV  shift, and go to state 151
+    PROD     desplazar e ir al estado 150
+    STRINGV  desplazar e ir al estado 151
 
 
-State 122
+Estado 122
 
    45 programa: type STRINGV LPAREN args • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    RPAREN  shift, and go to state 152
+    RPAREN  desplazar e ir al estado 152
 
 
-State 123
+Estado 123
 
    16 vardef: type STRINGV LSQUAREPAREN RSQUAREPAREN • EQ exp SEMICOLON
 
-    EQ  shift, and go to state 153
+    EQ  desplazar e ir al estado 153
 
 
-State 124
+Estado 124
 
    13 vardef: type STRINGV LSQUAREPAREN atom • RSQUAREPAREN SEMICOLON
    15       | type STRINGV LSQUAREPAREN atom • RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON
 
-    RSQUAREPAREN  shift, and go to state 154
+    RSQUAREPAREN  desplazar e ir al estado 154
 
 
-State 125
+Estado 125
 
     5 cabecera: PROGRAM LOWER STRINGV DOT STRINGV HIGHER •
     8         | PROGRAM LOWER STRINGV DOT STRINGV HIGHER • cabecera
 
-    PROGRAM  shift, and go to state 1
+    PROGRAM  desplazar e ir al estado 1
 
-    $default  reduce using rule 5 (cabecera)
+    $default  reduce usando la regla 5 (cabecera)
 
-    cabecera  go to state 155
+    cabecera  ir al estado 155
 
 
-State 126
+Estado 126
 
    11 constdef: CONST type STRINGV EQ values • SEMICOLON
 
-    SEMICOLON  shift, and go to state 156
+    SEMICOLON  desplazar e ir al estado 156
 
 
-State 127
+Estado 127
 
    85 term: LPAREN exp RPAREN •
 
-    $default  reduce using rule 85 (term)
+    $default  reduce usando la regla 85 (term)
 
 
-State 128
+Estado 128
 
    82 exp: exp operand term •
 
-    $default  reduce using rule 82 (exp)
+    $default  reduce usando la regla 82 (exp)
 
 
-State 129
+Estado 129
 
    69 line_program: WHILE LPAREN • exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 157
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 157
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 130
+Estado 130
 
    66 line_program: FOR LPAREN • type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR LPAREN • type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRUCT          desplazar e ir al estado 40
 
-    type  go to state 158
+    type  ir al estado 158
 
 
-State 131
+Estado 131
 
    68 line_program: DO OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 159
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 159
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 132
+Estado 132
 
    58 line_program: WRITE LOWER • LOWER precontentWrite SEMICOLON
 
-    LOWER  shift, and go to state 160
+    LOWER  desplazar e ir al estado 160
 
 
-State 133
+Estado 133
 
    63 line_program: IF LPAREN • exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 161
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 161
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 134
+Estado 134
 
    64 line_program: ELSE IF • LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    LPAREN  shift, and go to state 162
+    LPAREN  desplazar e ir al estado 162
 
 
-State 135
+Estado 135
 
    65 line_program: ELSE OPENCURLYBRACKET • line_program CLOSECURLYBRACKET
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 163
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 163
+    atom          ir al estado 37
 
 
-State 136
+Estado 136
 
    59 line_program: PRINTF LPAREN • precontentWrite RPAREN SEMICOLON
 
-    STRINGV      shift, and go to state 164
-    QUOTESTRING  shift, and go to state 165
+    STRINGV      desplazar e ir al estado 164
+    QUOTESTRING  desplazar e ir al estado 165
 
-    precontentWrite  go to state 166
-    contentWrite     go to state 167
+    precontentWrite  ir al estado 166
+    contentWrite     ir al estado 167
 
 
-State 137
+Estado 137
 
    60 line_program: SCANF LPAREN • precontentWrite RPAREN SEMICOLON
 
-    STRINGV      shift, and go to state 164
-    QUOTESTRING  shift, and go to state 165
+    STRINGV      desplazar e ir al estado 164
+    QUOTESTRING  desplazar e ir al estado 165
 
-    precontentWrite  go to state 168
-    contentWrite     go to state 167
+    precontentWrite  ir al estado 168
+    contentWrite     ir al estado 167
 
 
-State 138
+Estado 138
 
    61 line_program: STRINGV LPAREN • array RPAREN SEMICOLON
    62             | STRINGV LPAREN • RPAREN SEMICOLON
 
-    LPAREN       shift, and go to state 78
-    RPAREN       shift, and go to state 169
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    RPAREN       desplazar e ir al estado 169
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    array   go to state 170
-    exp     go to state 171
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    array   ir al estado 170
+    exp     ir al estado 171
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 139
+Estado 139
 
    21 vardef: STRINGV operand • vardef
    71 line_program: STRINGV operand • SEMICOLON
 
-    SEMICOLON       shift, and go to state 172
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 40
+    SEMICOLON       desplazar e ir al estado 172
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 40
 
-    vardef  go to state 85
-    type    go to state 76
-    values  go to state 34
-    atom    go to state 37
+    vardef  ir al estado 85
+    type    ir al estado 76
+    values  ir al estado 34
+    atom    ir al estado 37
 
 
-State 140
+Estado 140
 
    73 line_program: RETURN SEMICOLON •
 
-    $default  reduce using rule 73 (line_program)
+    $default  reduce usando la regla 73 (line_program)
 
 
-State 141
+Estado 141
 
    72 line_program: RETURN exp • SEMICOLON
    82 exp: exp • operand term
 
-    AND        shift, and go to state 43
-    OR         shift, and go to state 44
-    LOWER      shift, and go to state 45
-    HIGHER     shift, and go to state 46
-    PLUS       shift, and go to state 47
-    HYPHEN     shift, and go to state 48
-    PROD       shift, and go to state 49
-    DIV        shift, and go to state 50
-    DIVINT     shift, and go to state 51
-    MOD        shift, and go to state 52
-    DOT        shift, and go to state 54
-    EQ         shift, and go to state 98
-    SEMICOLON  shift, and go to state 173
+    AND        desplazar e ir al estado 43
+    OR         desplazar e ir al estado 44
+    LOWER      desplazar e ir al estado 45
+    HIGHER     desplazar e ir al estado 46
+    PLUS       desplazar e ir al estado 47
+    HYPHEN     desplazar e ir al estado 48
+    PROD       desplazar e ir al estado 49
+    DIV        desplazar e ir al estado 50
+    DIVINT     desplazar e ir al estado 51
+    MOD        desplazar e ir al estado 52
+    DOT        desplazar e ir al estado 54
+    EQ         desplazar e ir al estado 98
+    SEMICOLON  desplazar e ir al estado 173
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 142
+Estado 142
 
    37 type: STRUCT STRINGV •
    75 line_program: STRUCT STRINGV • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON
 
-    OPENCURLYBRACKET  shift, and go to state 174
+    OPENCURLYBRACKET  desplazar e ir al estado 174
 
-    $default  reduce using rule 37 (type)
+    $default  reduce usando la regla 37 (type)
 
 
-State 143
+Estado 143
 
    49 programa: STRUCT STRINGV OPENCURLYBRACKET lines_program CLOSECURLYBRACKET • SEMICOLON
 
-    SEMICOLON  shift, and go to state 175
+    SEMICOLON  desplazar e ir al estado 175
 
 
-State 144
+Estado 144
 
    56 lines_program: lines_program line_program •
 
-    $default  reduce using rule 56 (lines_program)
+    $default  reduce usando la regla 56 (lines_program)
 
 
-State 145
+Estado 145
 
    17 vardef: type STRINGV EQ STRINGV LPAREN • array RPAREN SEMICOLON
    18       | type STRINGV EQ STRINGV LPAREN • RPAREN SEMICOLON
 
-    LPAREN       shift, and go to state 78
-    RPAREN       shift, and go to state 176
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    RPAREN       desplazar e ir al estado 176
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    array   go to state 177
-    exp     go to state 171
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    array   ir al estado 177
+    exp     ir al estado 171
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 146
+Estado 146
 
    20 vardef: type STRINGV EQ exp COMMA • vardef
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 40
 
-    vardef  go to state 178
-    type    go to state 76
-    values  go to state 34
-    atom    go to state 37
+    vardef  ir al estado 178
+    type    ir al estado 76
+    values  ir al estado 34
+    atom    ir al estado 37
 
 
-State 147
+Estado 147
 
    14 vardef: type STRINGV EQ exp SEMICOLON •
 
-    $default  reduce using rule 14 (vardef)
+    $default  reduce usando la regla 14 (vardef)
 
 
-State 148
+Estado 148
 
    47 programa: type STRINGV LPAREN RPAREN SEMICOLON •
 
-    $default  reduce using rule 47 (programa)
+    $default  reduce usando la regla 47 (programa)
 
 
-State 149
+Estado 149
 
    46 programa: type STRINGV LPAREN RPAREN OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 179
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 179
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 150
+Estado 150
 
    54 args: type PROD • STRINGV COMMA args
    55     | type PROD • STRINGV
 
-    STRINGV  shift, and go to state 180
+    STRINGV  desplazar e ir al estado 180
 
 
-State 151
+Estado 151
 
    52 args: type STRINGV • COMMA args
    53     | type STRINGV •
 
-    COMMA  shift, and go to state 181
+    COMMA  desplazar e ir al estado 181
 
-    $default  reduce using rule 53 (args)
+    $default  reduce usando la regla 53 (args)
 
 
-State 152
+Estado 152
 
    45 programa: type STRINGV LPAREN args RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 182
+    OPENCURLYBRACKET  desplazar e ir al estado 182
 
 
-State 153
+Estado 153
 
    16 vardef: type STRINGV LSQUAREPAREN RSQUAREPAREN EQ • exp SEMICOLON
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 183
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 183
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 154
+Estado 154
 
    13 vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN • SEMICOLON
    15       | type STRINGV LSQUAREPAREN atom RSQUAREPAREN • EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON
 
-    EQ         shift, and go to state 184
-    SEMICOLON  shift, and go to state 185
+    EQ         desplazar e ir al estado 184
+    SEMICOLON  desplazar e ir al estado 185
 
 
-State 155
+Estado 155
 
     8 cabecera: PROGRAM LOWER STRINGV DOT STRINGV HIGHER cabecera •
 
-    $default  reduce using rule 8 (cabecera)
+    $default  reduce usando la regla 8 (cabecera)
 
 
-State 156
+Estado 156
 
    11 constdef: CONST type STRINGV EQ values SEMICOLON •
 
-    $default  reduce using rule 11 (constdef)
+    $default  reduce usando la regla 11 (constdef)
 
 
-State 157
+Estado 157
 
    69 line_program: WHILE LPAREN exp • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    82 exp: exp • operand term
 
-    AND     shift, and go to state 43
-    OR      shift, and go to state 44
-    LOWER   shift, and go to state 45
-    HIGHER  shift, and go to state 46
-    PLUS    shift, and go to state 47
-    HYPHEN  shift, and go to state 48
-    PROD    shift, and go to state 49
-    DIV     shift, and go to state 50
-    DIVINT  shift, and go to state 51
-    MOD     shift, and go to state 52
-    DOT     shift, and go to state 54
-    EQ      shift, and go to state 98
-    RPAREN  shift, and go to state 186
+    AND     desplazar e ir al estado 43
+    OR      desplazar e ir al estado 44
+    LOWER   desplazar e ir al estado 45
+    HIGHER  desplazar e ir al estado 46
+    PLUS    desplazar e ir al estado 47
+    HYPHEN  desplazar e ir al estado 48
+    PROD    desplazar e ir al estado 49
+    DIV     desplazar e ir al estado 50
+    DIVINT  desplazar e ir al estado 51
+    MOD     desplazar e ir al estado 52
+    DOT     desplazar e ir al estado 54
+    EQ      desplazar e ir al estado 98
+    RPAREN  desplazar e ir al estado 186
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 158
+Estado 158
 
    66 line_program: FOR LPAREN type • STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR LPAREN type • STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    STRINGV  shift, and go to state 187
+    STRINGV  desplazar e ir al estado 187
 
 
-State 159
+Estado 159
 
    56 lines_program: lines_program • line_program
    68 line_program: DO OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 188
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 188
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 160
+Estado 160
 
    58 line_program: WRITE LOWER LOWER • precontentWrite SEMICOLON
 
-    STRINGV      shift, and go to state 164
-    QUOTESTRING  shift, and go to state 165
+    STRINGV      desplazar e ir al estado 164
+    QUOTESTRING  desplazar e ir al estado 165
 
-    precontentWrite  go to state 189
-    contentWrite     go to state 167
+    precontentWrite  ir al estado 189
+    contentWrite     ir al estado 167
 
 
-State 161
+Estado 161
 
    63 line_program: IF LPAREN exp • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    82 exp: exp • operand term
 
-    AND     shift, and go to state 43
-    OR      shift, and go to state 44
-    LOWER   shift, and go to state 45
-    HIGHER  shift, and go to state 46
-    PLUS    shift, and go to state 47
-    HYPHEN  shift, and go to state 48
-    PROD    shift, and go to state 49
-    DIV     shift, and go to state 50
-    DIVINT  shift, and go to state 51
-    MOD     shift, and go to state 52
-    DOT     shift, and go to state 54
-    EQ      shift, and go to state 98
-    RPAREN  shift, and go to state 190
+    AND     desplazar e ir al estado 43
+    OR      desplazar e ir al estado 44
+    LOWER   desplazar e ir al estado 45
+    HIGHER  desplazar e ir al estado 46
+    PLUS    desplazar e ir al estado 47
+    HYPHEN  desplazar e ir al estado 48
+    PROD    desplazar e ir al estado 49
+    DIV     desplazar e ir al estado 50
+    DIVINT  desplazar e ir al estado 51
+    MOD     desplazar e ir al estado 52
+    DOT     desplazar e ir al estado 54
+    EQ      desplazar e ir al estado 98
+    RPAREN  desplazar e ir al estado 190
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 162
+Estado 162
 
    64 line_program: ELSE IF LPAREN • exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 191
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 191
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 163
+Estado 163
 
    65 line_program: ELSE OPENCURLYBRACKET line_program • CLOSECURLYBRACKET
 
-    CLOSECURLYBRACKET  shift, and go to state 192
+    CLOSECURLYBRACKET  desplazar e ir al estado 192
 
 
-State 164
+Estado 164
 
    81 contentWrite: STRINGV •
 
-    $default  reduce using rule 81 (contentWrite)
+    $default  reduce usando la regla 81 (contentWrite)
 
 
-State 165
+Estado 165
 
    80 contentWrite: QUOTESTRING •
 
-    $default  reduce using rule 80 (contentWrite)
+    $default  reduce usando la regla 80 (contentWrite)
 
 
-State 166
+Estado 166
 
    59 line_program: PRINTF LPAREN precontentWrite • RPAREN SEMICOLON
 
-    RPAREN  shift, and go to state 193
+    RPAREN  desplazar e ir al estado 193
 
 
-State 167
+Estado 167
 
    78 precontentWrite: contentWrite •
    79 contentWrite: contentWrite • COMMA exp
 
-    COMMA  shift, and go to state 194
+    COMMA  desplazar e ir al estado 194
 
-    $default  reduce using rule 78 (precontentWrite)
+    $default  reduce usando la regla 78 (precontentWrite)
 
 
-State 168
+Estado 168
 
    60 line_program: SCANF LPAREN precontentWrite • RPAREN SEMICOLON
 
-    RPAREN  shift, and go to state 195
+    RPAREN  desplazar e ir al estado 195
 
 
-State 169
+Estado 169
 
    62 line_program: STRINGV LPAREN RPAREN • SEMICOLON
 
-    SEMICOLON  shift, and go to state 196
+    SEMICOLON  desplazar e ir al estado 196
 
 
-State 170
+Estado 170
 
    61 line_program: STRINGV LPAREN array • RPAREN SEMICOLON
 
-    RPAREN  shift, and go to state 197
+    RPAREN  desplazar e ir al estado 197
 
 
-State 171
+Estado 171
 
    76 array: exp • COMMA array
    77      | exp •
    82 exp: exp • operand term
 
-    AND     shift, and go to state 43
-    OR      shift, and go to state 44
-    LOWER   shift, and go to state 45
-    HIGHER  shift, and go to state 46
-    PLUS    shift, and go to state 47
-    HYPHEN  shift, and go to state 48
-    PROD    shift, and go to state 49
-    DIV     shift, and go to state 50
-    DIVINT  shift, and go to state 51
-    MOD     shift, and go to state 52
-    COMMA   shift, and go to state 198
-    DOT     shift, and go to state 54
-    EQ      shift, and go to state 98
+    AND     desplazar e ir al estado 43
+    OR      desplazar e ir al estado 44
+    LOWER   desplazar e ir al estado 45
+    HIGHER  desplazar e ir al estado 46
+    PLUS    desplazar e ir al estado 47
+    HYPHEN  desplazar e ir al estado 48
+    PROD    desplazar e ir al estado 49
+    DIV     desplazar e ir al estado 50
+    DIVINT  desplazar e ir al estado 51
+    MOD     desplazar e ir al estado 52
+    COMMA   desplazar e ir al estado 198
+    DOT     desplazar e ir al estado 54
+    EQ      desplazar e ir al estado 98
 
-    $default  reduce using rule 77 (array)
+    $default  reduce usando la regla 77 (array)
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 172
+Estado 172
 
    71 line_program: STRINGV operand SEMICOLON •
 
-    $default  reduce using rule 71 (line_program)
+    $default  reduce usando la regla 71 (line_program)
 
 
-State 173
+Estado 173
 
    72 line_program: RETURN exp SEMICOLON •
 
-    $default  reduce using rule 72 (line_program)
+    $default  reduce usando la regla 72 (line_program)
 
 
-State 174
+Estado 174
 
    75 line_program: STRUCT STRINGV OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET SEMICOLON
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 199
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 199
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 175
+Estado 175
 
    49 programa: STRUCT STRINGV OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON •
 
-    $default  reduce using rule 49 (programa)
+    $default  reduce usando la regla 49 (programa)
 
 
-State 176
+Estado 176
 
    18 vardef: type STRINGV EQ STRINGV LPAREN RPAREN • SEMICOLON
 
-    SEMICOLON  shift, and go to state 200
+    SEMICOLON  desplazar e ir al estado 200
 
 
-State 177
+Estado 177
 
    17 vardef: type STRINGV EQ STRINGV LPAREN array • RPAREN SEMICOLON
 
-    RPAREN  shift, and go to state 201
+    RPAREN  desplazar e ir al estado 201
 
 
-State 178
+Estado 178
 
    20 vardef: type STRINGV EQ exp COMMA vardef •
 
-    $default  reduce using rule 20 (vardef)
+    $default  reduce usando la regla 20 (vardef)
 
 
-State 179
+Estado 179
 
    46 programa: type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
    56 lines_program: lines_program • line_program
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 202
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 202
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 180
+Estado 180
 
    54 args: type PROD STRINGV • COMMA args
    55     | type PROD STRINGV •
 
-    COMMA  shift, and go to state 203
+    COMMA  desplazar e ir al estado 203
 
-    $default  reduce using rule 55 (args)
+    $default  reduce usando la regla 55 (args)
 
 
-State 181
+Estado 181
 
    52 args: type STRINGV COMMA • args
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRUCT          desplazar e ir al estado 40
 
-    type  go to state 121
-    args  go to state 204
+    type  ir al estado 121
+    args  ir al estado 204
 
 
-State 182
+Estado 182
 
    45 programa: type STRINGV LPAREN args RPAREN OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 205
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 205
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 183
+Estado 183
 
    16 vardef: type STRINGV LSQUAREPAREN RSQUAREPAREN EQ exp • SEMICOLON
    82 exp: exp • operand term
 
-    AND        shift, and go to state 43
-    OR         shift, and go to state 44
-    LOWER      shift, and go to state 45
-    HIGHER     shift, and go to state 46
-    PLUS       shift, and go to state 47
-    HYPHEN     shift, and go to state 48
-    PROD       shift, and go to state 49
-    DIV        shift, and go to state 50
-    DIVINT     shift, and go to state 51
-    MOD        shift, and go to state 52
-    DOT        shift, and go to state 54
-    EQ         shift, and go to state 98
-    SEMICOLON  shift, and go to state 206
+    AND        desplazar e ir al estado 43
+    OR         desplazar e ir al estado 44
+    LOWER      desplazar e ir al estado 45
+    HIGHER     desplazar e ir al estado 46
+    PLUS       desplazar e ir al estado 47
+    HYPHEN     desplazar e ir al estado 48
+    PROD       desplazar e ir al estado 49
+    DIV        desplazar e ir al estado 50
+    DIVINT     desplazar e ir al estado 51
+    MOD        desplazar e ir al estado 52
+    DOT        desplazar e ir al estado 54
+    EQ         desplazar e ir al estado 98
+    SEMICOLON  desplazar e ir al estado 206
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 184
+Estado 184
 
    15 vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN EQ • OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON
 
-    OPENCURLYBRACKET  shift, and go to state 207
+    OPENCURLYBRACKET  desplazar e ir al estado 207
 
 
-State 185
+Estado 185
 
    13 vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN SEMICOLON •
 
-    $default  reduce using rule 13 (vardef)
+    $default  reduce usando la regla 13 (vardef)
 
 
-State 186
+Estado 186
 
    69 line_program: WHILE LPAREN exp RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 208
+    OPENCURLYBRACKET  desplazar e ir al estado 208
 
 
-State 187
+Estado 187
 
    66 line_program: FOR LPAREN type STRINGV • EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR LPAREN type STRINGV • EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    EQ  shift, and go to state 209
+    EQ  desplazar e ir al estado 209
 
 
-State 188
+Estado 188
 
    68 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET • WHILE LPAREN exp RPAREN SEMICOLON
 
-    WHILE  shift, and go to state 210
+    WHILE  desplazar e ir al estado 210
 
 
-State 189
+Estado 189
 
    58 line_program: WRITE LOWER LOWER precontentWrite • SEMICOLON
 
-    SEMICOLON  shift, and go to state 211
+    SEMICOLON  desplazar e ir al estado 211
 
 
-State 190
+Estado 190
 
    63 line_program: IF LPAREN exp RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 212
+    OPENCURLYBRACKET  desplazar e ir al estado 212
 
 
-State 191
+Estado 191
 
    64 line_program: ELSE IF LPAREN exp • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    82 exp: exp • operand term
 
-    AND     shift, and go to state 43
-    OR      shift, and go to state 44
-    LOWER   shift, and go to state 45
-    HIGHER  shift, and go to state 46
-    PLUS    shift, and go to state 47
-    HYPHEN  shift, and go to state 48
-    PROD    shift, and go to state 49
-    DIV     shift, and go to state 50
-    DIVINT  shift, and go to state 51
-    MOD     shift, and go to state 52
-    DOT     shift, and go to state 54
-    EQ      shift, and go to state 98
-    RPAREN  shift, and go to state 213
+    AND     desplazar e ir al estado 43
+    OR      desplazar e ir al estado 44
+    LOWER   desplazar e ir al estado 45
+    HIGHER  desplazar e ir al estado 46
+    PLUS    desplazar e ir al estado 47
+    HYPHEN  desplazar e ir al estado 48
+    PROD    desplazar e ir al estado 49
+    DIV     desplazar e ir al estado 50
+    DIVINT  desplazar e ir al estado 51
+    MOD     desplazar e ir al estado 52
+    DOT     desplazar e ir al estado 54
+    EQ      desplazar e ir al estado 98
+    RPAREN  desplazar e ir al estado 213
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 192
+Estado 192
 
    65 line_program: ELSE OPENCURLYBRACKET line_program CLOSECURLYBRACKET •
 
-    $default  reduce using rule 65 (line_program)
+    $default  reduce usando la regla 65 (line_program)
 
 
-State 193
+Estado 193
 
    59 line_program: PRINTF LPAREN precontentWrite RPAREN • SEMICOLON
 
-    SEMICOLON  shift, and go to state 214
+    SEMICOLON  desplazar e ir al estado 214
 
 
-State 194
+Estado 194
 
    79 contentWrite: contentWrite COMMA • exp
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 215
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 215
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 195
+Estado 195
 
    60 line_program: SCANF LPAREN precontentWrite RPAREN • SEMICOLON
 
-    SEMICOLON  shift, and go to state 216
+    SEMICOLON  desplazar e ir al estado 216
 
 
-State 196
+Estado 196
 
    62 line_program: STRINGV LPAREN RPAREN SEMICOLON •
 
-    $default  reduce using rule 62 (line_program)
+    $default  reduce usando la regla 62 (line_program)
 
 
-State 197
+Estado 197
 
    61 line_program: STRINGV LPAREN array RPAREN • SEMICOLON
 
-    SEMICOLON  shift, and go to state 217
+    SEMICOLON  desplazar e ir al estado 217
 
 
-State 198
+Estado 198
 
    76 array: exp COMMA • array
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    array   go to state 218
-    exp     go to state 171
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    array   ir al estado 218
+    exp     ir al estado 171
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 199
+Estado 199
 
    56 lines_program: lines_program • line_program
    75 line_program: STRUCT STRINGV OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET SEMICOLON
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 219
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 219
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 200
+Estado 200
 
    18 vardef: type STRINGV EQ STRINGV LPAREN RPAREN SEMICOLON •
 
-    $default  reduce using rule 18 (vardef)
+    $default  reduce usando la regla 18 (vardef)
 
 
-State 201
+Estado 201
 
    17 vardef: type STRINGV EQ STRINGV LPAREN array RPAREN • SEMICOLON
 
-    SEMICOLON  shift, and go to state 220
+    SEMICOLON  desplazar e ir al estado 220
 
 
-State 202
+Estado 202
 
    46 programa: type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
-    $default  reduce using rule 46 (programa)
+    $default  reduce usando la regla 46 (programa)
 
 
-State 203
+Estado 203
 
    54 args: type PROD STRINGV COMMA • args
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRUCT          desplazar e ir al estado 40
 
-    type  go to state 121
-    args  go to state 221
+    type  ir al estado 121
+    args  ir al estado 221
 
 
-State 204
+Estado 204
 
    52 args: type STRINGV COMMA args •
 
-    $default  reduce using rule 52 (args)
+    $default  reduce usando la regla 52 (args)
 
 
-State 205
+Estado 205
 
    45 programa: type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
    56 lines_program: lines_program • line_program
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 222
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 222
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 206
+Estado 206
 
    16 vardef: type STRINGV LSQUAREPAREN RSQUAREPAREN EQ exp SEMICOLON •
 
-    $default  reduce using rule 16 (vardef)
+    $default  reduce usando la regla 16 (vardef)
 
 
-State 207
+Estado 207
 
    15 vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN EQ OPENCURLYBRACKET • array CLOSECURLYBRACKET SEMICOLON
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    array   go to state 223
-    exp     go to state 171
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    array   ir al estado 223
+    exp     ir al estado 171
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 208
+Estado 208
 
    69 line_program: WHILE LPAREN exp RPAREN OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 224
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 224
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 209
+Estado 209
 
    66 line_program: FOR LPAREN type STRINGV EQ • INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR LPAREN type STRINGV EQ • INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    INTNUM  shift, and go to state 225
+    INTNUM  desplazar e ir al estado 225
 
 
-State 210
+Estado 210
 
    68 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE • LPAREN exp RPAREN SEMICOLON
 
-    LPAREN  shift, and go to state 226
+    LPAREN  desplazar e ir al estado 226
 
 
-State 211
+Estado 211
 
    58 line_program: WRITE LOWER LOWER precontentWrite SEMICOLON •
 
-    $default  reduce using rule 58 (line_program)
+    $default  reduce usando la regla 58 (line_program)
 
 
-State 212
+Estado 212
 
    63 line_program: IF LPAREN exp RPAREN OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 227
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 227
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 213
+Estado 213
 
    64 line_program: ELSE IF LPAREN exp RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 228
+    OPENCURLYBRACKET  desplazar e ir al estado 228
 
 
-State 214
+Estado 214
 
    59 line_program: PRINTF LPAREN precontentWrite RPAREN SEMICOLON •
 
-    $default  reduce using rule 59 (line_program)
+    $default  reduce usando la regla 59 (line_program)
 
 
-State 215
+Estado 215
 
    79 contentWrite: contentWrite COMMA exp •
    82 exp: exp • operand term
 
-    AND     shift, and go to state 43
-    OR      shift, and go to state 44
-    LOWER   shift, and go to state 45
-    HIGHER  shift, and go to state 46
-    PLUS    shift, and go to state 47
-    HYPHEN  shift, and go to state 48
-    PROD    shift, and go to state 49
-    DIV     shift, and go to state 50
-    DIVINT  shift, and go to state 51
-    MOD     shift, and go to state 52
-    DOT     shift, and go to state 54
-    EQ      shift, and go to state 98
+    AND     desplazar e ir al estado 43
+    OR      desplazar e ir al estado 44
+    LOWER   desplazar e ir al estado 45
+    HIGHER  desplazar e ir al estado 46
+    PLUS    desplazar e ir al estado 47
+    HYPHEN  desplazar e ir al estado 48
+    PROD    desplazar e ir al estado 49
+    DIV     desplazar e ir al estado 50
+    DIVINT  desplazar e ir al estado 51
+    MOD     desplazar e ir al estado 52
+    DOT     desplazar e ir al estado 54
+    EQ      desplazar e ir al estado 98
 
-    $default  reduce using rule 79 (contentWrite)
+    $default  reduce usando la regla 79 (contentWrite)
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 216
+Estado 216
 
    60 line_program: SCANF LPAREN precontentWrite RPAREN SEMICOLON •
 
-    $default  reduce using rule 60 (line_program)
+    $default  reduce usando la regla 60 (line_program)
 
 
-State 217
+Estado 217
 
    61 line_program: STRINGV LPAREN array RPAREN SEMICOLON •
 
-    $default  reduce using rule 61 (line_program)
+    $default  reduce usando la regla 61 (line_program)
 
 
-State 218
+Estado 218
 
    76 array: exp COMMA array •
 
-    $default  reduce using rule 76 (array)
+    $default  reduce usando la regla 76 (array)
 
 
-State 219
+Estado 219
 
    75 line_program: STRUCT STRINGV OPENCURLYBRACKET lines_program CLOSECURLYBRACKET • SEMICOLON
 
-    SEMICOLON  shift, and go to state 229
+    SEMICOLON  desplazar e ir al estado 229
 
 
-State 220
+Estado 220
 
    17 vardef: type STRINGV EQ STRINGV LPAREN array RPAREN SEMICOLON •
 
-    $default  reduce using rule 17 (vardef)
+    $default  reduce usando la regla 17 (vardef)
 
 
-State 221
+Estado 221
 
    54 args: type PROD STRINGV COMMA args •
 
-    $default  reduce using rule 54 (args)
+    $default  reduce usando la regla 54 (args)
 
 
-State 222
+Estado 222
 
    45 programa: type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
-    $default  reduce using rule 45 (programa)
+    $default  reduce usando la regla 45 (programa)
 
 
-State 223
+Estado 223
 
    15 vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN EQ OPENCURLYBRACKET array • CLOSECURLYBRACKET SEMICOLON
 
-    CLOSECURLYBRACKET  shift, and go to state 230
+    CLOSECURLYBRACKET  desplazar e ir al estado 230
 
 
-State 224
+Estado 224
 
    56 lines_program: lines_program • line_program
    69 line_program: WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 231
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 231
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 225
+Estado 225
 
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM • SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR LPAREN type STRINGV EQ INTNUM • SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    SEMICOLON  shift, and go to state 232
+    SEMICOLON  desplazar e ir al estado 232
 
 
-State 226
+Estado 226
 
    68 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN • exp RPAREN SEMICOLON
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 233
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 233
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 227
+Estado 227
 
    56 lines_program: lines_program • line_program
    63 line_program: IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 234
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 234
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 228
+Estado 228
 
    64 line_program: ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 235
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 235
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 229
+Estado 229
 
    75 line_program: STRUCT STRINGV OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON •
 
-    $default  reduce using rule 75 (line_program)
+    $default  reduce usando la regla 75 (line_program)
 
 
-State 230
+Estado 230
 
    15 vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET • SEMICOLON
 
-    SEMICOLON  shift, and go to state 236
+    SEMICOLON  desplazar e ir al estado 236
 
 
-State 231
+Estado 231
 
    69 line_program: WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
-    $default  reduce using rule 69 (line_program)
+    $default  reduce usando la regla 69 (line_program)
 
 
-State 232
+Estado 232
 
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON • exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON • exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    LPAREN       shift, and go to state 78
-    STRINGV      shift, and go to state 79
-    QUOTESTRING  shift, and go to state 24
-    TRUEVAL      shift, and go to state 25
-    FALSEVAL     shift, and go to state 26
-    INTNUM       shift, and go to state 27
-    REALNUM      shift, and go to state 28
-    EX           shift, and go to state 80
+    LPAREN       desplazar e ir al estado 78
+    STRINGV      desplazar e ir al estado 79
+    QUOTESTRING  desplazar e ir al estado 24
+    TRUEVAL      desplazar e ir al estado 25
+    FALSEVAL     desplazar e ir al estado 26
+    INTNUM       desplazar e ir al estado 27
+    REALNUM      desplazar e ir al estado 28
+    EX           desplazar e ir al estado 80
 
-    values  go to state 34
-    exp     go to state 237
-    term    go to state 82
-    atom    go to state 83
+    values  ir al estado 34
+    exp     ir al estado 237
+    term    ir al estado 82
+    atom    ir al estado 83
 
 
-State 233
+Estado 233
 
    68 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp • RPAREN SEMICOLON
    82 exp: exp • operand term
 
-    AND     shift, and go to state 43
-    OR      shift, and go to state 44
-    LOWER   shift, and go to state 45
-    HIGHER  shift, and go to state 46
-    PLUS    shift, and go to state 47
-    HYPHEN  shift, and go to state 48
-    PROD    shift, and go to state 49
-    DIV     shift, and go to state 50
-    DIVINT  shift, and go to state 51
-    MOD     shift, and go to state 52
-    DOT     shift, and go to state 54
-    EQ      shift, and go to state 98
-    RPAREN  shift, and go to state 238
+    AND     desplazar e ir al estado 43
+    OR      desplazar e ir al estado 44
+    LOWER   desplazar e ir al estado 45
+    HIGHER  desplazar e ir al estado 46
+    PLUS    desplazar e ir al estado 47
+    HYPHEN  desplazar e ir al estado 48
+    PROD    desplazar e ir al estado 49
+    DIV     desplazar e ir al estado 50
+    DIVINT  desplazar e ir al estado 51
+    MOD     desplazar e ir al estado 52
+    DOT     desplazar e ir al estado 54
+    EQ      desplazar e ir al estado 98
+    RPAREN  desplazar e ir al estado 238
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 234
+Estado 234
 
    63 line_program: IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
-    $default  reduce using rule 63 (line_program)
+    $default  reduce usando la regla 63 (line_program)
 
 
-State 235
+Estado 235
 
    56 lines_program: lines_program • line_program
    64 line_program: ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 239
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 239
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 236
+Estado 236
 
    15 vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON •
 
-    $default  reduce using rule 15 (vardef)
+    $default  reduce usando la regla 15 (vardef)
 
 
-State 237
+Estado 237
 
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp • SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp • SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    82 exp: exp • operand term
 
-    AND        shift, and go to state 43
-    OR         shift, and go to state 44
-    LOWER      shift, and go to state 45
-    HIGHER     shift, and go to state 46
-    PLUS       shift, and go to state 47
-    HYPHEN     shift, and go to state 48
-    PROD       shift, and go to state 49
-    DIV        shift, and go to state 50
-    DIVINT     shift, and go to state 51
-    MOD        shift, and go to state 52
-    DOT        shift, and go to state 54
-    EQ         shift, and go to state 98
-    SEMICOLON  shift, and go to state 240
+    AND        desplazar e ir al estado 43
+    OR         desplazar e ir al estado 44
+    LOWER      desplazar e ir al estado 45
+    HIGHER     desplazar e ir al estado 46
+    PLUS       desplazar e ir al estado 47
+    HYPHEN     desplazar e ir al estado 48
+    PROD       desplazar e ir al estado 49
+    DIV        desplazar e ir al estado 50
+    DIVINT     desplazar e ir al estado 51
+    MOD        desplazar e ir al estado 52
+    DOT        desplazar e ir al estado 54
+    EQ         desplazar e ir al estado 98
+    SEMICOLON  desplazar e ir al estado 240
 
-    operand  go to state 100
+    operand  ir al estado 100
 
 
-State 238
+Estado 238
 
    68 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN • SEMICOLON
 
-    SEMICOLON  shift, and go to state 241
+    SEMICOLON  desplazar e ir al estado 241
 
 
-State 239
+Estado 239
 
    64 line_program: ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
-    $default  reduce using rule 64 (line_program)
+    $default  reduce usando la regla 64 (line_program)
 
 
-State 240
+Estado 240
 
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON • STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
    67             | FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON • vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 242
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 40
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 242
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 40
 
-    vardef  go to state 243
-    type    go to state 76
-    values  go to state 34
-    atom    go to state 37
+    vardef  ir al estado 243
+    type    ir al estado 76
+    values  ir al estado 34
+    atom    ir al estado 37
 
 
-State 241
+Estado 241
 
    68 line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON •
 
-    $default  reduce using rule 68 (line_program)
+    $default  reduce usando la regla 68 (line_program)
 
 
-State 242
+Estado 242
 
    21 vardef: STRINGV • operand vardef
    22       | STRINGV • COMMA vardef
@@ -3602,266 +3602,266 @@ State 242
   105 atom: STRINGV •
   107     | STRINGV • LSQUAREPAREN atom RSQUAREPAREN
 
-    AND           shift, and go to state 43
-    OR            shift, and go to state 44
-    LOWER         shift, and go to state 45
-    HIGHER        shift, and go to state 46
-    PLUS          shift, and go to state 47
-    HYPHEN        shift, and go to state 48
-    PROD          shift, and go to state 49
-    DIV           shift, and go to state 50
-    DIVINT        shift, and go to state 51
-    MOD           shift, and go to state 52
-    COMMA         shift, and go to state 53
-    DOT           shift, and go to state 54
-    EQ            shift, and go to state 55
-    LSQUAREPAREN  shift, and go to state 56
+    AND           desplazar e ir al estado 43
+    OR            desplazar e ir al estado 44
+    LOWER         desplazar e ir al estado 45
+    HIGHER        desplazar e ir al estado 46
+    PLUS          desplazar e ir al estado 47
+    HYPHEN        desplazar e ir al estado 48
+    PROD          desplazar e ir al estado 49
+    DIV           desplazar e ir al estado 50
+    DIVINT        desplazar e ir al estado 51
+    MOD           desplazar e ir al estado 52
+    COMMA         desplazar e ir al estado 53
+    DOT           desplazar e ir al estado 54
+    EQ            desplazar e ir al estado 55
+    LSQUAREPAREN  desplazar e ir al estado 56
 
-    $default  reduce using rule 105 (atom)
+    $default  reduce usando la regla 105 (atom)
 
-    operand  go to state 244
+    operand  ir al estado 244
 
 
-State 243
+Estado 243
 
    67 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    RPAREN  shift, and go to state 245
+    RPAREN  desplazar e ir al estado 245
 
 
-State 244
+Estado 244
 
    21 vardef: STRINGV operand • vardef
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand • RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    RPAREN          shift, and go to state 246
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 23
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    STRUCT          shift, and go to state 40
+    RPAREN          desplazar e ir al estado 246
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 23
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    STRUCT          desplazar e ir al estado 40
 
-    vardef  go to state 85
-    type    go to state 76
-    values  go to state 34
-    atom    go to state 37
+    vardef  ir al estado 85
+    type    ir al estado 76
+    values  ir al estado 34
+    atom    ir al estado 37
 
 
-State 245
+Estado 245
 
    67 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 247
+    OPENCURLYBRACKET  desplazar e ir al estado 247
 
 
-State 246
+Estado 246
 
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN • OPENCURLYBRACKET lines_program CLOSECURLYBRACKET
 
-    OPENCURLYBRACKET  shift, and go to state 248
+    OPENCURLYBRACKET  desplazar e ir al estado 248
 
 
-State 247
+Estado 247
 
    67 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 249
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 249
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 248
+Estado 248
 
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET • lines_program CLOSECURLYBRACKET
 
-    WHILE           shift, and go to state 102
-    FOR             shift, and go to state 103
-    DO              shift, and go to state 104
-    WRITE           shift, and go to state 105
-    IF              shift, and go to state 106
-    ELSE            shift, and go to state 107
-    COMMENTLINE     shift, and go to state 7
-    MULTILINE       shift, and go to state 8
-    INTEGER         shift, and go to state 11
-    SHORT           shift, and go to state 12
-    LONG            shift, and go to state 13
-    UNSIGNED_INT    shift, and go to state 14
-    UNSIGNED_SHORT  shift, and go to state 15
-    UNSIGNED_LONG   shift, and go to state 16
-    FLOAT           shift, and go to state 17
-    DOUBLE          shift, and go to state 18
-    VOID            shift, and go to state 19
-    BOOLEAN         shift, and go to state 20
-    CHAR            shift, and go to state 21
-    PRINTF          shift, and go to state 108
-    SCANF           shift, and go to state 109
-    STRING          shift, and go to state 22
-    STRINGV         shift, and go to state 110
-    QUOTESTRING     shift, and go to state 24
-    TRUEVAL         shift, and go to state 25
-    FALSEVAL        shift, and go to state 26
-    INTNUM          shift, and go to state 27
-    REALNUM         shift, and go to state 28
-    RETURN          shift, and go to state 111
-    STRUCT          shift, and go to state 112
+    WHILE           desplazar e ir al estado 102
+    FOR             desplazar e ir al estado 103
+    DO              desplazar e ir al estado 104
+    WRITE           desplazar e ir al estado 105
+    IF              desplazar e ir al estado 106
+    ELSE            desplazar e ir al estado 107
+    COMMENTLINE     desplazar e ir al estado 7
+    MULTILINE       desplazar e ir al estado 8
+    INTEGER         desplazar e ir al estado 11
+    SHORT           desplazar e ir al estado 12
+    LONG            desplazar e ir al estado 13
+    UNSIGNED_INT    desplazar e ir al estado 14
+    UNSIGNED_SHORT  desplazar e ir al estado 15
+    UNSIGNED_LONG   desplazar e ir al estado 16
+    FLOAT           desplazar e ir al estado 17
+    DOUBLE          desplazar e ir al estado 18
+    VOID            desplazar e ir al estado 19
+    BOOLEAN         desplazar e ir al estado 20
+    CHAR            desplazar e ir al estado 21
+    PRINTF          desplazar e ir al estado 108
+    SCANF           desplazar e ir al estado 109
+    STRING          desplazar e ir al estado 22
+    STRINGV         desplazar e ir al estado 110
+    QUOTESTRING     desplazar e ir al estado 24
+    TRUEVAL         desplazar e ir al estado 25
+    FALSEVAL        desplazar e ir al estado 26
+    INTNUM          desplazar e ir al estado 27
+    REALNUM         desplazar e ir al estado 28
+    RETURN          desplazar e ir al estado 111
+    STRUCT          desplazar e ir al estado 112
 
-    comment        go to state 113
-    vardef         go to state 114
-    type           go to state 76
-    values         go to state 34
-    lines_program  go to state 250
-    line_program   go to state 116
-    atom           go to state 37
+    comment        ir al estado 113
+    vardef         ir al estado 114
+    type           ir al estado 76
+    values         ir al estado 34
+    lines_program  ir al estado 250
+    line_program   ir al estado 116
+    atom           ir al estado 37
 
 
-State 249
+Estado 249
 
    56 lines_program: lines_program • line_program
    67 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 251
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 251
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 250
+Estado 250
 
    56 lines_program: lines_program • line_program
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program • CLOSECURLYBRACKET
 
-    WHILE              shift, and go to state 102
-    FOR                shift, and go to state 103
-    DO                 shift, and go to state 104
-    WRITE              shift, and go to state 105
-    IF                 shift, and go to state 106
-    ELSE               shift, and go to state 107
-    COMMENTLINE        shift, and go to state 7
-    MULTILINE          shift, and go to state 8
-    INTEGER            shift, and go to state 11
-    SHORT              shift, and go to state 12
-    LONG               shift, and go to state 13
-    UNSIGNED_INT       shift, and go to state 14
-    UNSIGNED_SHORT     shift, and go to state 15
-    UNSIGNED_LONG      shift, and go to state 16
-    FLOAT              shift, and go to state 17
-    DOUBLE             shift, and go to state 18
-    VOID               shift, and go to state 19
-    CLOSECURLYBRACKET  shift, and go to state 252
-    BOOLEAN            shift, and go to state 20
-    CHAR               shift, and go to state 21
-    PRINTF             shift, and go to state 108
-    SCANF              shift, and go to state 109
-    STRING             shift, and go to state 22
-    STRINGV            shift, and go to state 110
-    QUOTESTRING        shift, and go to state 24
-    TRUEVAL            shift, and go to state 25
-    FALSEVAL           shift, and go to state 26
-    INTNUM             shift, and go to state 27
-    REALNUM            shift, and go to state 28
-    RETURN             shift, and go to state 111
-    STRUCT             shift, and go to state 112
+    WHILE              desplazar e ir al estado 102
+    FOR                desplazar e ir al estado 103
+    DO                 desplazar e ir al estado 104
+    WRITE              desplazar e ir al estado 105
+    IF                 desplazar e ir al estado 106
+    ELSE               desplazar e ir al estado 107
+    COMMENTLINE        desplazar e ir al estado 7
+    MULTILINE          desplazar e ir al estado 8
+    INTEGER            desplazar e ir al estado 11
+    SHORT              desplazar e ir al estado 12
+    LONG               desplazar e ir al estado 13
+    UNSIGNED_INT       desplazar e ir al estado 14
+    UNSIGNED_SHORT     desplazar e ir al estado 15
+    UNSIGNED_LONG      desplazar e ir al estado 16
+    FLOAT              desplazar e ir al estado 17
+    DOUBLE             desplazar e ir al estado 18
+    VOID               desplazar e ir al estado 19
+    CLOSECURLYBRACKET  desplazar e ir al estado 252
+    BOOLEAN            desplazar e ir al estado 20
+    CHAR               desplazar e ir al estado 21
+    PRINTF             desplazar e ir al estado 108
+    SCANF              desplazar e ir al estado 109
+    STRING             desplazar e ir al estado 22
+    STRINGV            desplazar e ir al estado 110
+    QUOTESTRING        desplazar e ir al estado 24
+    TRUEVAL            desplazar e ir al estado 25
+    FALSEVAL           desplazar e ir al estado 26
+    INTNUM             desplazar e ir al estado 27
+    REALNUM            desplazar e ir al estado 28
+    RETURN             desplazar e ir al estado 111
+    STRUCT             desplazar e ir al estado 112
 
-    comment       go to state 113
-    vardef        go to state 114
-    type          go to state 76
-    values        go to state 34
-    line_program  go to state 144
-    atom          go to state 37
+    comment       ir al estado 113
+    vardef        ir al estado 114
+    type          ir al estado 76
+    values        ir al estado 34
+    line_program  ir al estado 144
+    atom          ir al estado 37
 
 
-State 251
+Estado 251
 
    67 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
-    $default  reduce using rule 67 (line_program)
+    $default  reduce usando la regla 67 (line_program)
 
 
-State 252
+Estado 252
 
    66 line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET •
 
-    $default  reduce using rule 66 (line_program)
+    $default  reduce usando la regla 66 (line_program)

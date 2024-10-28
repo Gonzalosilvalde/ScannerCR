@@ -89,6 +89,7 @@ extern void yy_flush_buffer( YY_BUFFER_STATE buffer );
 extern void yy_switch_to_buffer( YY_BUFFER_STATE new_buffer );
 extern YY_BUFFER_STATE yy_create_buffer( FILE *file, int size );
 extern YY_BUFFER_STATE yy_current_buffer();
+extern void yy_delete_buffer ( YY_BUFFER_STATE b  );
 extern void yypush_buffer_state ( YY_BUFFER_STATE new_buffer  );
 extern void yypop_buffer_state ( void );
 pthread_mutex_t mutex;
@@ -106,6 +107,8 @@ int arraySize = 0;
 char sizeS[8] = "200";
 
 char tipoStruct[50] = "";
+
+int inputCount = 0;////////////////por ahora no hace nada, pero en el futuro usar para escribir en el cargo.toml
 
 const char *nombreArchivo = "cabeceras.txt";
 
@@ -136,7 +139,7 @@ char* getEndNumber(char* number);
 int searchString(char **arr, char *toFind, int size);
 char* getStringFromExp(char* str);
 
-#line 140 "scanner.tab.c"
+#line 143 "scanner.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -647,17 +650,17 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   177,   177,   228,   231,   236,   237,   238,   270,   271,
-     272,   306,   316,   324,   343,   362,   382,   405,   423,   444,
-     465,   515,   576,   584,   602,   611,   630,   631,   632,   633,
-     634,   635,   636,   637,   638,   639,   640,   641,   642,   651,
-     654,   655,   656,   657,   661,   669,   678,   725,   771,   774,
-     784,   795,   801,   806,   829,   850,   871,   896,   908,   919,
-     924,   931,   938,   948,   958,   971,   983,   992,  1016,  1039,
-    1054,  1067,  1068,  1077,  1085,  1092,  1112,  1130,  1139,  1145,
-    1291,  1305,  1308,  1314,  1327,  1336,  1339,  1357,  1377,  1380,
-    1381,  1382,  1383,  1384,  1385,  1386,  1387,  1388,  1389,  1390,
-    1391,  1392,  1393,  1394,  1395,  1396,  1401,  1405,  1410
+       0,   180,   180,   231,   234,   239,   244,   250,   291,   295,
+     300,   335,   355,   366,   392,   413,   442,   473,   494,   519,
+     542,   594,   658,   674,   694,   704,   725,   726,   727,   728,
+     729,   730,   731,   732,   733,   734,   735,   736,   737,   747,
+     750,   751,   752,   753,   757,   772,   781,   829,   875,   879,
+     890,   903,   919,   924,   949,   972,   995,  1034,  1054,  1065,
+    1073,  1081,  1090,  1102,  1113,  1126,  1138,  1147,  1192,  1221,
+    1237,  1252,  1253,  1263,  1270,  1277,  1297,  1316,  1327,  1333,
+    1481,  1497,  1500,  1507,  1524,  1533,  1537,  1555,  1575,  1578,
+    1579,  1580,  1581,  1582,  1583,  1584,  1585,  1586,  1587,  1588,
+    1589,  1590,  1591,  1592,  1593,  1594,  1599,  1603,  1609
 };
 #endif
 
@@ -1842,7 +1845,7 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* S: cabecera preprograma  */
-#line 177 "scanner.y"
+#line 180 "scanner.y"
                              { 
                 char* entrada = (char*)malloc(strlen(filePath) + 1); // Asignar memoria para la cadena
                 memset(entrada, 0 , sizeof(entrada));
@@ -1877,97 +1880,122 @@ yyreduce:
                 FILE *fp = fopen(salida, "w");
 
                 if (fp != NULL) {
-                        char *resultado = insertTabsBetweenBraces((yyvsp[0].valString));
-                        if (resultado != NULL) {
+		    	char *resultado = insertTabsBetweenBraces((yyvsp[0].valString));
+    			if (resultado != NULL) {
+        			fputs(resultado, fp);
+        			free(resultado); // Libera la memoria asignada por insertTabsBetweenBraces
+        			fclose(fp);
+    			}
+		}
 
-                                fputs(resultado, fp);
-                                fclose(fp);
-                                
-                        }
-                }
-                
+                free((yyvsp[0].valString));
                 
         }
-#line 1892 "scanner.tab.c"
+#line 1895 "scanner.tab.c"
     break;
 
   case 3: /* comment: COMMENTLINE  */
-#line 228 "scanner.y"
+#line 231 "scanner.y"
                      {
                 (yyval.valString) = (yyvsp[0].valString);
                 }
-#line 1900 "scanner.tab.c"
+#line 1903 "scanner.tab.c"
     break;
 
   case 4: /* comment: MULTILINE  */
-#line 231 "scanner.y"
+#line 234 "scanner.y"
                     {;}
-#line 1906 "scanner.tab.c"
+#line 1909 "scanner.tab.c"
     break;
 
   case 5: /* cabecera: PROGRAM LOWER STRINGV HIGHER  */
-#line 236 "scanner.y"
-                                        {(yyval.valString) = "";}
-#line 1912 "scanner.tab.c"
+#line 239 "scanner.y"
+                                             {
+	 		free((yyvsp[-1].valString));
+			(yyval.valString) = "";
+
+		}
+#line 1919 "scanner.tab.c"
     break;
 
   case 6: /* cabecera: PROGRAM LOWER STRINGV DOT STRINGV HIGHER  */
-#line 237 "scanner.y"
-                                                          {(yyval.valString) = "";}
-#line 1918 "scanner.tab.c"
+#line 244 "scanner.y"
+                                                          {
+			
+			free((yyvsp[-3].valString));
+			free((yyvsp[-1].valString));
+			(yyval.valString) = "";
+		}
+#line 1930 "scanner.tab.c"
     break;
 
   case 7: /* cabecera: PROGRAM QUOTESTRING  */
-#line 238 "scanner.y"
+#line 250 "scanner.y"
                                      {
                         #pragma omp critical
-                        {       
-                                char final[100] = "";
-                                char fichero[50] = "";
-                                strcat(fichero, (yyvsp[0].valString));
-                                deleteQuotes(fichero);
-                                fichero[strlen(fichero) - 2] = '\0';
-                        
-                                char ruta[100] = "entrada/";
+			{       
+    				char final[100] = "";
+    				char fichero[50] = "";
 
-                                strcat(final, fichero);
-                                strcat(final, ".c");
-                                printf("-----------------%s------------------ \n", final);
-                                strcat(ruta, final);
-                                if(searchString(arrayCabeceras, ruta, arraySize ) == 0){
-                                        arraySize++;
-                                        arrayCabeceras = (char**)realloc(arrayCabeceras, arraySize * sizeof(char*));
-                                        arrayCabeceras[arraySize - 1] = (char*)malloc(strlen(ruta) * sizeof(char)); 
+   	 			strcat(fichero, (yyvsp[0].valString));
+    				free((yyvsp[0].valString));
+    				deleteQuotes(fichero);
 
-                                        strcpy(arrayCabeceras[arraySize - 1], ruta);
-                                        printf("array size %i\n\n", arraySize);
-                                        printf("array cabeceras %s\n\n", arrayCabeceras[arraySize - 1]);
-                                        printf("ruta  %s\n\n", ruta);
-                                }
-                                
+    				// Asegurarse de que no se elimina más caracteres de los necesarios
+    				if (strlen(fichero) > 2) {
+        				fichero[strlen(fichero) - 2] = '\0';
+    				}
 
-                        }
-                        
-                        
-                        
-                }
-#line 1955 "scanner.tab.c"
+    				char ruta[100] = "entrada/";
+
+    				strcat(final, fichero);
+    				strcat(final, ".c");
+    				printf("-----------------%s------------------ \n", final);
+
+    				strcat(ruta, final);
+    				if (searchString(arrayCabeceras, ruta, arraySize) == 0) {
+        				arraySize++;
+        				arrayCabeceras = (char**)realloc(arrayCabeceras, arraySize * sizeof(char*));
+        
+        				// Asignar espacio suficiente para ruta con terminador nulo
+        				arrayCabeceras[arraySize - 1] = (char*)malloc((strlen(ruta) + 1) * sizeof(char)); 
+        				if (arrayCabeceras[arraySize - 1] == NULL) {
+            					printf("Error al asignar memoria para arrayCabeceras[%d]\n", arraySize - 1);
+            					exit(1);
+        				}
+
+        				strcpy(arrayCabeceras[arraySize - 1], ruta);
+
+        				printf("array size %i\n\n", arraySize);
+        				printf("array cabeceras %s\n\n", arrayCabeceras[arraySize - 1]);
+        				printf("ruta  %s\n\n", ruta);
+    				}
+			}
+		}
+#line 1976 "scanner.tab.c"
     break;
 
   case 8: /* cabecera: PROGRAM LOWER STRINGV HIGHER cabecera  */
-#line 270 "scanner.y"
-                                                       {(yyval.valString) = "";}
-#line 1961 "scanner.tab.c"
+#line 291 "scanner.y"
+                                                       {
+			free((yyvsp[-2].valString));	
+			(yyval.valString) = "";
+		}
+#line 1985 "scanner.tab.c"
     break;
 
   case 9: /* cabecera: PROGRAM LOWER STRINGV DOT STRINGV HIGHER cabecera  */
-#line 271 "scanner.y"
-                                                                  {(yyval.valString) = "";}
-#line 1967 "scanner.tab.c"
+#line 295 "scanner.y"
+                                                                  {
+			free((yyvsp[-4].valString));
+			free((yyvsp[-2].valString));
+			(yyval.valString) = "";
+		}
+#line 1995 "scanner.tab.c"
     break;
 
   case 10: /* cabecera: PROGRAM QUOTESTRING cabecera  */
-#line 272 "scanner.y"
+#line 300 "scanner.y"
                                              {
                                                 
                         #pragma omp critical
@@ -1975,6 +2003,7 @@ yyreduce:
                                 char final[100] = "";
                                 char fichero[50] = "";
                                 strcat(fichero, (yyvsp[-1].valString));
+				free((yyvsp[-1].valString));
                                 deleteQuotes(fichero);
                                 fichero[strlen(fichero) - 2] = '\0';
                         
@@ -1999,57 +2028,74 @@ yyreduce:
 
                         }
                 }
-#line 2003 "scanner.tab.c"
+#line 2032 "scanner.tab.c"
     break;
 
   case 11: /* constdef: DEFINE STRINGV values  */
-#line 306 "scanner.y"
+#line 335 "scanner.y"
                               {
-                char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char)+strlen((yyvsp[0].valString))*sizeof(char) + strlen("const: usize = ;\n"));
-                memset(final,0, strlen(final));
-                strcat(final, "const ");
-                strcat(final, (yyvsp[-1].valString));
-                strcat(final, ": usize = ");
-                strcat(final, (yyvsp[0].valString));
-                strcat(final, ";\n");
-                (yyval.valString) = final;
-                }
-#line 2018 "scanner.tab.c"
+		// Calcular el tamaño total necesario para `final`
+		size_t size_final = strlen((yyvsp[-1].valString)) + strlen((yyvsp[0].valString)) + 6 + 10 + 2 + 1; // +1 para el terminador nulo
+		char *final = malloc(size_final * sizeof(char));
+
+		// Inicializar toda la memoria asignada con ceros
+		memset(final, 0, size_final * sizeof(char));
+
+		strcat(final, "const ");
+		strcat(final, (yyvsp[-1].valString));
+		strcat(final, ": usize = ");
+		strcat(final, (yyvsp[0].valString));
+		strcat(final, ";\n");
+
+		free((yyvsp[0].valString));
+		free((yyvsp[-1].valString));
+		(yyval.valString) = final;
+	}
+#line 2055 "scanner.tab.c"
     break;
 
   case 12: /* constdef: CONST type STRINGV EQ values SEMICOLON  */
-#line 316 "scanner.y"
+#line 355 "scanner.y"
                                                 {
-                ; }
-#line 2025 "scanner.tab.c"
+                
+		free((yyvsp[-3].valString));
+		free((yyvsp[-1].valString));
+	}
+#line 2065 "scanner.tab.c"
     break;
 
   case 13: /* vardef: type STRINGV SEMICOLON  */
-#line 324 "scanner.y"
-                               {//1
-                char *tipo;
-                if (strcmp(obtenerTipo((yyvsp[-2].valInt)), "struct") == 0) {
-                        printf("\n\n TIPO TIPO %s TIPO TIPO \n \n", obtenerTipo((yyvsp[-2].valInt)));
-                        tipo = tipoStruct;
-                        
-                }else{
-                        tipo = obtenerTipo((yyvsp[-2].valInt));
+#line 366 "scanner.y"
+                               {
+		char *tipo;
+		if (strcmp(obtenerTipo((yyvsp[-2].valInt)), "struct") == 0) {
+		printf("\n\n TIPO TIPO %s TIPO TIPO \n \n", obtenerTipo((yyvsp[-2].valInt)));
+		tipo = tipoStruct;
+		} else {
+		tipo = obtenerTipo((yyvsp[-2].valInt));
+		}
 
-                }                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen("let\n: ;"));
-                memset(final,0,sizeof(final));
-                strcat(final,"let ");
-                strcat(final,(yyvsp[-1].valString));
-                strcat(final,":");
-                strcat(final,tipo);
-                strcat(final,";\n");
-                (yyval.valString) = final;
+		// Asigna espacio suficiente para `final` y el terminador nulo
+		char *final = malloc(strlen(tipo) + strlen((yyvsp[-1].valString)) + strlen("let\n: ;") + 1);
 
-        }
-#line 2049 "scanner.tab.c"
+		// Inicializa la memoria asignada
+		memset(final, 0, strlen(tipo) + strlen((yyvsp[-1].valString)) + strlen("let\n: ;") + 1);
+
+		// Concatenación de strings
+		strcat(final, "let ");
+		strcat(final, (yyvsp[-1].valString));
+		strcat(final, ":");
+		strcat(final, tipo);
+		strcat(final, ";\n");
+
+		free((yyvsp[-1].valString));
+		(yyval.valString) = final;
+	}
+#line 2095 "scanner.tab.c"
     break;
 
   case 14: /* vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN SEMICOLON  */
-#line 343 "scanner.y"
+#line 392 "scanner.y"
                                                                {
                 char *tipo;
                 if (strcmp(obtenerTipo((yyvsp[-5].valInt)), "struct") == 0) {
@@ -2067,65 +2113,84 @@ yyreduce:
                 strcat(final, ";");
                 strcat(final, (yyvsp[-2].valString));
                 strcat(final, "];\n");
+		free((yyvsp[-4].valString));
+		free((yyvsp[-2].valString));
                 (yyval.valString) = final;
         }
-#line 2073 "scanner.tab.c"
+#line 2121 "scanner.tab.c"
     break;
 
   case 15: /* vardef: type STRINGV EQ exp SEMICOLON  */
-#line 362 "scanner.y"
+#line 413 "scanner.y"
                                         {//2
-                char *tipo;
-                if (strcmp(obtenerTipo((yyvsp[-4].valInt)), "struct") == 0) {
-                        tipo = tipoStruct;
-                        
-                }else{
-                        tipo = obtenerTipo((yyvsp[-4].valInt));
+		char *tipo;
+		if (strcmp(obtenerTipo((yyvsp[-4].valInt)), "struct") == 0) {
+			tipo = tipoStruct;
+		} else {
+			tipo = obtenerTipo((yyvsp[-4].valInt));
+		}
 
-                }                char * final = malloc(strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-3].valString))*sizeof(char) + strlen("=let\n: ;"));
-                memset(final,0,sizeof(final));
-                strcat(final,"let ");
-                strcat(final,(yyvsp[-3].valString));
-                strcat(final,":");
-                strcat(final,tipo);
-                strcat(final,"=");
-                strcat(final,(yyvsp[-1].valString));
-                strcat(final,";\n");
-                (yyval.valString) = final;
+		// Calcular el tamaño correctamente para `final` e incluir el terminador nulo
+		char *final = malloc(strlen(tipo) + strlen((yyvsp[-1].valString)) + strlen((yyvsp[-3].valString)) + strlen("=let\n: ;") + 1);
+
+		// Inicializar `final` correctamente
+		final[0] = '\0';
+
+		// Concatenación de las cadenas en `final`
+		strcat(final, "let ");
+		strcat(final, (yyvsp[-3].valString));
+		strcat(final, ":");
+		strcat(final, tipo);
+		strcat(final, "=");
+		strcat(final, (yyvsp[-1].valString));
+		strcat(final, ";\n");
+
+		// Liberar la memoria de las variables temporales
+		free((yyvsp[-3].valString));
+		free((yyvsp[-1].valString));
+		(yyval.valString) = final;
         }
-#line 2097 "scanner.tab.c"
+#line 2154 "scanner.tab.c"
     break;
 
   case 16: /* vardef: type STRINGV LSQUAREPAREN atom RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON  */
-#line 382 "scanner.y"
+#line 442 "scanner.y"
                                                                                                            {//4
-                char *tipo;
-                if (strcmp(obtenerTipo((yyvsp[-9].valInt)), "struct") == 0) {
-                        tipo = tipoStruct;
-                        
-                }else{
-                        tipo = obtenerTipo((yyvsp[-9].valInt));
+		char *tipo;
+		if (strcmp(obtenerTipo((yyvsp[-9].valInt)), "struct") == 0) {
+		    tipo = tipoStruct;
+		} else {
+		    tipo = obtenerTipo((yyvsp[-9].valInt));
+		}
 
-                }                char * final = malloc(strlen((yyvsp[-8].valString))*sizeof(char) + strlen(tipo)*sizeof(char)+ strlen((yyvsp[-6].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("let ::[] [] ; \n"));
-                memset(final,0,sizeof(final));
-                
-                strcat(final,"let ");
-                strcat(final,(yyvsp[-8].valString));
-                strcat(final,": [");
-                strcat(final,tipo);
-                strcat(final,":");
-                strcat(final,(yyvsp[-6].valString));
-                strcat(final,"] =");
-                strcat(final,"[");
-                strcat(final,(yyvsp[-2].valString));
-                strcat(final,"];\n");
-                (yyval.valString) = final;
+		// Calcular correctamente el tamaño de `malloc` y asegurar espacio para el terminador nulo
+		char *final = malloc(strlen((yyvsp[-8].valString)) + strlen(tipo) + strlen((yyvsp[-6].valString)) + strlen((yyvsp[-2].valString)) + strlen("let ::[] [] ; \n") + 1);
+
+		// Inicializar `final`
+		final[0] = '\0';
+
+		// Concatenar las cadenas de manera segura
+		strcat(final, "let ");
+		strcat(final, (yyvsp[-8].valString));
+		strcat(final, ": [");
+		strcat(final, tipo);
+		strcat(final, ":");
+		strcat(final, (yyvsp[-6].valString));
+		strcat(final, "] = [");
+		strcat(final, (yyvsp[-2].valString));
+		strcat(final, "];\n");
+
+		// Liberar la memoria de las variables temporales
+		free((yyvsp[-8].valString));
+		free((yyvsp[-6].valString));
+		free((yyvsp[-2].valString));
+		(yyval.valString) = final;
         }
-#line 2125 "scanner.tab.c"
+#line 2190 "scanner.tab.c"
     break;
 
   case 17: /* vardef: type STRINGV LSQUAREPAREN RSQUAREPAREN EQ exp SEMICOLON  */
-#line 405 "scanner.y"
+#line 473 "scanner.y"
                                                                  {//4
                 char *tipo;
                 if (strcmp(obtenerTipo((yyvsp[-6].valInt)), "struct") == 0) {
@@ -2134,7 +2199,8 @@ yyreduce:
                 }else{
                         tipo = obtenerTipo((yyvsp[-6].valInt));
 
-                }                char * final = malloc(strlen((yyvsp[-5].valString))*sizeof(char) + strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("let ::[] [] ; \n"));
+                }                
+		char * final = malloc(strlen((yyvsp[-5].valString))*sizeof(char) + strlen(tipo)*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("let ::[] [] ; \n"));
                 memset(final,0,sizeof(final));
                 
                 strcat(final,"let ");
@@ -2142,13 +2208,15 @@ yyreduce:
                 strcat(final,"=");
                 strcat(final,(yyvsp[-1].valString));
                 strcat(final,";");
+		free((yyvsp[-5].valString));
+		free((yyvsp[-1].valString));
                 (yyval.valString) = final;
         }
-#line 2148 "scanner.tab.c"
+#line 2216 "scanner.tab.c"
     break;
 
   case 18: /* vardef: type STRINGV EQ STRINGV LPAREN array RPAREN SEMICOLON  */
-#line 423 "scanner.y"
+#line 494 "scanner.y"
                                                                {//5
                 char *tipo;
                 if (strcmp(obtenerTipo((yyvsp[-7].valInt)), "struct") == 0) {
@@ -2157,7 +2225,8 @@ yyreduce:
                 }else{
                         tipo = obtenerTipo((yyvsp[-7].valInt));
 
-                }                char * final = malloc(strlen((yyvsp[-6].valString))*sizeof(char) +strlen((yyvsp[-4].valString))*sizeof(char) + strlen(tipo)*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("let = ();"));
+                }                
+		char * final = malloc(strlen((yyvsp[-6].valString))*sizeof(char) +strlen((yyvsp[-4].valString))*sizeof(char) + strlen(tipo)*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("let = ();"));
                 memset(final,0, sizeof(final));
 
                 strcat(final, "let ");
@@ -2167,14 +2236,17 @@ yyreduce:
                 strcat(final,"(");
                 strcat(final, (yyvsp[-2].valString));
                 strcat(final, ");");
+		free((yyvsp[-6].valString));
+		free((yyvsp[-4].valString));
+		free((yyvsp[-2].valString));
                 (yyval.valString) = final;
 
         }
-#line 2174 "scanner.tab.c"
+#line 2246 "scanner.tab.c"
     break;
 
   case 19: /* vardef: type STRINGV EQ STRINGV LPAREN RPAREN SEMICOLON  */
-#line 444 "scanner.y"
+#line 519 "scanner.y"
                                                          {//6
                 char *tipo;
                 if (strcmp(obtenerTipo((yyvsp[-6].valInt)), "struct") == 0) {
@@ -2183,7 +2255,8 @@ yyreduce:
                 }else{
                         tipo = obtenerTipo((yyvsp[-6].valInt));
 
-                }                char * final = malloc(strlen((yyvsp[-5].valString))*sizeof(char) +strlen((yyvsp[-3].valString))*sizeof(char) + strlen(tipo)*sizeof(char)  + sizeof("let = ();"));
+                }                
+		char * final = malloc(strlen((yyvsp[-5].valString))*sizeof(char) +strlen((yyvsp[-3].valString))*sizeof(char) + strlen(tipo)*sizeof(char)  + sizeof("let = ();"));
                 memset(final,0, sizeof(final));
 
                 strcat(final, "let ");
@@ -2191,16 +2264,17 @@ yyreduce:
                 strcat(final, "=");
                 strcat(final, (yyvsp[-3].valString));
                 strcat(final,"();");
-        
+        	free((yyvsp[-5].valString));
+		free((yyvsp[-3].valString));
 
                 (yyval.valString) = final;
 
         }
-#line 2200 "scanner.tab.c"
+#line 2274 "scanner.tab.c"
     break;
 
   case 20: /* vardef: type STRINGV COMMA vardef  */
-#line 465 "scanner.y"
+#line 542 "scanner.y"
                                    {//7
                 char *tipo;
                 if (strcmp(obtenerTipo((yyvsp[-3].valInt)), "struct") == 0) {
@@ -2209,7 +2283,8 @@ yyreduce:
                 }else{
                         tipo = obtenerTipo((yyvsp[-3].valInt));
 
-                }                strcpy(gType, tipo);
+                }                
+		strcpy(gType, tipo);
                 char * final = malloc(strlen((yyvsp[-2].valString))*sizeof(char) + strlen((yyvsp[0].valString))*sizeof(char)+ strlen(tipo)*sizeof(char) + sizeof(", "));
                 memset(final, 0 , sizeof(final));
 
@@ -2217,7 +2292,8 @@ yyreduce:
                 strcat(final, (yyvsp[-2].valString));
                 strcat(final, ":;\n");;
                 strcat(final, (yyvsp[0].valString));
-
+		free((yyvsp[-2].valString));
+		free((yyvsp[0].valString));
                 char modTipo1[4 + strlen(tipo) + 2]; // 4 por ":;\n", 2 por ": y ";\n", +1 por el nulo
                 char modTipo2[4 + strlen(tipo) + 2]; // 4 por ":=\n", 2 por ": y "=", +1 por el nulo
 
@@ -2251,11 +2327,11 @@ yyreduce:
 
                 
         }
-#line 2255 "scanner.tab.c"
+#line 2331 "scanner.tab.c"
     break;
 
   case 21: /* vardef: type STRINGV EQ exp COMMA vardef  */
-#line 515 "scanner.y"
+#line 594 "scanner.y"
                                           {//8
                 char *tipo;
                 if (strcmp(obtenerTipo((yyvsp[-5].valInt)), "struct") == 0) {
@@ -2264,7 +2340,8 @@ yyreduce:
                 }else{
                         tipo = obtenerTipo((yyvsp[-5].valInt));
 
-                }                char * final = malloc(strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char)+ strlen((yyvsp[0].valString))*sizeof(char)+ strlen(tipo)*sizeof(char) + sizeof(", "));
+                }                
+		char * final = malloc(strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char)+ strlen((yyvsp[0].valString))*sizeof(char)+ strlen(tipo)*sizeof(char) + sizeof(", "));
                 memset(final, 0 , sizeof(final));
 
                 strcat(final, "let ");
@@ -2273,7 +2350,9 @@ yyreduce:
                 strcat(final, (yyvsp[-2].valString));
                 strcat(final,";\n");
                 strcat(final, (yyvsp[0].valString));
-
+		free((yyvsp[-4].valString));
+		free((yyvsp[-2].valString));
+		free((yyvsp[0].valString));
                 char modTipo1[4 + strlen(tipo) + 2]; // 4 por ":;\n", 2 por ": y ";\n", +1 por el nulo
                 char modTipo2[4 + strlen(tipo) + 2]; // 4 por ":=\n", 2 por ": y "=", +1 por el nulo
 
@@ -2305,52 +2384,63 @@ yyreduce:
                         // Manejar el error si la primera llamada a reemplazar falla
                 }
         }
-#line 2309 "scanner.tab.c"
+#line 2388 "scanner.tab.c"
     break;
 
   case 22: /* vardef: STRINGV operand vardef  */
-#line 576 "scanner.y"
-                               {
-                char * final = malloc(strlen((yyvsp[-2].valString))*sizeof(char)+strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("; : \n") + strlen((yyvsp[0].valString))* sizeof(char));
-                memset(final, 0, sizeof(final));
-                strcat(final, (yyvsp[-2].valString));
-                strcat(final, (yyvsp[-1].valString));;
-                strcat(final, (yyvsp[0].valString));
-                (yyval.valString) = final;
-        }
-#line 2322 "scanner.tab.c"
+#line 658 "scanner.y"
+                                 {
+    		size_t total_size = strlen((yyvsp[-2].valString)) + strlen((yyvsp[-1].valString)) + strlen((yyvsp[0].valString)) + strlen("; : \n") + 1;
+    		char *final = malloc(total_size);
+
+    		if (final) {  // Siempre es buena práctica verificar si malloc fue exitoso
+        		final[0] = '\0'; // Inicializar el string final como vacío
+        		strcat(final, (yyvsp[-2].valString));
+        		strcat(final, (yyvsp[-1].valString));
+        		strcat(final, (yyvsp[0].valString));
+    		}
+
+    		free((yyvsp[-2].valString)); // Libera $1 después de usarlo
+		free((yyvsp[-1].valString));
+		free((yyvsp[0].valString));
+    		(yyval.valString) = final; // Asigna el resultado a $$
+	}
+#line 2409 "scanner.tab.c"
     break;
 
   case 23: /* vardef: STRINGV COMMA vardef  */
-#line 584 "scanner.y"
+#line 674 "scanner.y"
                              {//10
                 char * final = malloc(strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("; : \n") + strlen((yyvsp[0].valString))* sizeof(char));
                 memset(final, 0, sizeof(final));
                 strcat(final, "");
                 strcat(final, (yyvsp[-2].valString));
-                strcat(final, ":;\n");;
+                strcat(final, ":;\n");
                 strcat(final, (yyvsp[0].valString));
+		free((yyvsp[-2].valString));
+		free((yyvsp[0].valString));
                 (yyval.valString) = final;
         }
-#line 2336 "scanner.tab.c"
+#line 2425 "scanner.tab.c"
     break;
 
   case 24: /* vardef: atom SEMICOLON  */
-#line 602 "scanner.y"
+#line 694 "scanner.y"
                        {//11
 
                 char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char) + sizeof(";  \n") );
                 memset(final, 0, sizeof(final));
                 
                 strcat(final, (yyvsp[-1].valString));
-                strcat(final, ";\n");;
+                strcat(final, ";\n");
+		free((yyvsp[-1].valString));
                 (yyval.valString) = final;
         }
-#line 2350 "scanner.tab.c"
+#line 2440 "scanner.tab.c"
     break;
 
   case 25: /* vardef: STRINGV EQ exp SEMICOLON  */
-#line 611 "scanner.y"
+#line 704 "scanner.y"
                                  {//12
                 char * final = malloc(strlen((yyvsp[-3].valString))*sizeof(char) + sizeof("; : let \n") + strlen((yyvsp[-1].valString))*sizeof(char) );
                 memset(final, 0, sizeof(final));
@@ -2359,154 +2449,163 @@ yyreduce:
                 strcat(final, ":=");
                 strcat(final, (yyvsp[-1].valString));
                 strcat(final,";\n");
+		free((yyvsp[-3].valString));
+		free((yyvsp[-1].valString));
                 (yyval.valString) = final;
         }
-#line 2365 "scanner.tab.c"
+#line 2457 "scanner.tab.c"
     break;
 
   case 26: /* type: INTEGER  */
-#line 630 "scanner.y"
+#line 725 "scanner.y"
                 {(yyval.valInt) = 0;}
-#line 2371 "scanner.tab.c"
+#line 2463 "scanner.tab.c"
     break;
 
   case 27: /* type: SHORT  */
-#line 631 "scanner.y"
+#line 726 "scanner.y"
                 {(yyval.valInt) = 1;}
-#line 2377 "scanner.tab.c"
+#line 2469 "scanner.tab.c"
     break;
 
   case 28: /* type: LONG  */
-#line 632 "scanner.y"
+#line 727 "scanner.y"
                {(yyval.valInt) = 2;}
-#line 2383 "scanner.tab.c"
+#line 2475 "scanner.tab.c"
     break;
 
   case 29: /* type: UNSIGNED_INT  */
-#line 633 "scanner.y"
+#line 728 "scanner.y"
                        {(yyval.valInt) = 3;}
-#line 2389 "scanner.tab.c"
+#line 2481 "scanner.tab.c"
     break;
 
   case 30: /* type: UNSIGNED_SHORT  */
-#line 634 "scanner.y"
+#line 729 "scanner.y"
                          {(yyval.valInt) = 4;}
-#line 2395 "scanner.tab.c"
+#line 2487 "scanner.tab.c"
     break;
 
   case 31: /* type: UNSIGNED_LONG  */
-#line 635 "scanner.y"
+#line 730 "scanner.y"
                         {(yyval.valInt) = 5;}
-#line 2401 "scanner.tab.c"
+#line 2493 "scanner.tab.c"
     break;
 
   case 32: /* type: FLOAT  */
-#line 636 "scanner.y"
+#line 731 "scanner.y"
                 {(yyval.valInt) = 6;}
-#line 2407 "scanner.tab.c"
+#line 2499 "scanner.tab.c"
     break;
 
   case 33: /* type: DOUBLE  */
-#line 637 "scanner.y"
+#line 732 "scanner.y"
                  {(yyval.valInt) = 7;}
-#line 2413 "scanner.tab.c"
+#line 2505 "scanner.tab.c"
     break;
 
   case 34: /* type: STRING  */
-#line 638 "scanner.y"
+#line 733 "scanner.y"
                  {(yyval.valInt) = 8;}
-#line 2419 "scanner.tab.c"
+#line 2511 "scanner.tab.c"
     break;
 
   case 35: /* type: CHAR  */
-#line 639 "scanner.y"
+#line 734 "scanner.y"
                {(yyval.valInt) = 9;}
-#line 2425 "scanner.tab.c"
+#line 2517 "scanner.tab.c"
     break;
 
   case 36: /* type: BOOLEAN  */
-#line 640 "scanner.y"
+#line 735 "scanner.y"
                   {(yyval.valInt) = 10;}
-#line 2431 "scanner.tab.c"
+#line 2523 "scanner.tab.c"
     break;
 
   case 37: /* type: VOID  */
-#line 641 "scanner.y"
+#line 736 "scanner.y"
                {;}
-#line 2437 "scanner.tab.c"
+#line 2529 "scanner.tab.c"
     break;
 
   case 38: /* type: STRUCT STRINGV  */
-#line 642 "scanner.y"
+#line 737 "scanner.y"
                          {
                 strcpy(tipoStruct, (yyvsp[0].valString));
+		free((yyvsp[0].valString));
                 (yyval.valInt) = 11;
         ;}
-#line 2446 "scanner.tab.c"
+#line 2539 "scanner.tab.c"
     break;
 
   case 39: /* values: TRUEVAL  */
-#line 651 "scanner.y"
+#line 747 "scanner.y"
                 {
                 (yyval.valString) = strdup("true");
         }
-#line 2454 "scanner.tab.c"
+#line 2547 "scanner.tab.c"
     break;
 
   case 40: /* values: FALSEVAL  */
-#line 654 "scanner.y"
+#line 750 "scanner.y"
                    {(yyval.valString) = (yyvsp[0].valString);}
-#line 2460 "scanner.tab.c"
+#line 2553 "scanner.tab.c"
     break;
 
   case 41: /* values: INTNUM  */
-#line 655 "scanner.y"
+#line 751 "scanner.y"
                  {(yyval.valString) = (yyvsp[0].valString);}
-#line 2466 "scanner.tab.c"
+#line 2559 "scanner.tab.c"
     break;
 
   case 42: /* values: REALNUM  */
-#line 656 "scanner.y"
+#line 752 "scanner.y"
                   {(yyval.valString) = (yyvsp[0].valString);}
-#line 2472 "scanner.tab.c"
+#line 2565 "scanner.tab.c"
     break;
 
   case 43: /* values: QUOTESTRING  */
-#line 657 "scanner.y"
+#line 753 "scanner.y"
                       {(yyval.valString) = (yyvsp[0].valString);}
-#line 2478 "scanner.tab.c"
+#line 2571 "scanner.tab.c"
     break;
 
   case 44: /* preprograma: preprograma programa  */
-#line 661 "scanner.y"
+#line 757 "scanner.y"
                             {
-                char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[0].valString))*sizeof(char));
-                memset(final,0,sizeof(final));
-                strcat(final, (yyvsp[-1].valString));
-                strcat(final, (yyvsp[0].valString));
+		char *final = malloc(strlen((yyvsp[-1].valString)) + strlen((yyvsp[0].valString)) + 1); // +1 para '\0'
+		if (final == NULL) {
+    		// Manejar el caso en que malloc falla
+    			return 0;
+		}
 
-                (yyval.valString) = final;
+		final[0] = '\0'; // Iniciar la cadena para evitar problemas en strcat
+		strcat(final, (yyvsp[-1].valString));
+		strcat(final, (yyvsp[0].valString));
+
+		free((yyvsp[0].valString));
+		free((yyvsp[-1].valString));
+		(yyval.valString) = final; // Asegúrate de liberar $$ cuando ya no se necesite
         }
-#line 2491 "scanner.tab.c"
+#line 2591 "scanner.tab.c"
     break;
 
   case 45: /* preprograma: programa  */
-#line 669 "scanner.y"
-                 {
-                char * final = malloc(strlen((yyvsp[0].valString))*sizeof(char));
-                memset(final,0,sizeof(final));
-
-                strcat(final, (yyvsp[0].valString));
-
-                (yyval.valString) = final;
-        }
-#line 2504 "scanner.tab.c"
+#line 772 "scanner.y"
+                   {
+		char *final = malloc((strlen((yyvsp[0].valString)) + 1) * sizeof(char)); // Reservar espacio suficiente incluyendo el terminador nulo
+    		memset(final, 0, (strlen((yyvsp[0].valString)) + 1) * sizeof(char)); // Inicializar toda la memoria a 0
+    		strcat(final, (yyvsp[0].valString)); // Concatenar $1 en `final`
+    		free((yyvsp[0].valString)); // Liberar memoria de $1
+    		(yyval.valString) = final; // Asignar el resultado a $$
+	}
+#line 2603 "scanner.tab.c"
     break;
 
   case 46: /* programa: type STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 678 "scanner.y"
+#line 781 "scanner.y"
                                                                                         {                        
-                        
+			printf("hola2\n");                        
                         
                         char * final = malloc( strlen((yyvsp[-4].valString)) * sizeof(char) + strlen((yyvsp[-1].valString)) * sizeof(char)   + 20*sizeof(char) + sizeof("fn ->String {}"));
                         memset(final, 0, sizeof(final));
@@ -2546,16 +2645,17 @@ yyreduce:
                         strcat(final, "}\n\n");
                         free((yyvsp[-1].valString));
                         free((yyvsp[-4].valString));
+			free((yyvsp[-6].valString));
                         DeleteListT (&flist);
                         
                         (yyval.valString) = final;
                 
         }
-#line 2555 "scanner.tab.c"
+#line 2655 "scanner.tab.c"
     break;
 
   case 47: /* programa: type STRINGV LPAREN RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 725 "scanner.y"
+#line 829 "scanner.y"
                                                                                       {
                 
                         
@@ -2593,7 +2693,7 @@ yyreduce:
                 strcat(final, "\n");
                 strcat(final, (yyvsp[-1].valString));
                 strcat(final, "\n}\n\n");
-                
+                free((yyvsp[-5].valString));
                 free((yyvsp[-1].valString));
                 DeleteListT (&flist);
 
@@ -2601,33 +2701,35 @@ yyreduce:
                                 
                 
         }
-#line 2605 "scanner.tab.c"
+#line 2705 "scanner.tab.c"
     break;
 
   case 48: /* programa: type STRINGV LPAREN RPAREN SEMICOLON  */
-#line 771 "scanner.y"
+#line 875 "scanner.y"
                                              {
-                (yyval.valString) = "";
+                free((yyvsp[-3].valString));
+		(yyval.valString) = "";
         }
-#line 2613 "scanner.tab.c"
+#line 2714 "scanner.tab.c"
     break;
 
   case 49: /* programa: vardef programa  */
-#line 774 "scanner.y"
+#line 879 "scanner.y"
                           {
                 char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[0].valString))*sizeof(char) + sizeof("\n\n"));
                 strcat(final,(yyvsp[-1].valString));
                 strcat(final,"\n");
                 strcat(final, (yyvsp[0].valString));
                 strcat(final,"\n");
-                
+                free((yyvsp[-1].valString));
+		free((yyvsp[0].valString));
                 (yyval.valString) = final;
         }
-#line 2627 "scanner.tab.c"
+#line 2729 "scanner.tab.c"
     break;
 
   case 50: /* programa: STRUCT STRINGV OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON  */
-#line 784 "scanner.y"
+#line 890 "scanner.y"
                                                                                   {
                 char * final = malloc(strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + strlen("struct { } \n\n"));
                 memset(final, 0 , sizeof(final));
@@ -2637,30 +2739,41 @@ yyreduce:
                 strcat(final, (yyvsp[-2].valString));
                 strcat(final, "}\n");
                 replaceSemicolon(final);
+		free((yyvsp[-4].valString));
+		free((yyvsp[-2].valString));
                 (yyval.valString) = final; 
         }
-#line 2643 "scanner.tab.c"
+#line 2747 "scanner.tab.c"
     break;
 
   case 51: /* programa: constdef programa  */
-#line 795 "scanner.y"
+#line 903 "scanner.y"
                             {
-                char * final = malloc(strlen((yyvsp[0].valString))*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) );
-                memset(final,0, strlen(final));
-                strcat(final, (yyvsp[-1].valString));
-                strcat(final, (yyvsp[0].valString));
-                (yyval.valString) = final;}
-#line 2654 "scanner.tab.c"
+		// Asigna espacio suficiente para `final` y el terminador nulo
+		char * final = malloc(strlen((yyvsp[0].valString)) + strlen((yyvsp[-1].valString)) + 1);
+
+		// Inicializa la memoria asignada con ceros
+		memset(final, 0, strlen((yyvsp[0].valString)) + strlen((yyvsp[-1].valString)) + 1);
+
+		// Concatenación de strings
+		strcat(final, (yyvsp[-1].valString));
+		strcat(final, (yyvsp[0].valString));
+
+		free((yyvsp[-1].valString));
+		free((yyvsp[0].valString));
+		(yyval.valString) = final;
+	}
+#line 2767 "scanner.tab.c"
     break;
 
   case 52: /* programa: comment  */
-#line 801 "scanner.y"
+#line 919 "scanner.y"
                 {;}
-#line 2660 "scanner.tab.c"
+#line 2773 "scanner.tab.c"
     break;
 
   case 53: /* args: type STRINGV COMMA args  */
-#line 806 "scanner.y"
+#line 924 "scanner.y"
                                 {
                 char * final;
                 
@@ -2672,7 +2785,8 @@ yyreduce:
                 }else{
                         tipo = obtenerTipo((yyvsp[-3].valInt));
 
-                }                final = malloc(strlen(tipo)  + strlen((yyvsp[-2].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + sizeof(",  ") + 3*sizeof(char));
+                }                
+		final = malloc(strlen(tipo)  + strlen((yyvsp[-2].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + sizeof(",  ") + 3*sizeof(char));
                 memset(final, 0, sizeof(final));
                 strcat(final, (yyvsp[0].valString));
                 strcat(final, ",");
@@ -2680,15 +2794,16 @@ yyreduce:
                 strcat(final, tipo);
                 strcat(final, " ");
                 strcat(final, (yyvsp[-2].valString));
-                free((yyvsp[0].valString));
+                free((yyvsp[-2].valString));
+		free((yyvsp[0].valString));
                 (yyval.valString) = final;
                 
                 }
-#line 2688 "scanner.tab.c"
+#line 2803 "scanner.tab.c"
     break;
 
   case 54: /* args: type STRINGV  */
-#line 829 "scanner.y"
+#line 949 "scanner.y"
                       {
                 char * final;
                 char *tipo;
@@ -2697,6 +2812,7 @@ yyreduce:
                         strcat(tipo, (yyvsp[0].valString));
                         strcat(tipo, ": &mut ");
                         strcat(tipo, tipoStruct);
+			free((yyvsp[0].valString));
                         (yyval.valString) = tipo;
 
                 }else{
@@ -2706,15 +2822,16 @@ yyreduce:
                         strcat(final, tipo);
                         strcat(final, " ");
                         strcat(final, (yyvsp[0].valString));
+			free((yyvsp[0].valString));
                         (yyval.valString) = final;
 
                 }                
         }
-#line 2714 "scanner.tab.c"
+#line 2831 "scanner.tab.c"
     break;
 
   case 55: /* args: type PROD STRINGV COMMA args  */
-#line 850 "scanner.y"
+#line 972 "scanner.y"
                                       {
                 char * final;
                 
@@ -2725,7 +2842,8 @@ yyreduce:
                 }else{
                         tipo = obtenerTipo((yyvsp[-4].valInt));
 
-                }                final = malloc(strlen(tipo)  + strlen((yyvsp[-2].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + sizeof(",  ") + 3*sizeof(char));
+                }                
+		final = malloc(strlen(tipo)  + strlen((yyvsp[-2].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + sizeof(",  ") + 3*sizeof(char));
                 memset(final, 0, sizeof(final));
                 strcat(final, (yyvsp[0].valString));
                 strcat(final, ",");
@@ -2733,100 +2851,129 @@ yyreduce:
                 strcat(final, tipo);
                 strcat(final, " ");
                 strcat(final, (yyvsp[-2].valString));
+		free((yyvsp[-2].valString));
                 free((yyvsp[0].valString));
                 (yyval.valString) = final;
         }
-#line 2740 "scanner.tab.c"
+#line 2859 "scanner.tab.c"
     break;
 
   case 56: /* args: type PROD STRINGV  */
-#line 871 "scanner.y"
-                           {
-                
-                char * final;
-                char *tipo;
-                if (strcmp(obtenerTipo((yyvsp[-2].valInt)), "struct") == 0) {
-                        tipo = malloc(strlen(tipoStruct)*sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + sizeof(": &mut "));
-                        strcat(tipo, (yyvsp[0].valString));
-                        strcat(tipo, ": &mut ");
-                        strcat(tipo, tipoStruct);
-                        (yyval.valString) = tipo;
+#line 995 "scanner.y"
+                            {
+		char *final;
+		char *tipo;
 
-                }else{
-                        tipo = obtenerTipo((yyvsp[-2].valInt));
-                        final = malloc(strlen(tipo) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) );
-                        memset(final, 0, sizeof(final));
-                        strcat(final, tipo);
-                        strcat(final, " ");
-                        strcat(final, (yyvsp[0].valString));
-                        (yyval.valString) = final;
+		if (strcmp(obtenerTipo((yyvsp[-2].valInt)), "struct") == 0) {
+			// Asignación de memoria para `tipo` con espacio suficiente y el terminador nulo
+			tipo = malloc(strlen(tipoStruct) + strlen((yyvsp[0].valString)) + strlen(": &mut ") + 1);
 
-                } 
-        }
-#line 2767 "scanner.tab.c"
+			// Inicialización de `tipo`
+			tipo[0] = '\0';
+
+			// Concatenación
+			strcat(tipo, (yyvsp[0].valString));
+			strcat(tipo, ": &mut ");
+			strcat(tipo, tipoStruct);
+
+			free((yyvsp[0].valString));
+			(yyval.valString) = tipo;
+		} else {
+			tipo = obtenerTipo((yyvsp[-2].valInt));
+
+			// Asignación de memoria para `final` con espacio suficiente y el terminador nulo
+			final = malloc(strlen(tipo) + strlen((yyvsp[0].valString)) + 2);  // +2 para el espacio y '\0'
+
+			// Inicialización de `final`
+			final[0] = '\0';
+
+			// Concatenación
+			strcat(final, tipo);
+			strcat(final, " ");
+			strcat(final, (yyvsp[0].valString));
+
+			free((yyvsp[0].valString));
+			(yyval.valString) = final;
+		}
+	}
+#line 2900 "scanner.tab.c"
     break;
 
   case 57: /* lines_program: lines_program line_program  */
-#line 896 "scanner.y"
+#line 1034 "scanner.y"
                                    {
-                
-                char * final = malloc(strlen((yyvsp[-1].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + sizeof("\n") + 3*sizeof(char));
-                memset(final, 0, sizeof(final));
+	// Calcular el tamaño total necesario para el buffer
+		char *final = malloc(strlen((yyvsp[-1].valString)) + strlen((yyvsp[0].valString)) + 2); // +2 para "\n" y '\0'
+		if (final == NULL) {
+    		// Manejo del error si malloc falla
+    			return 0;
+		}
 
-                strcpy(final, (yyvsp[-1].valString));
-                strcat(final, "\n");
-                strcat(final, (yyvsp[0].valString));
-                free((yyvsp[-1].valString));
-                free((yyvsp[0].valString));
-                (yyval.valString) = final;
+		// Copiar las cadenas
+		strcpy(final, (yyvsp[-1].valString));
+		strcat(final, "\n");
+		strcat(final, (yyvsp[0].valString));
+
+		// Liberar las cadenas individuales
+		free((yyvsp[-1].valString));
+		free((yyvsp[0].valString));
+
+		// Asignar el resultado a $$
+		(yyval.valString) = final;
         }
-#line 2784 "scanner.tab.c"
+#line 2925 "scanner.tab.c"
     break;
 
   case 58: /* lines_program: line_program  */
-#line 908 "scanner.y"
+#line 1054 "scanner.y"
                        {
                 (yyval.valString) = (yyvsp[0].valString);
                 
                 }
-#line 2793 "scanner.tab.c"
+#line 2934 "scanner.tab.c"
     break;
 
   case 59: /* line_program: WRITE LOWER LOWER precontentWrite SEMICOLON  */
-#line 919 "scanner.y"
+#line 1065 "scanner.y"
                                                     {
-                
-                (yyval.valString) = (yyvsp[-1].valString);
+        	char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char));
+		memset(final, 0, sizeof(final));
+		strcat(final, (yyvsp[-1].valString));
+		free((yyvsp[-1].valString));
+                (yyval.valString) = final;
                 
         }
-#line 2803 "scanner.tab.c"
+#line 2947 "scanner.tab.c"
     break;
 
   case 60: /* line_program: PRINTF LPAREN precontentWrite RPAREN SEMICOLON  */
-#line 924 "scanner.y"
+#line 1073 "scanner.y"
                                                          {
                 char * final = malloc(strlen((yyvsp[-2].valString))*sizeof(char)+ sizeof("print!"));
                 memset(final, 0, sizeof(final));
                 strcat(final, "print!");
                 strcat(final, (yyvsp[-2].valString));
+		free((yyvsp[-2].valString));
                 (yyval.valString) = final;
         }
-#line 2815 "scanner.tab.c"
+#line 2960 "scanner.tab.c"
     break;
 
   case 61: /* line_program: SCANF LPAREN precontentWrite RPAREN SEMICOLON  */
-#line 931 "scanner.y"
+#line 1081 "scanner.y"
                                                        {
                 char * final = malloc(strlen((yyvsp[-2].valString))*sizeof(char)+ sizeof("let mut input = String::new();\nio::stdin()\n.read_line(&mut input)\n.expect(\"Failed to read line\");"));
                 memset(final, 0, sizeof(final));
                 strcpy(final, "let mut input = String::new();\nio::stdin()\n.read_line(&mut input)\n.expect(\"Failed to read line\");");
+                inputCount = inputCount + 1;
+		free((yyvsp[-2].valString));
                 (yyval.valString) = final;
         }
-#line 2826 "scanner.tab.c"
+#line 2973 "scanner.tab.c"
     break;
 
   case 62: /* line_program: STRINGV LPAREN array RPAREN SEMICOLON  */
-#line 938 "scanner.y"
+#line 1090 "scanner.y"
                                               {
                 char * final = malloc(strlen((yyvsp[-4].valString))* sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("quiere();") + 1);
                 memset(final,0, sizeof(final));
@@ -2834,28 +2981,31 @@ yyreduce:
                 strcat(final, "(");
                 strcat(final,(yyvsp[-2].valString));
                 strcat(final,");");
+		free((yyvsp[-4].valString));
+		free((yyvsp[-2].valString));
                 (yyval.valString) = final;
 
         }
-#line 2841 "scanner.tab.c"
+#line 2990 "scanner.tab.c"
     break;
 
   case 63: /* line_program: STRINGV LPAREN RPAREN SEMICOLON  */
-#line 948 "scanner.y"
+#line 1102 "scanner.y"
                                         {
                 char * final = malloc(strlen((yyvsp[-3].valString))* sizeof(char) +  sizeof("();") + 1);
                 memset(final,0, sizeof(final));
                 strcat(final, (yyvsp[-3].valString));
                 strcat(final, "(");
                 strcat(final,");");
+		free((yyvsp[-3].valString));
                 (yyval.valString) = final;
 
         }
-#line 2855 "scanner.tab.c"
+#line 3005 "scanner.tab.c"
     break;
 
   case 64: /* line_program: IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 958 "scanner.y"
+#line 1113 "scanner.y"
                                                                                  {
                 char * final = malloc(strlen((yyvsp[-4].valString))* sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("if ( ) { } \t \n \n"));
                 memset(final, 0, sizeof(final));
@@ -2869,11 +3019,11 @@ yyreduce:
                 (yyval.valString) = final;
 
         }
-#line 2873 "scanner.tab.c"
+#line 3023 "scanner.tab.c"
     break;
 
   case 65: /* line_program: ELSE IF LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 971 "scanner.y"
+#line 1126 "scanner.y"
                                                                                      {
                 char * final = malloc(strlen((yyvsp[-4].valString))* sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("else if ( ) { } \t \n \n"));
                 memset(final, 0, sizeof(final));
@@ -2886,11 +3036,11 @@ yyreduce:
                 free((yyvsp[-1].valString));
                 (yyval.valString) = final;
         }
-#line 2890 "scanner.tab.c"
+#line 3040 "scanner.tab.c"
     break;
 
   case 66: /* line_program: ELSE OPENCURLYBRACKET line_program CLOSECURLYBRACKET  */
-#line 983 "scanner.y"
+#line 1138 "scanner.y"
                                                                {
                 char* final = malloc(strlen((yyvsp[-1].valString))*sizeof(char)+ sizeof("else {} \n \n \t"));
                 memset(final, 0, sizeof(final));
@@ -2900,42 +3050,63 @@ yyreduce:
                 (yyval.valString) = final;
         
         }
-#line 2904 "scanner.tab.c"
+#line 3054 "scanner.tab.c"
     break;
 
   case 67: /* line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 992 "scanner.y"
+#line 1147 "scanner.y"
                                                                                                                                             {
-                char * final = malloc((yyvsp[-12].valInt)*sizeof(int) + strlen((yyvsp[-7].valString))*sizeof(char) +
-                                sizeof("for ; ; {}")+strlen((yyvsp[-11].valString))*sizeof(char)+ strlen((yyvsp[-9].valString))*sizeof(char) + strlen((yyvsp[-6].valString))*sizeof(char) + 
-                                strlen((yyvsp[-5].valString))*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char));
-                memset(final,0, strlen(final));
+		// Calcular el tamaño de `final` correctamente y asegurar espacio para el terminador nulo
+		char str3[12];  // Asumiendo que INT_MAX es el tamaño máximo
+		char str4[12];
+		char str8[12];
+		sprintf(str3, "%d", (yyvsp[-12].valInt));
+		sprintf(str4, "%d", (yyvsp[-11].valString));
+		sprintf(str8, "%d", (yyvsp[-7].valString));
 
-                char * numero = getEndNumber((yyvsp[-7].valString));
-                char* octavo;
-                if(!strcmp(numero,"")){
-                        octavo =  getStringFromExp((yyvsp[-7].valString));
-                }
-                
-                strcat(final, "for ");
-                strcat(final, (yyvsp[-11].valString));
-                strcat(final, " in ");
-                strcat(final, (yyvsp[-9].valString));
-                strcat(final, "..");
-                strcat(final, octavo);
-                strcat(final, "{\n\t");
-                strcat(final, (yyvsp[-1].valString));
-                strcat(final, "\n}");
-                (yyval.valString)=final;
-                ;}
-#line 2932 "scanner.tab.c"
+		char *final = malloc(strlen(str3) + strlen(str8) + strlen("for ; ; {}") + strlen((yyvsp[-11].valString)) +
+                     strlen((yyvsp[-9].valString)) + strlen((yyvsp[-6].valString)) + strlen((yyvsp[-5].valString)) + strlen((yyvsp[-1].valString)) + 1);
+		// Inicializar `final` correctamente
+		final[0] = '\0';
+
+		// Obtener valor de `octavo`
+		char *numero = getEndNumber((yyvsp[-7].valString));
+		char *octavo;
+		if (strcmp(numero, "") == 0) {
+		octavo = getStringFromExp((yyvsp[-7].valString));
+		} else {
+		octavo = strdup(numero);  // Asegurar que octavo siempre esté inicializado
+		}
+
+		// Concatenación de las cadenas en `final`
+		strcat(final, "for ");
+		strcat(final, (yyvsp[-11].valString));
+		strcat(final, " in ");
+		strcat(final, (yyvsp[-9].valString));
+		strcat(final, "..");
+		strcat(final, octavo);
+		strcat(final, "{\n");
+		strcat(final, (yyvsp[-1].valString));
+		strcat(final, "\n}");
+
+		// Liberar la memoria de las variables temporales
+		free((yyvsp[-11].valString));
+		free((yyvsp[-9].valString));
+		free((yyvsp[-7].valString));
+		free((yyvsp[-5].valString));
+		free((yyvsp[-4].valString));
+		free((yyvsp[-1].valString));
+		free(numero);
+		free(octavo);  // Asegurarse de liberar `octavo` después de usarlo
+		(yyval.valString) = final;
+	}
+#line 3104 "scanner.tab.c"
     break;
 
   case 68: /* line_program: FOR LPAREN type STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 1016 "scanner.y"
+#line 1192 "scanner.y"
                                                                                                                                     {
-                char * final = malloc ((yyvsp[-11].valInt)*sizeof(int) + strlen((yyvsp[-10].valString))*sizeof(char) + strlen((yyvsp[-8].valString))*sizeof(char) + strlen((yyvsp[-6].valString))*sizeof(char)  +
-                                        strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char)+ sizeof("for ; ; {} .step_by( )"));
+                char * final = malloc ((yyvsp[-11].valInt)*sizeof(int) + strlen((yyvsp[-10].valString))*sizeof(char) + strlen((yyvsp[-8].valString))*sizeof(char) + strlen((yyvsp[-6].valString))*sizeof(char)  + strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char)+ sizeof("for ; ; {} .step_by( )"));
                 memset(final,0, strlen(final));
                 char * numero = getEndNumber((yyvsp[-6].valString));
                 char * numero2 = getEndNumber((yyvsp[-4].valString));
@@ -2949,18 +3120,25 @@ yyreduce:
                 strcat(final, ".step_by(");
                 strcat(final, numero2);
                 strcat(final, ")");
-                strcat(final, "{\n\t");
+                strcat(final, "{\n");
                 strcat(final, (yyvsp[-1].valString));
                 strcat(final, "\n}");
+		free((yyvsp[-10].valString));
+		free((yyvsp[-8].valString));
+		free((yyvsp[-6].valString));
+		free((yyvsp[-4].valString));
+		free((yyvsp[-1].valString));
+		free(numero);
+		free(numero2);
                 (yyval.valString)=final;
         
         
         }
-#line 2960 "scanner.tab.c"
+#line 3138 "scanner.tab.c"
     break;
 
   case 69: /* line_program: DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON  */
-#line 1039 "scanner.y"
+#line 1221 "scanner.y"
                                                                                                {
                 char * final = malloc( strlen((yyvsp[-6].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + sizeof("loop {} if() == {} break; \n") );
                 memset(final, 0 , sizeof(final));
@@ -2972,15 +3150,16 @@ yyreduce:
                 strcat(final, "){\n");
                 strcat(final, "break;\n");
                 strcat(final, "}\n}");
-
+		free((yyvsp[-6].valString));
+		free((yyvsp[-2].valString));
                 (yyval.valString) = final;
         
         }
-#line 2980 "scanner.tab.c"
+#line 3159 "scanner.tab.c"
     break;
 
   case 70: /* line_program: WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET  */
-#line 1054 "scanner.y"
+#line 1237 "scanner.y"
                                                                                   {
                 char * final = malloc(strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("while () {} \n\n"));
                 memset(final, 0, sizeof(final));
@@ -2990,47 +3169,49 @@ yyreduce:
                 strcat(final, "){\n");
                 strcat(final, (yyvsp[-1].valString));
                 strcat(final, "\n}");
+		free((yyvsp[-4].valString));
+		free((yyvsp[-1].valString));
                 (yyval.valString) = final;
                 
         }
-#line 2997 "scanner.tab.c"
+#line 3178 "scanner.tab.c"
     break;
 
   case 71: /* line_program: comment  */
-#line 1067 "scanner.y"
+#line 1252 "scanner.y"
                  {;}
-#line 3003 "scanner.tab.c"
+#line 3184 "scanner.tab.c"
     break;
 
   case 72: /* line_program: STRINGV operand SEMICOLON  */
-#line 1068 "scanner.y"
+#line 1253 "scanner.y"
                                    {
                 char * final = malloc (strlen((yyvsp[-1].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char));
                 memset(final, 0, sizeof(final));
                 strcat(final, (yyvsp[-2].valString));
                 strcat(final, (yyvsp[-1].valString));
                 strcat(final, ";");
-
+		free((yyvsp[-2].valString));
+		free((yyvsp[-1].valString));
                 (yyval.valString) = final;
         }
-#line 3017 "scanner.tab.c"
+#line 3199 "scanner.tab.c"
     break;
 
   case 73: /* line_program: RETURN exp SEMICOLON  */
-#line 1077 "scanner.y"
+#line 1263 "scanner.y"
                                {
-                char * final = malloc(strlen((yyvsp[-1].valString))*sizeof(char) );
-                memset(final, 0 , sizeof(final));
-                
-                strcat(final, (yyvsp[-1].valString));
-                (yyval.valString)=final;
+		char *final = malloc((strlen((yyvsp[-1].valString)) + 1) * sizeof(char)); // Reservar espacio suficiente incluyendo el terminador nulo
+    		memset(final, 0, (strlen((yyvsp[-1].valString)) + 1) * sizeof(char)); // Inicializar toda la memoria a 0
+    		strcat(final, (yyvsp[-1].valString)); // Concatenar $2 en `final`
+    		(yyval.valString) = final; // Asignar el resultado a $$
                 
         }
-#line 3030 "scanner.tab.c"
+#line 3211 "scanner.tab.c"
     break;
 
   case 74: /* line_program: RETURN SEMICOLON  */
-#line 1085 "scanner.y"
+#line 1270 "scanner.y"
                            {
                 char * final = malloc(sizeof("return;"));
                 memset(final, 0 , sizeof(final));
@@ -3038,26 +3219,26 @@ yyreduce:
                 (yyval.valString) = final;
                 
         }
-#line 3042 "scanner.tab.c"
+#line 3223 "scanner.tab.c"
     break;
 
   case 75: /* line_program: vardef  */
-#line 1092 "scanner.y"
+#line 1277 "scanner.y"
                 {
                 char * final = malloc(strlen((yyvsp[0].valString))*sizeof(char)  + sizeof("\n"));
                 memset(final,0,sizeof(final));
                 strcat(final,(yyvsp[0].valString));
                 strcat(final,"\n");
 
-                
+          	free((yyvsp[0].valString));      
                 (yyval.valString) = final;
                 
         }
-#line 3057 "scanner.tab.c"
+#line 3238 "scanner.tab.c"
     break;
 
   case 76: /* line_program: STRUCT STRINGV OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON  */
-#line 1112 "scanner.y"
+#line 1297 "scanner.y"
                                                                                   {
                 char * final = malloc(strlen((yyvsp[-4].valString))*sizeof(char) + strlen((yyvsp[-2].valString))*sizeof(char) + strlen("struct { } \n\n"));
                 memset(final, 0 , sizeof(final));
@@ -3067,14 +3248,15 @@ yyreduce:
                 strcat(final, (yyvsp[-2].valString));
                 strcat(final, "}\n");
                 replaceSemicolon(final);
-
+		free((yyvsp[-4].valString));
+		free((yyvsp[-2].valString));
                 (yyval.valString) = final; 
         }
-#line 3074 "scanner.tab.c"
+#line 3256 "scanner.tab.c"
     break;
 
   case 77: /* array: exp COMMA array  */
-#line 1130 "scanner.y"
+#line 1316 "scanner.y"
                        {
                 char * final = malloc(strlen((yyvsp[-2].valString))*sizeof(char) + strlen((yyvsp[0].valString))*sizeof(char)) ;
                 memset(final,0,sizeof(final));
@@ -3082,93 +3264,96 @@ yyreduce:
                 strcat(final,(yyvsp[-2].valString));
                 strcat(final,",");
                 strcat(final,(yyvsp[0].valString));
+		free((yyvsp[-2].valString));
+		free((yyvsp[0].valString));
                 (yyval.valString) = final;
         }
-#line 3088 "scanner.tab.c"
+#line 3272 "scanner.tab.c"
     break;
 
   case 78: /* array: exp  */
-#line 1139 "scanner.y"
+#line 1327 "scanner.y"
             {
                 (yyval.valString) = (yyvsp[0].valString);
         }
-#line 3096 "scanner.tab.c"
+#line 3280 "scanner.tab.c"
     break;
 
   case 79: /* precontentWrite: contentWrite  */
-#line 1145 "scanner.y"
-                    {
-                if(strlen(printV) ==0){
-                        char * final = malloc(strlen((yyvsp[0].valString))*sizeof(char) + strlen(printV)*sizeof(char)+strlen("();") * sizeof(char) );
-                        memset(final, 0, sizeof(final));
-                        strcat(final, "(");
-                        strcat(final,(yyvsp[0].valString));
-                        strcat(final, ");");
-                        (yyval.valString) = final;
-                }else{
-                        int longitud = strlen(printV);
-                        char * final = malloc(strlen((yyvsp[0].valString))*sizeof(char) + strlen("{},,,")*sizeof(char) + longitud*sizeof(char)+strlen("(\"") * sizeof(char)+ strlen("\");")*sizeof(char));
-                        memset(final, 0, sizeof(final));
-                        
-                        int contador = 0;
-                         // Obtenemos la longitud de la cadena original
-                        char* nueva_cadena =malloc(sizeof(char) * (longitud)); // Reservamos memoria para la nueva cadena
-                        memset(nueva_cadena, 0, sizeof(nueva_cadena));
+#line 1333 "scanner.y"
+                     {
+	    	if (strlen(printV) == 0) {
+        		char *final = malloc(strlen((yyvsp[0].valString)) + strlen(printV) + strlen("();") + 1);  // +1 para '\0'
+        		if (final) {
+            			final[0] = '\0';  // Inicializa la cadena a vacía
+            			strcat(final, "(");
+            			strcat(final, (yyvsp[0].valString));
+            			strcat(final, ");");
+            			(yyval.valString) = final;
+        		}
+    		} else {
+	        	int longitud = strlen(printV);
+        		char *final = malloc(strlen((yyvsp[0].valString)) + strlen("{},,,") + longitud + strlen("(\"") + strlen("\");") + 1);
+        		if (final) {
+            			final[0] = '\0';  // Inicializa a vacío
 
+            			// Reservamos memoria para nueva_cadena y la inicializamos
+            			char *nueva_cadena = malloc(longitud + 1);
+            			if (nueva_cadena) {
+                			nueva_cadena[0] = '\0';  // Inicializa a vacío
 
-                        for (int i = longitud - 1; i >= 0; i--) {
-                                if (printV[i] == ',') {
-                                        // Reemplazar la última coma por el carácter nulo
-                                        printV[i] = '\0';
-                                        break;
-                                }
-                        }
-                        strcpy(nueva_cadena, printV);
-                        nueva_cadena[longitud*2-1] = '\0'; // Agregamos el terminador nulo al final de la nueva cadena
+                			// Quita la última coma en printV
+                			for (int i = longitud - 1; i >= 0; i--) {
+                    				if (printV[i] == ',') {
+                        				printV[i] = '\0';
+                        				break;
+                    				}
+                			}
+                			strcpy(nueva_cadena, printV);
 
-                        
-                        for (int i = 0; (yyvsp[0].valString)[i] != '\0'; i++) {
-                                if ((yyvsp[0].valString)[i] == '}') {
-                                        contador++;
-                                }
-                        }
-                        strcat(final, "(");
-                        if(strlen(printV) == contador){
-                                strcat(final, "\"");
-                                strcat(final, (yyvsp[0].valString));
-                                strcat(final, "\"");
-                                strcat(final, ",");
-                                strcat(final, nueva_cadena);
+                			// Conteo de '{' en $1
+                			int contador = 0;
+                			for (int i = 0; (yyvsp[0].valString)[i] != '\0'; i++) {
+                    				if ((yyvsp[0].valString)[i] == '}') {
+                        				contador++;
+                    				}
+                			}
 
-                                
-                        } else if (strlen(printV) > contador){
-                                strcat(final, "\"");
-                                strcat(final, (yyvsp[0].valString));
-                                strcat(final, "{}");
-                                strcat(final, "\"");
-                                strcat(final, ",");
-                                strcat(final, nueva_cadena);
-                                
-                        } else {
-                                printf("tiene que haber algun error");
-                        }
-                        strcat(final, ");");
-                        memset(printV, 0, sizeof(printV));
-                        free((yyvsp[0].valString));
-                        free(nueva_cadena);
-                        (yyval.valString) = final;
-                }
+                			strcat(final, "(");
+                			if (strlen(printV) == contador) {
+                    				strcat(final, "\"");
+                    				strcat(final, (yyvsp[0].valString));
+                    				strcat(final, "\"");
+                    				strcat(final, ",");
+                    				strcat(final, nueva_cadena);
+                			} else if (strlen(printV) > contador) {
+                    				strcat(final, "\"");
+                    				strcat(final, (yyvsp[0].valString));
+                    				strcat(final, "{}");
+                    				strcat(final, "\"");
+                    				strcat(final, ",");
+                    				strcat(final, nueva_cadena);
+                			} else {
+                    				printf("Error: valores no coinciden\n");
+                			}
+                			strcat(final, ");");
 
-
-
-        }
-#line 3166 "scanner.tab.c"
+                			// Liberación de memoria
+                			memset(printV, 0, strlen(printV));  // Limpia printV pero sin liberar
+                			free(nueva_cadena);  // Libera nueva_cadena
+            			}
+            			(yyval.valString) = final;  // Asigna el resultado final
+        		}
+        		free((yyvsp[0].valString));  // Libera $1 en ambas ramas
+    		}
+	}
+#line 3351 "scanner.tab.c"
     break;
 
   case 80: /* contentWrite: contentWrite COMMA exp  */
-#line 1291 "scanner.y"
+#line 1481 "scanner.y"
                               {
-                printf("aqui");
+                printf("aqui\n");
                 char * final = malloc(strlen((yyvsp[-2].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + strlen("{}") * sizeof(char)); 
                 memset(final, 0, sizeof(final));
 
@@ -3178,64 +3363,72 @@ yyreduce:
                 
                 strcat(final, (yyvsp[-2].valString));
                 deleteQuotes(final);
+		free((yyvsp[-2].valString));
+		free((yyvsp[0].valString));
                 (yyval.valString) = final;
         }
-#line 3184 "scanner.tab.c"
+#line 3371 "scanner.tab.c"
     break;
 
   case 81: /* contentWrite: QUOTESTRING  */
-#line 1305 "scanner.y"
+#line 1497 "scanner.y"
                       {
 
                 (yyval.valString) = (yyvsp[0].valString);}
-#line 3192 "scanner.tab.c"
+#line 3379 "scanner.tab.c"
     break;
 
   case 82: /* contentWrite: STRINGV  */
-#line 1308 "scanner.y"
+#line 1500 "scanner.y"
                   {
-                (yyval.valString) = (yyvsp[0].valString);}
-#line 3199 "scanner.tab.c"
+                (yyval.valString) = (yyvsp[0].valString);
+	}
+#line 3387 "scanner.tab.c"
     break;
 
   case 83: /* exp: exp operand term  */
-#line 1314 "scanner.y"
+#line 1507 "scanner.y"
                          {
                 
-                char * final = malloc(strlen((yyvsp[-2].valString)) * sizeof(char) +strlen((yyvsp[-1].valString)) * sizeof(char) + strlen((yyvsp[0].valString)) * sizeof(char) + 1);
-                memset(final, 0, sizeof(final));
-                strcpy(final, (yyvsp[-2].valString));
-                strcat(final, (yyvsp[-1].valString));
-                strcat(final, (yyvsp[0].valString));
-                free((yyvsp[-2].valString));
-                free((yyvsp[-1].valString));
-                free((yyvsp[0].valString));
-                (yyval.valString) = final;
-                
+                char *final = malloc(strlen((yyvsp[-2].valString)) + strlen((yyvsp[-1].valString)) + strlen((yyvsp[0].valString)) + 1); // +1 para el terminador nulo
+
+		// Inicializar el bloque de memoria completo
+		memset(final, 0, strlen((yyvsp[-2].valString)) + strlen((yyvsp[-1].valString)) + strlen((yyvsp[0].valString)) + 1);
+
+		// Concatenar las cadenas
+		strcpy(final, (yyvsp[-2].valString));
+		strcat(final, (yyvsp[-1].valString));
+		strcat(final, (yyvsp[0].valString));
+
+		// Liberar las variables temporales
+		free((yyvsp[-2].valString));
+		free((yyvsp[-1].valString));
+		(yyval.valString) = final;
         }
-#line 3217 "scanner.tab.c"
+#line 3409 "scanner.tab.c"
     break;
 
   case 84: /* exp: term  */
-#line 1327 "scanner.y"
+#line 1524 "scanner.y"
               {
                                 
 
         	(yyval.valString) = (yyvsp[0].valString);
 			}
-#line 3227 "scanner.tab.c"
+#line 3419 "scanner.tab.c"
     break;
 
   case 85: /* term: atom  */
-#line 1336 "scanner.y"
+#line 1533 "scanner.y"
              {
 
-                (yyval.valString) = (yyvsp[0].valString);}
-#line 3235 "scanner.tab.c"
+                (yyval.valString) = (yyvsp[0].valString);
+	}
+#line 3428 "scanner.tab.c"
     break;
 
   case 86: /* term: LPAREN exp RPAREN  */
-#line 1339 "scanner.y"
+#line 1537 "scanner.y"
                             {
                 char * final = malloc(strlen((yyvsp[-1].valString)) * sizeof(char) + sizeof("()") + 1);
                 memset(final, 0, sizeof(final));
@@ -3245,11 +3438,11 @@ yyreduce:
                 free((yyvsp[-1].valString));
                 (yyval.valString) = final;
                 }
-#line 3249 "scanner.tab.c"
+#line 3442 "scanner.tab.c"
     break;
 
   case 87: /* term: EX exp  */
-#line 1357 "scanner.y"
+#line 1555 "scanner.y"
                  {
                 char * final = malloc(strlen((yyvsp[0].valString)) * sizeof(char) + sizeof("!()") + 1);
                 memset(final, 0, sizeof(final));
@@ -3259,140 +3452,141 @@ yyreduce:
                 free((yyvsp[0].valString));
                 (yyval.valString) = final;
                 }
-#line 3263 "scanner.tab.c"
+#line 3456 "scanner.tab.c"
     break;
 
   case 88: /* operand: PLUS  */
-#line 1377 "scanner.y"
+#line 1575 "scanner.y"
              {
                 (yyval.valString) = strdup(" + ");
         }
-#line 3271 "scanner.tab.c"
+#line 3464 "scanner.tab.c"
     break;
 
   case 89: /* operand: PLUS EQ  */
-#line 1380 "scanner.y"
+#line 1578 "scanner.y"
                  {(yyval.valString) = strdup(" += ");}
-#line 3277 "scanner.tab.c"
+#line 3470 "scanner.tab.c"
     break;
 
   case 90: /* operand: HYPHEN  */
-#line 1381 "scanner.y"
+#line 1579 "scanner.y"
                 {(yyval.valString) = strdup(" - ");}
-#line 3283 "scanner.tab.c"
+#line 3476 "scanner.tab.c"
     break;
 
   case 91: /* operand: HYPHEN EQ  */
-#line 1382 "scanner.y"
+#line 1580 "scanner.y"
                    {(yyval.valString) = strdup(" -= ");}
-#line 3289 "scanner.tab.c"
+#line 3482 "scanner.tab.c"
     break;
 
   case 92: /* operand: HYPHEN HIGHER  */
-#line 1383 "scanner.y"
+#line 1581 "scanner.y"
                       {(yyval.valString) = strdup(".");}
-#line 3295 "scanner.tab.c"
+#line 3488 "scanner.tab.c"
     break;
 
   case 93: /* operand: PROD  */
-#line 1384 "scanner.y"
+#line 1582 "scanner.y"
               {(yyval.valString) = strdup(" * ");}
-#line 3301 "scanner.tab.c"
+#line 3494 "scanner.tab.c"
     break;
 
   case 94: /* operand: DIV  */
-#line 1385 "scanner.y"
+#line 1583 "scanner.y"
              {(yyval.valString) = strdup(" / ");}
-#line 3307 "scanner.tab.c"
+#line 3500 "scanner.tab.c"
     break;
 
   case 95: /* operand: DIVINT  */
-#line 1386 "scanner.y"
+#line 1584 "scanner.y"
                 {(yyval.valString) = strdup(" / ");}
-#line 3313 "scanner.tab.c"
+#line 3506 "scanner.tab.c"
     break;
 
   case 96: /* operand: MOD  */
-#line 1387 "scanner.y"
+#line 1585 "scanner.y"
              {(yyval.valString) = strdup(" % ");}
-#line 3319 "scanner.tab.c"
+#line 3512 "scanner.tab.c"
     break;
 
   case 97: /* operand: LOWER  */
-#line 1388 "scanner.y"
+#line 1586 "scanner.y"
                {(yyval.valString) = strdup(" < ");}
-#line 3325 "scanner.tab.c"
+#line 3518 "scanner.tab.c"
     break;
 
   case 98: /* operand: HIGHER  */
-#line 1389 "scanner.y"
+#line 1587 "scanner.y"
                 {(yyval.valString) = strdup(" > ");}
-#line 3331 "scanner.tab.c"
+#line 3524 "scanner.tab.c"
     break;
 
   case 99: /* operand: LOWER EQ  */
-#line 1390 "scanner.y"
+#line 1588 "scanner.y"
                   {(yyval.valString) = strdup(" <= ");}
-#line 3337 "scanner.tab.c"
+#line 3530 "scanner.tab.c"
     break;
 
   case 100: /* operand: HIGHER EQ  */
-#line 1391 "scanner.y"
+#line 1589 "scanner.y"
                    {(yyval.valString) = strdup(" >= ");}
-#line 3343 "scanner.tab.c"
+#line 3536 "scanner.tab.c"
     break;
 
   case 101: /* operand: EQ EQ  */
-#line 1392 "scanner.y"
+#line 1590 "scanner.y"
                {(yyval.valString) = strdup(" == ");}
-#line 3349 "scanner.tab.c"
+#line 3542 "scanner.tab.c"
     break;
 
   case 102: /* operand: AND  */
-#line 1393 "scanner.y"
+#line 1591 "scanner.y"
              {(yyval.valString) = strdup(" && ");}
-#line 3355 "scanner.tab.c"
+#line 3548 "scanner.tab.c"
     break;
 
   case 103: /* operand: PLUS PLUS  */
-#line 1394 "scanner.y"
+#line 1592 "scanner.y"
                    {(yyval.valString) = strdup(" ++ ");}
-#line 3361 "scanner.tab.c"
+#line 3554 "scanner.tab.c"
     break;
 
   case 104: /* operand: OR  */
-#line 1395 "scanner.y"
+#line 1593 "scanner.y"
            {(yyval.valString) = strdup(" || ");}
-#line 3367 "scanner.tab.c"
+#line 3560 "scanner.tab.c"
     break;
 
   case 105: /* operand: DOT  */
-#line 1396 "scanner.y"
+#line 1594 "scanner.y"
              {(yyval.valString) = strdup(".");}
-#line 3373 "scanner.tab.c"
+#line 3566 "scanner.tab.c"
     break;
 
   case 106: /* atom: STRINGV  */
-#line 1401 "scanner.y"
+#line 1599 "scanner.y"
                 {
 
             (yyval.valString) = (yyvsp[0].valString);
 		}
-#line 3382 "scanner.tab.c"
+#line 3575 "scanner.tab.c"
     break;
 
   case 107: /* atom: values  */
-#line 1405 "scanner.y"
+#line 1603 "scanner.y"
                  {
 
                         
 			(yyval.valString) = (yyvsp[0].valString);
+			
 		}
-#line 3392 "scanner.tab.c"
+#line 3586 "scanner.tab.c"
     break;
 
   case 108: /* atom: STRINGV LSQUAREPAREN atom RSQUAREPAREN  */
-#line 1410 "scanner.y"
+#line 1609 "scanner.y"
                                                {
 
                 char * final = malloc(strlen((yyvsp[-3].valString))* sizeof(char) + strlen((yyvsp[-1].valString))*sizeof(char) + sizeof("[]"));
@@ -3401,13 +3595,15 @@ yyreduce:
                 strcat(final, "[");
                 strcat(final, (yyvsp[-1].valString));
                 strcat(final, "]");
+		free((yyvsp[-3].valString));
+		free((yyvsp[-1].valString));
                 (yyval.valString) = final;
         }
-#line 3407 "scanner.tab.c"
+#line 3603 "scanner.tab.c"
     break;
 
 
-#line 3411 "scanner.tab.c"
+#line 3607 "scanner.tab.c"
 
       default: break;
     }
@@ -3631,7 +3827,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 1422 "scanner.y"
+#line 1623 "scanner.y"
 
 
 char * obtenerTipo(int valor) {
@@ -3654,28 +3850,31 @@ char * obtenerTipo(int valor) {
     return tipo;
 }
 
-char* getEndNumber(char* number){
-                int len = strlen(number);
-                char* numero = (char*) malloc(len + 1); // Reservar espacio para el nuevo número (+1 por el '\0')
-                char* newNumero = (char*) malloc(2); // Reservar espacio para el dígito y el '\0'
-                numero[0] = '\0'; // Inicializar la cadena vacía
-                for (int i = len - 1; i >= 0; i--) {
-                        if (!isdigit(number[i])) {
-                                break;
-                                
-                        } else {
-                                newNumero[0] = number[i];
-                                newNumero[1] = '\0'; // Agregar el '\0' para que sea una cadena válida
-                                char* temp = strdup(numero); // Crear una copia temporal de la cadena
-                                strcpy(numero, newNumero); // Copiar el dígito al principio de la cadena
-                                strcat(numero, temp); // Concatenar el resto de la cadena al final
-                                free(temp); // Liberar la memoria de la cadena temporal
-                        }
-                }
-                free(newNumero); // Liberar la memoria del dígito
-                return numero;
-}
+char* getEndNumber(char* number) {
+	int len = strlen(number);
+	char* numero = (char*) malloc(len + 1); // Reservar espacio para el nuevo número (+1 por el '\0')
+    	if (numero == NULL) return NULL; // Verificar si la asignación fue exitosa
 
+    		int j = 0;
+    		// Recorremos `number` desde el final para encontrar los dígitos
+    		for (int i = len - 1; i >= 0; i--) {
+        		if (!isdigit(number[i])) {
+          	  		break;
+        		} else {
+        	    		numero[j++] = number[i]; // Guardar el dígito en `numero`
+        		}
+    		}
+    		numero[j] = '\0'; // Terminar la cadena con '\0'
+
+    		// Invertir `numero` para obtener los dígitos en el orden correcto
+    		for (int k = 0; k < j / 2; k++) {
+        		char temp = numero[k];
+        		numero[k] = numero[j - k - 1];
+        		numero[j - k - 1] = temp;
+    		}
+
+    	return numero;
+}
 
 /* Funciones auxiliares de borrado de caracteres */
 void deleteQuotes(char * stringq) {
@@ -4028,62 +4227,73 @@ int main(int argc, char *argv[]) {
                         break;
 		case 2: int i = 0;
                         arraySize++;
-                        YY_BUFFER_STATE bufferState = NULL;
-                        arrayCabeceras = (char**)realloc(arrayCabeceras, arraySize * sizeof(char*));
-                        arrayCabeceras[arraySize - 1] = (char*)malloc(strlen(ruta) * sizeof(char));
-                        strcpy(arrayCabeceras[arraySize - 1], ruta);
-                        strcpy(filePath, ruta);
-                        
-                        #pragma omp parallel shared(arrayCabeceras, arraySize, yyin, filePath) private(i)
-                        {
-                                #pragma omp for
-                                for (i = 0; i < arraySize; i++) {
-                                        printf("\n-------%i--------\n", arraySize);
-                                        #pragma omp critical
-                                        {/*     extern void yy_flush_buffer( YY_BUFFER_STATE buffer );
-                                                extern void yy_switch_to_buffer( YY_BUFFER_STATE new_buffer );
-                                                extern YY_BUFFER_STATE yy_create_buffer( FILE *file, int size );
-                                                extern YY_BUFFER_STATE yy_current_buffer();*/
-                                                bufferState = yy_current_buffer();
-                                                yy_flush_buffer(bufferState);
-                                                yyin = fopen(arrayCabeceras[i], "r");
-                                                bufferState = yy_create_buffer(yyin, 1024);
-                                                yy_switch_to_buffer(bufferState);
-                                        }
-                                        // Ejecutar la función que trabaja con el array
-                                        if (yyin == NULL) {
-                                                printf("ERROR: No se ha podido abrir el fichero.\n");
-                                        } else {
-                                                #pragma omp critical
-                                                {
-                                                strcpy(filePath, arrayCabeceras[i]);
-                                                }
-                                                yyparse();
-                                                #pragma omp critical
-                                                {
-                                                fclose(yyin);
-                                                }
-                                        }
+			YY_BUFFER_STATE bufferState = NULL;
 
-                                        // Hacer algo después de la función
-                                        #pragma omp critical
-                                        {
-                                                printf("Thread %d realizando manipulaciones posteriores.\n", omp_get_thread_num());
-                                        }
-                                }
-                        }
+			// Asegurar espacio suficiente en arrayCabeceras
+			arrayCabeceras = (char**)realloc(arrayCabeceras, arraySize * sizeof(char*));
+			if (arrayCabeceras == NULL) {
+    				printf("Error al reasignar memoria para arrayCabeceras\n");
+    				exit(1); // Termina si realloc falla
+			}
 
-                                
+			// Asignar memoria para la nueva cadena en arrayCabeceras[arraySize - 1]
+			// Añadimos +1 para el terminador nulo '\0'
+			arrayCabeceras[arraySize - 1] = (char*)malloc((strlen(ruta) + 1) * sizeof(char));
+			if (arrayCabeceras[arraySize - 1] == NULL) {
+    				printf("Error al asignar memoria para arrayCabeceras[%d]\n", arraySize - 1);
+    				exit(1); // Termina si malloc falla
+			}
 
+			// Copiar la cadena 'ruta' a la nueva posición en arrayCabeceras
+			strcpy(arrayCabeceras[arraySize - 1], ruta);
 
+			// Copiar la ruta también en filePath
+			strcpy(filePath, ruta);
 
-                        printf("array size final %i", arraySize);
-                        
-                        
-                        
-                
-                        break;
-                
+			#pragma omp parallel shared(arrayCabeceras, arraySize, yyin, filePath) private(i)
+			{
+    			#pragma omp for
+    			for (i = 0; i < arraySize; i++) {
+        			printf("\n-------%i--------\n", arraySize);
+
+        			#pragma omp critical
+        			{
+            				bufferState = yy_current_buffer();
+            				yy_flush_buffer(bufferState);
+            				yyin = fopen(arrayCabeceras[i], "r");
+
+            				if (yyin == NULL) {
+                				printf("ERROR: No se ha podido abrir el fichero %s.\n", arrayCabeceras[i]);
+                				continue; // Saltar a la siguiente iteración si el archivo no se abre
+            				}
+
+           				bufferState = yy_create_buffer(yyin, 1024);
+            				yy_switch_to_buffer(bufferState);
+        			}
+		
+        			// Ejecutar la función que trabaja con el array
+        			#pragma omp critical
+        			{
+            				strcpy(filePath, arrayCabeceras[i]);
+        			}
+        			yyparse();
+
+        			#pragma omp critical
+        			{
+            				fclose(yyin);
+        			}
+
+        			#pragma omp critical
+        			{
+            				printf("Thread %d realizando manipulaciones posteriores.\n", omp_get_thread_num());
+        			}
+
+        			yy_delete_buffer(bufferState);
+    			}
+		}
+
+		printf("array size final %i\n", arraySize);
+                break;
                 
                 case 4 : if((strcmp(argv[2], "-s") != 0) || (isNumber(argv[3])==0)) {
                                 printf("Syntax : ./traductorP <archivoC> [-s size_string]\n");

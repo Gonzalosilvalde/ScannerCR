@@ -18,7 +18,7 @@ fn calculateAverage (student: &mut Student) {
 	
 	
 	for i in 0.. MAX_SUBJECTS{
-			sum += student1.grades[i];
+		sum += student1.grades[i];
 		
 		
 	}
@@ -32,7 +32,7 @@ fn () main-> i32 {
 	
 	
 	for i in 0.. MAX_STUDENTS{
-			print!("Enter name of student %d: {}",i + 1);
+		print!("Enter name of student %d: {}",i + 1);
 		let mut input = String::new();
 		io::stdin()
 		.read_line(&mut input)
@@ -44,7 +44,7 @@ fn () main-> i32 {
 		.expect("Failed to read line");
 		print!("Enter grades for student %d:\n{}",i + 1);
 		for j in 0.. MAX_SUBJECTS{
-				print!("Enter grade for subject %d: {}",j + 1);
+			print!("Enter grade for subject %d: {}",j + 1);
 			let mut input = String::new();
 			io::stdin()
 			.read_line(&mut input)
@@ -54,15 +54,14 @@ fn () main-> i32 {
 	}
 	print!("\n\nDisplaying Information:\n\n");
 	for i in 0.. MAX_STUDENTS{
-			print!("Name: %s\n{}",students[i].name);
+		print!("Name: %s\n{}",students[i].name);
 		print!("ID: %d\n{}",students[i].id);
 		print!("Grades: ");
 		for j in 0.. MAX_SUBJECTS{
-				print!("%.2f {}",students[i].grades[j]);
+			print!("%.2f {}",students[i].grades[j]);
 		}
 		print!("\nAverage: %.2f\n\n{}",students[i].average);
 	}
 	0
 }
 
-á

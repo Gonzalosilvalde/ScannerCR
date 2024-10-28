@@ -4,6 +4,8 @@
 // Declaración de la función
 void funcion3() {
     printf("Esta es la función 3.\n");
+    printf("Esta es la función 3.\n");
+
 }
 
 int main() {

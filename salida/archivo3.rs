@@ -1,6 +1,7 @@
 // Declaración de la función
 fn () funcion3
 print!("Esta es la función 3.\n");
+print!("Esta es la función 3.\n");
 }
 
 fn () main-> i32 {

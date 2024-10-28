@@ -76,11 +76,14 @@ stringquote {return STRINGQUOTE;}
 const {return CONST;}
 
 ({letter}|\_|&)({letter}|{digit}|\_)*  {
-    yylval.valString = strdup(yytext);
+    	yylval.valString = strdup(yytext);
         
         return STRINGV;
 }
-({stringquote}|{cs})+ {yylval.valString = strdup(yytext); return QUOTESTRING;}
+({stringquote}|{cs})+ {
+	yylval.valString = strdup(yytext); 
+	return QUOTESTRING;
+}
 \n ;
 . ;
 %%

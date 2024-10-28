@@ -1,5 +1,5 @@
 FUENTE = scanner
-PRUEBA = archivo4.c
+PRUEBA = archivo3.c
 
 all: compile run
 
@@ -11,29 +11,33 @@ compile_counter: bison_counter flex_compile link
 
 flex_compile:
 	flex $(FUENTE).l
-	gcc -c  lex.yy.c -o lex.yy.o -lfl
+	gcc -g -c lex.yy.c -o lex.yy.o -lfl
 
 bison_compile:
 	bison -d $(FUENTE).y 
-	gcc -c  $(FUENTE).tab.c -o $(FUENTE).tab.o
+	gcc -g -c $(FUENTE).tab.c -o $(FUENTE).tab.o
 
 bison_counter:
 	bison -d $(FUENTE).y -Wcounterexamples
-	gcc -c  $(FUENTE).tab.c -o $(FUENTE).tab.o
+	gcc -g -c $(FUENTE).tab.c -o $(FUENTE).tab.o
 
-link:
-	gcc -o  $(FUENTE) list.o lex.yy.o $(FUENTE).tab.o -L. -lfl -ly  -pthread -fopenmp
+link: list.o lex.yy.o $(FUENTE).tab.o
+	gcc -g -o $(FUENTE) list.o lex.yy.o $(FUENTE).tab.o -L. -lfl -pthread -fopenmp
 
 run:
 	./$(FUENTE) $(PRUEBA)
 
 list.o : list.h list.c
-	gcc -c list.c -Wall
+	gcc -g -c list.c -Wall -o list.o
 
 valgrind: 
-	valgrind --leak-check=full --track-origins=yes ./$(FUENTE) $(PRUEBA)
+	valgrind --leak-check=full --track-origins=yes ./$(FUENTE) $(PRUEBA) > fallos.txt 2>&1
+
+debug: all
+	gdb ./$(FUENTE)
 
 clean:
-	rm -f $(FUENTE) lex.yy.c $(FUENTE).tab.c $(FUENTE).tab.h *.o
+	rm -f $(FUENTE) lex.yy.c $(FUENTE).tab.c $(FUENTE).tab.h *.o $(FUENTE).gv $(FUENTE).output
 
-.PHONY: all compile flex_compile bison_compile link run clean
+.PHONY: all compile flex_compile bison_compile link run clean debug
+

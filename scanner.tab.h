@@ -130,7 +130,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 75 "scanner.y"
+#line 78 "scanner.y"
 
     char * valString;
     int valInt;
