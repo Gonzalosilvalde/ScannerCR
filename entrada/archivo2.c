@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "archivo5.h"
 int main() {
     char operador;
     double num1, num2, resultado;
@@ -14,16 +14,16 @@ int main() {
     scanf("%lf", &num2);
 
     switch (operador) {
-        case "+":
+        case '+':
             resultado = num1 + num2;
             break;
-        case "-":
+        case '-':
             resultado = num1 - num2;
             break;
-        case "*":
+        case '*':
             resultado = num1 * num2;
             break;
-        case "/":
+        case '/':
             if (num2 != 0) {
                 resultado = num1 / num2;
             } else {

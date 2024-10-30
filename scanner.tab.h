@@ -103,29 +103,31 @@ extern int yydebug;
     INTEGER = 304,                 /* INTEGER  */
     SHORT = 305,                   /* SHORT  */
     LONG = 306,                    /* LONG  */
-    UNSIGNED_INT = 307,            /* UNSIGNED_INT  */
-    UNSIGNED_SHORT = 308,          /* UNSIGNED_SHORT  */
-    UNSIGNED_LONG = 309,           /* UNSIGNED_LONG  */
-    FLOAT = 310,                   /* FLOAT  */
-    DOUBLE = 311,                  /* DOUBLE  */
-    VOID = 312,                    /* VOID  */
-    OPENCURLYBRACKET = 313,        /* OPENCURLYBRACKET  */
-    CLOSECURLYBRACKET = 314,       /* CLOSECURLYBRACKET  */
-    BOOLEAN = 315,                 /* BOOLEAN  */
-    CHAR = 316,                    /* CHAR  */
-    PRINTF = 317,                  /* PRINTF  */
-    SCANF = 318,                   /* SCANF  */
-    STRING = 319,                  /* STRING  */
-    STRINGV = 320,                 /* STRINGV  */
-    QUOTESTRING = 321,             /* QUOTESTRING  */
-    TRUEVAL = 322,                 /* TRUEVAL  */
-    FALSEVAL = 323,                /* FALSEVAL  */
-    INTNUM = 324,                  /* INTNUM  */
-    REALNUM = 325,                 /* REALNUM  */
-    RETURN = 326,                  /* RETURN  */
-    STRUCT = 327,                  /* STRUCT  */
-    AMPERSAND = 328,               /* AMPERSAND  */
-    EX = 329                       /* EX  */
+    LONG_LONG = 307,               /* LONG_LONG  */
+    UNSIGNED_INT = 308,            /* UNSIGNED_INT  */
+    UNSIGNED_SHORT = 309,          /* UNSIGNED_SHORT  */
+    UNSIGNED_LONG = 310,           /* UNSIGNED_LONG  */
+    UNSIGNED_LONG_LONG = 311,      /* UNSIGNED_LONG_LONG  */
+    FLOAT = 312,                   /* FLOAT  */
+    DOUBLE = 313,                  /* DOUBLE  */
+    VOID = 314,                    /* VOID  */
+    OPENCURLYBRACKET = 315,        /* OPENCURLYBRACKET  */
+    CLOSECURLYBRACKET = 316,       /* CLOSECURLYBRACKET  */
+    BOOLEAN = 317,                 /* BOOLEAN  */
+    CHAR = 318,                    /* CHAR  */
+    PRINTF = 319,                  /* PRINTF  */
+    SCANF = 320,                   /* SCANF  */
+    STRING = 321,                  /* STRING  */
+    STRINGV = 322,                 /* STRINGV  */
+    QUOTESTRING = 323,             /* QUOTESTRING  */
+    TRUEVAL = 324,                 /* TRUEVAL  */
+    FALSEVAL = 325,                /* FALSEVAL  */
+    INTNUM = 326,                  /* INTNUM  */
+    REALNUM = 327,                 /* REALNUM  */
+    RETURN = 328,                  /* RETURN  */
+    STRUCT = 329,                  /* STRUCT  */
+    AMPERSAND = 330,               /* AMPERSAND  */
+    EX = 331                       /* EX  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -140,7 +142,7 @@ union YYSTYPE
     int valInt;
     double valDouble;
 
-#line 144 "scanner.tab.h"
+#line 146 "scanner.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

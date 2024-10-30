@@ -1,124 +1,226 @@
-==4857== Memcheck, a memory error detector
-==4857== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==4857== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
-==4857== Command: ./scanner archivo3.c
-==4857== 
+==6290== Memcheck, a memory error detector
+==6290== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==6290== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
+==6290== Command: ./scanner archivo5.c
+==6290== 
+==6290== Invalid free() / delete / delete[] / realloc()
+==6290==    at 0x484317B: free (vg_replace_malloc.c:872)
+==6290==    by 0x110965: yyparse (scanner.y:933)
+==6290==    by 0x1158E7: main (scanner.y:2372)
+==6290==  Address 0x11d360 is 0 bytes inside data symbol "tipoStruct"
+==6290== 
 Número de argumentos (argc): 2
 Argumentos (argv):
 argv[0] = ./scanner
-argv[1] = archivo3.c
+argv[1] = archivo5.c
 
 -------1--------
------------------archivo4.c------------------ 
-array size 2
-
-array cabeceras entrada/archivo4.c
-
-ruta  entrada/archivo4.c
-
+Palabra capturada: stdio
+Palabra capturada: h
+Palabra capturada: stdlib
+Palabra capturada: h
+Palabra capturada: Nodo
+Palabra capturada: data
 0
+Palabra capturada: Nodo
+Palabra capturada: siguiente
 1
-2
-3
-4
-filepath: entrada/archivo3.c
-entrada: entrada/archivo3.c
-lastSlash: /archivo3.c
-sal   salida/archivo3.rs
-salida/archivo3.rsThread 0 realizando manipulaciones posteriores.
 
--------2--------
+
+ TIPO TIPO struct TIPO TIPO 
+ 
+2
+
+
+ TIPO TIPO struct TIPO TIPO 
+ 
+Palabra capturada: agregarNodo
+Palabra capturada: Nodo
+Palabra capturada: cabeza
+Palabra capturada: valor
+Palabra capturada: Nodo
+Palabra capturada: nuevoNodo
+Palabra capturada: Nodo
+Palabra capturada: malloc
+Palabra capturada: sizeof
+Palabra capturada: Nodo
+3
+Palabra capturada: nuevoNodo
+Palabra capturada: data
+Palabra capturada: valor
+4
+Palabra capturada: nuevoNodo
+Palabra capturada: siguiente
+Palabra capturada: cabeza
 5
+Palabra capturada: cabeza
+Palabra capturada: nuevoNodo
 6
+Palabra capturada: eliminarNodo
+Palabra capturada: Nodo
+Palabra capturada: cabeza
+Palabra capturada: valor
+Palabra capturada: Nodo
+Palabra capturada: temp
+Palabra capturada: cabeza
+Palabra capturada: prev
 7
+modTipo1 tiene: ''
+modTipo2 tiene: ':Nodo='
+Palabra capturada: temp
+Palabra capturada: NULL
+Palabra capturada: temp
+Palabra capturada: data
+Palabra capturada: valor
+Palabra capturada: cabeza
+Palabra capturada: temp
+Palabra capturada: siguiente
 8
+Palabra capturada: free
+Palabra capturada: temp
 9
 10
+Palabra capturada: temp
+Palabra capturada: NULL
+Palabra capturada: temp
+Palabra capturada: data
+Palabra capturada: valor
+Palabra capturada: prev
+Palabra capturada: temp
 11
+Palabra capturada: temp
+Palabra capturada: temp
+Palabra capturada: siguiente
 12
+Palabra capturada: temp
+Palabra capturada: NULL
 13
+Palabra capturada: prev
+Palabra capturada: siguiente
+Palabra capturada: temp
+Palabra capturada: siguiente
 14
-hola2
+Palabra capturada: free
+Palabra capturada: temp
 15
+Palabra capturada: mostrarLista
+Palabra capturada: Nodo
+Palabra capturada: nodo
+Palabra capturada: nodo
+Palabra capturada: NULL
+Palabra capturada: nodo
+Palabra capturada: data
 16
+Palabra capturada: nodo
+Palabra capturada: nodo
+Palabra capturada: siguiente
 17
-aqui
 18
-aqui
+Palabra capturada: main
+Palabra capturada: Nodo
+Palabra capturada: cabeza
+Palabra capturada: NULL
 19
-aqui
+Palabra capturada: opcion
+Palabra capturada: valor
 20
-aqui
 21
-aqui
 22
+Palabra capturada: &opcion
 23
+Palabra capturada: opcion
 24
-aqui
+Palabra capturada: &valor
 25
-aqui
+Palabra capturada: agregarNodo
+Palabra capturada: &cabeza
+Palabra capturada: valor
 26
+Palabra capturada: break
 27
 28
+Palabra capturada: &valor
 29
+Palabra capturada: eliminarNodo
+Palabra capturada: &cabeza
+Palabra capturada: valor
 30
-aqui
+Palabra capturada: break
 31
-aqui
 32
+Palabra capturada: mostrarLista
+Palabra capturada: cabeza
 33
+Palabra capturada: break
 34
 35
-aqui
+Palabra capturada: break
 36
-aqui
 37
+Palabra capturada: opcion
 38
-filepath: entrada/archivo4.c
-entrada: entrada/archivo4.c
-lastSlash: /archivo4.c
-sal   salida/archivo4.rs
-salida/archivo4.rsThread 0 realizando manipulaciones posteriores.
-array size final 2
-==4857== 
-==4857== HEAP SUMMARY:
-==4857==     in use at exit: 391 bytes in 27 blocks
-==4857==   total heap usage: 317 allocs, 290 frees, 43,187 bytes allocated
-==4857== 
-==4857== 8 bytes in 4 blocks are definitely lost in loss record 3 of 10
-==4857==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
-==4857==    by 0x49518E9: strdup (strdup.c:42)
-==4857==    by 0x10AF9C: yylex (scanner.l:32)
-==4857==    by 0x10D7AC: yyparse (scanner.tab.c:1760)
-==4857==    by 0x115075: main (scanner.y:2071)
-==4857== 
-==4857== 20 bytes in 2 blocks are definitely lost in loss record 7 of 10
-==4857==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
-==4857==    by 0x113401: yyparse (scanner.y:1611)
-==4857==    by 0x115075: main (scanner.y:2071)
-==4857== 
-==4857== 99 bytes in 10 blocks are definitely lost in loss record 9 of 10
-==4857==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
-==4857==    by 0x49518E9: strdup (strdup.c:42)
-==4857==    by 0x10B1C3: yylex (scanner.l:79)
-==4857==    by 0x10D7AC: yyparse (scanner.tab.c:1760)
-==4857==    by 0x115075: main (scanner.y:2071)
-==4857== 
-==4857== 128 bytes in 5 blocks are definitely lost in loss record 10 of 10
-==4857==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
-==4857==    by 0x49518E9: strdup (strdup.c:42)
-==4857==    by 0x10B1E3: yylex (scanner.l:84)
-==4857==    by 0x10D7AC: yyparse (scanner.tab.c:1760)
-==4857==    by 0x115075: main (scanner.y:2071)
-==4857== 
-==4857== LEAK SUMMARY:
-==4857==    definitely lost: 255 bytes in 21 blocks
-==4857==    indirectly lost: 0 bytes in 0 blocks
-==4857==      possibly lost: 0 bytes in 0 blocks
-==4857==    still reachable: 136 bytes in 6 blocks
-==4857==         suppressed: 0 bytes in 0 blocks
-==4857== Reachable blocks (those to which a pointer was found) are not shown.
-==4857== To see them, rerun with: --leak-check=full --show-leak-kinds=all
-==4857== 
-==4857== For lists of detected and suppressed errors, rerun with: -s
-==4857== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)
+39
+filepath: entrada/archivo5.c
+entrada: entrada/archivo5.c
+lastSlash: /archivo5.c
+sal   salida/archivo5.rs
+salida/archivo5.rsThread 0 realizando manipulaciones posteriores.
+array size final 1
+==6290== 
+==6290== HEAP SUMMARY:
+==6290==     in use at exit: 477 bytes in 34 blocks
+==6290==   total heap usage: 318 allocs, 285 frees, 34,081 bytes allocated
+==6290== 
+==6290== 2 bytes in 1 blocks are definitely lost in loss record 2 of 12
+==6290==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
+==6290==    by 0x49518E9: strdup (strdup.c:42)
+==6290==    by 0x10AFC0: yylex (scanner.l:34)
+==6290==    by 0x10D828: yyparse (scanner.tab.c:1951)
+==6290==    by 0x1158E7: main (scanner.y:2372)
+==6290== 
+==6290== 22 bytes in 1 blocks are definitely lost in loss record 7 of 12
+==6290==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
+==6290==    by 0x111CEE: yyparse (scanner.y:1311)
+==6290==    by 0x1158E7: main (scanner.y:2372)
+==6290== 
+==6290== 25 bytes in 1 blocks are definitely lost in loss record 8 of 12
+==6290==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
+==6290==    by 0x10F457: yyparse (scanner.y:610)
+==6290==    by 0x1158E7: main (scanner.y:2372)
+==6290== 
+==6290== 25 bytes in 1 blocks are definitely lost in loss record 9 of 12
+==6290==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
+==6290==    by 0x1146DF: reemplazar (scanner.y:2004)
+==6290==    by 0x10F7BD: yyparse (scanner.y:651)
+==6290==    by 0x1158E7: main (scanner.y:2372)
+==6290== 
+==6290== 25 bytes in 1 blocks are definitely lost in loss record 10 of 12
+==6290==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
+==6290==    by 0x10F04A: yyparse (scanner.y:549)
+==6290==    by 0x1158E7: main (scanner.y:2372)
+==6290== 
+==6290== 102 bytes in 16 blocks are definitely lost in loss record 11 of 12
+==6290==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
+==6290==    by 0x49518E9: strdup (strdup.c:42)
+==6290==    by 0x10B20F: yylex (scanner.l:85)
+==6290==    by 0x10D828: yyparse (scanner.tab.c:1951)
+==6290==    by 0x1158E7: main (scanner.y:2372)
+==6290== 
+==6290== 231 bytes in 8 blocks are definitely lost in loss record 12 of 12
+==6290==    at 0x48407B4: malloc (vg_replace_malloc.c:381)
+==6290==    by 0x49518E9: strdup (strdup.c:42)
+==6290==    by 0x10B24D: yylex (scanner.l:90)
+==6290==    by 0x10D828: yyparse (scanner.tab.c:1951)
+==6290==    by 0x1158E7: main (scanner.y:2372)
+==6290== 
+==6290== LEAK SUMMARY:
+==6290==    definitely lost: 432 bytes in 29 blocks
+==6290==    indirectly lost: 0 bytes in 0 blocks
+==6290==      possibly lost: 0 bytes in 0 blocks
+==6290==    still reachable: 45 bytes in 5 blocks
+==6290==         suppressed: 0 bytes in 0 blocks
+==6290== Reachable blocks (those to which a pointer was found) are not shown.
+==6290== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==6290== 
+==6290== For lists of detected and suppressed errors, rerun with: -s
+==6290== ERROR SUMMARY: 8 errors from 8 contexts (suppressed: 0 from 0)

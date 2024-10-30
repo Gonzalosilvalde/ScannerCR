@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include "archivo3.h"
 #include "archivo2.h"
 
 bool esPrimo(int num) {

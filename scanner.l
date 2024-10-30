@@ -7,7 +7,7 @@ int i = 0;
 
 letter [a-zA-Z]
 digit [0-9]
-stringquote \"[^"^\'\n]*\"
+stringquote   (["'][^"'\n]*["'])
 cs #{digit}+
 realnum (\-)?{digit}+(\.{digit}+)?([eE][+\-]{digit}+)?
 intnum (\-)?{digit}+
@@ -16,6 +16,8 @@ intnum (\-)?{digit}+
 int {return INTEGER;}//32
 short {return SHORT;}//16
 long {return LONG;}//64
+"long long" {return LONG_LONG;}//64
+"unsigned long long" {return UNSIGNED_LONG_LONG;}
 "unsigned int" {return UNSIGNED_INT;}
 "unsigned short" {return UNSIGNED_SHORT;}
 "unsigned long" {return UNSIGNED_LONG;}
@@ -81,7 +83,6 @@ const {return CONST;}
 
 ({letter}|\_|&)({letter}|{digit}|\_)*  {
     	yylval.valString = strdup(yytext);
-        
         return STRINGV;
 }
 ({stringquote}|{cs})+ {

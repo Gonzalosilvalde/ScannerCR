@@ -14,7 +14,7 @@ flex_compile:
 	gcc -g -c lex.yy.c -o lex.yy.o -lfl
 
 bison_compile:
-	bison -d $(FUENTE).y 
+	bison -v -d $(FUENTE).y 
 	gcc -g -c $(FUENTE).tab.c -o $(FUENTE).tab.o
 
 bison_counter:

@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "archivo6.h"
 
 
 #define MAX_STUDENTS 3

@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include "archivo4.h"
+#include "archivo7.h"
+
+
 
 void ordenarBurbuja(int arr[], int n) {
     for (int i = 0; i < n - 1; i++) {
