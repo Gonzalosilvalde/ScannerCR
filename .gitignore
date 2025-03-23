@@ -3,3 +3,8 @@
 *.tab.*
 *.output
 *.o
+
+#carpetas
+
+/entrada
+/salida
