@@ -22,56 +22,35 @@ extern YY_BUFFER_STATE yy_current_buffer();
 extern void yy_delete_buffer ( YY_BUFFER_STATE b  );
 extern void yypush_buffer_state ( YY_BUFFER_STATE new_buffer  );
 extern void yypop_buffer_state ( void );
-pthread_mutex_t mutex;
-pthread_mutex_t file_mutex;
 extern FILE *yyin;
-char filePath[100] ;
-char filePathOld[100];
+void yyerror(char const *);
 
-int global_argc; // Variable global para almacenar argc
-char **global_argv; // Variable global para almacenar argv
-
-char **arrayCabeceras = NULL;
 int arraySize = 0;
 
+char filePath[100] ;
 char sizeS[8] = "200";
-
 char tipoStruct[50] = "";
+char **arrayCabeceras = NULL;
+char gType[10] = "";
+char printV[100]= "";
 
-int inputCount = 0;////////////////por ahora no hace nada, pero en el futuro usar para escribir en el cargo.toml
-
-const char *nombreArchivo = "cabeceras.txt";
-
-//typeList será la tabla de tipos y constantes.
 TypeList typelist;
 TypeList flist;
-char gType[10] = "";
-//queue será la cola a través de la cual recogeremos y volcaremos las variables de los printf 
+
 NodeList queue;
-char printV[100]= "";
-//int comienzo ( int argc, char * argv[]);
-void yyerror(char const *);
-char * getVariables(TypeList *);
-void saveGType(char *tipo);
-char *getGType();
-char *insertTabsBetweenBraces(char *code);
-char * getEndings(NodeList *);
-void custom_function();
-char * getEndingsR(NodeList *);
-char * obtenerTipo(int valor);
+
+char * insertTabsBetweenBraces(char *code);
+char * getType(int valor);
 void replaceSemicolon(char *string);
-char * getRef (int);
 void deleteQuotes (char *);
-char *reemplazar(const char *cadena, const char *busqueda, const char *reemplazo);
-void deleteCurly(char *);
-void deleteNewLines(char *);
-char* getEndNumber(char* number);
+char * replace(const char *cadena, const char *busqueda, const char *reemplazo);
+char * getEndNumber(char* number);
 int searchString(char **arr, char *toFind, int size);
-char* getStringFromExp(char* str);
+char * getStringFromExp(char* str);
 void ifCreation(char* final, char* in, char* out);
 void funCreation(char* final, char* name, char* in);
 void typeSwitch(char*final, int type);
-char* resolveType(int parametro);
+char * resolveType(int parametro);
 void concatenateArray(char *final, char *strings[], int n);
 
 
@@ -505,11 +484,11 @@ vardef :
                 concatenateArray(modTipo2, partsMT2, nMT2);
             }
 
-            // Primera llamada a reemplazar
-            char *finalMod = reemplazar(final, ":;", modTipo1);
+            // Primera llamada a replace
+            char *finalMod = replace(final, ":;", modTipo1);
 
             if (finalMod != NULL) {
-                char *temp = reemplazar(finalMod, ":=", modTipo2);  // Segunda llamada a reemplazar
+                char *temp = replace(finalMod, ":=", modTipo2);  // Segunda llamada a replace
                 free(finalMod);  // Liberar la memoria asignada por la primera llamada
 
                 if (temp != NULL) {
@@ -518,7 +497,7 @@ vardef :
                         $$ = final;  // Usar el resultado de la primera llamada si la segunda falla
                 }
             } else {
-                // Manejar el error si la primera llamada a reemplazar falla
+                // Manejar el error si la primera llamada a replace falla
                 $$ = final;  // Devolver la cadena original si falla
             }
         }
@@ -561,16 +540,16 @@ vardef :
             }
             
             // Reemplazo de patrones en `final`
-            char *finalMod = reemplazar(final, ":;", modTipo1);
+            char *finalMod = replace(final, ":;", modTipo1);
             if (finalMod != NULL) {
-                finalMod = reemplazar(finalMod, ":=", modTipo2);
+                finalMod = replace(finalMod, ":=", modTipo2);
                 if (finalMod != NULL) {
                     $$ = finalMod;
                 } else {
-                    // Manejar el error si la segunda llamada a reemplazar falla
+                    // Manejar el error si la segunda llamada a replace falla
                 }
             } else {
-                // Manejar el error si la primera llamada a reemplazar falla
+                // Manejar el error si la primera llamada a replace falla
             }
     }        
 	| STRINGV operand vardef {
@@ -777,7 +756,7 @@ programa :
         |types OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON{
 		char *tipo;
 
-		if (strcmp(obtenerTipo($1), "struct") == 0) {
+		if (strcmp(getType($1), "struct") == 0) {
 			// Calcular el tamaño total y asignar memoria para el caso de "struct"
 			tipo = malloc((strlen(tipoStruct) + 1) * sizeof(char));
 
@@ -792,7 +771,7 @@ programa :
 			// printf("\n\n TIPO TIPO %s TIPO TIPO \n \n", tipo);
 		} else {
 			// Calcular el tamaño total y asignar memoria para el caso general
-			const char *tipo_obtenido = obtenerTipo($1);
+			const char *tipo_obtenido = getType($1);
 			tipo = malloc((strlen(tipo_obtenido) + 1) * sizeof(char));
 
 			if (tipo == NULL) {
@@ -866,7 +845,7 @@ args :
 		char *parts[4];
         int n = 4;      
 
-        if (strcmp(obtenerTipo($1), "struct") == 0) {
+        if (strcmp(getType($1), "struct") == 0) {
             // Calcular el tamaño total y asignar memoria a 'tipo'
             tipo = calloc(strlen(tipoStruct) + strlen($2) + strlen(": &mut ") + 1 , sizeof(char));
             if (tipo == NULL) {
@@ -885,7 +864,7 @@ args :
             free($2);
             $$ = tipo;
         } else {
-            tipo = obtenerTipo($1);
+            tipo = getType($1);
             // Calcular el tamaño total y asignar memoria a 'final'
             final = calloc(strlen(tipo) + strlen($2) + 2, sizeof(char)); // +2 para " " y '\0'
             if (final == NULL) {
@@ -1136,7 +1115,6 @@ line_program :
             char * final = malloc(strlen($3)*sizeof(char)+ sizeof("let mut input = String::new();\nio::stdin()\n.read_line(&mut input)\n.expect(\"Failed to read line\");"));
             memset(final, 0, sizeof(final));
             strcpy(final, "let mut input = String::new();\nio::stdin()\n.read_line(&mut input)\n.expect(\"Failed to read line\");");
-            inputCount = inputCount + 1;
             free($3);
             $$ = final;
         }
@@ -1334,10 +1312,10 @@ array :
         }
         | types {
             // Obtener el tipo y asignarlo a una nueva cadena con malloc
-            const char *obtenido = obtenerTipo($1);
+            const char *obtenido = getType($1);
             if (obtenido == NULL) {
-                perror("Error: obtenerTipo devolvió NULL");
-                exit(1);  // Manejo de error si obtenerTipo falla
+                perror("Error: getType devolvió NULL");
+                exit(1);  // Manejo de error si getType falla
             }
 
             // Reservar memoria suficiente para el tipo
@@ -1565,7 +1543,7 @@ atom :
 
 %%
 
-char * obtenerTipo(int valor) {
+char * getType(int valor) {
     char * tipo;
     switch (valor) {
         case 0: tipo = "i32 "; break;
@@ -1588,7 +1566,7 @@ char * obtenerTipo(int valor) {
 void typeSwitch(char*final, int type){
     
     strcat(final, "-> ");
-    strcat(final, obtenerTipo(type));
+    strcat(final, getType(type));
     strcat(final, " {");
 
 }
@@ -1634,7 +1612,7 @@ void deleteQuotes(char * stringq) {
         return;
 }
 
-char *reemplazar(const char *cadena, const char *busqueda, const char *reemplazo) {
+char *replace(const char *cadena, const char *busqueda, const char *reemplazo) {
     if (cadena == NULL || busqueda == NULL || reemplazo == NULL) {
         return NULL;
     }
@@ -1679,80 +1657,6 @@ char *reemplazar(const char *cadena, const char *busqueda, const char *reemplazo
     return nuevoString;
 }
 
-void deleteCurly(char * stringq) {
-        int reader = 0; int writer = 0;
-
-        while(stringq[reader]) {
-                if (!((stringq[reader] == '{') || (stringq[reader] == '}')) ){
-                stringq[writer++] = stringq[reader];
-                }
-                reader++;
-        }
-
-        stringq[writer] = 0;
-        return;
-}
-
-void deleteNewLines(char * stringq){
-        int reader = 0; int writer = 0;
-
-        while(stringq[reader]) {
-                if (!((stringq[reader] == '\n')) ){
-                stringq[writer++] = stringq[reader];
-                }
-                reader++;
-        }
-
-        stringq[writer] = 0;
-        return;
-}
-
-/* Procesa los elementos a incluir en el string de Write */
-char * getEndings (NodeList * queue) {
-        int size = (*queue).end;
-        char * final = malloc(size*100*sizeof(char) + size * sizeof("&") + 1);
-        strcpy(final,""); 
-        char * variable;
-        while(!isEmptyListN(queue)){
-                variable = getElementN(queue);
-                strcat(final,",");
-                strcat(final, variable);
-                free(variable);
-                DeleteElementN(queue);
-        }
-        return final;
-}
-
-/* Procesa los elementos a incluir en el string de Read */
-char * getEndingsR (NodeList * queue) {
-        int size = (*queue).end;
-        char * final = malloc(size*100*sizeof(char) + size * sizeof("&") + 1);
-        strcpy(final,""); 
-        char * variable;
-        while(!isEmptyListN(queue)){
-                variable = getElementN(queue);
-                strcat(final,",");
-                if (SearchType(&typelist, variable) != 2) {
-                        strcat(final, "&");
-                }
-                strcat(final, variable);
-                free(variable);
-                DeleteElementN(queue);
-        }
-        return final;
-}
-
-
-void saveGType(char *tipo) {
-    strncpy(gType, tipo, sizeof(gType) - 1); // Copiar tipo en gType
-    gType[sizeof(gType) - 1] = '\0'; // Asegurarse de que gType esté terminado en null
-}
-
-char *getGType() {
-    return gType;
-}
-
-
 void replaceSemicolon(char *string) {
     if (string == NULL) {
         return; // Verificar si la cadena es nula
@@ -1765,73 +1669,6 @@ void replaceSemicolon(char *string) {
             string[i] = ','; // Reemplazar el punto y coma por una coma
         }
     }
-}
-
-/* Recupera las variables declaradas */
-char * getVariables (TypeList * queue) {
-        int size = (*queue).end;
-        char * final = malloc(size * (109*sizeof(char) + sizeof("=;\n") + 100 *sizeof(char) + sizeof("[100]") + sizeof("const ")) +1);
-        char * varlist = malloc(size * (109*sizeof(char) + sizeof("=;\n") + 100 *sizeof(char) + sizeof("[100]")) +1);
-        char * constlist = malloc(size * (109*sizeof(char) + sizeof("=;\n") + 100 *sizeof(char) + sizeof("[100]") + sizeof("const ")) +1);
-        char * temp = malloc (size * (109*sizeof(char) + sizeof("=;\n") + 100 *sizeof(char) + sizeof("[100]") + sizeof("const ")) +1);
-        strcpy(varlist,"");
-        strcpy(constlist,"");
-        strcpy(final, "");
-        char * variable;
-        Node * node;
-        while(!isEmptyListT(queue)){
-                strcpy(temp, "");
-                node = getElementT(queue);
-                if ((*node).isConstant) {
-                        strcat(temp, "const ");
-                }
-                typeSwitch(temp, (*node).type);
-                strcat(temp, (*node).name);
-                if ((*node).type == 2) {
-                        strcat(temp, "[");
-                        strcat(temp, sizeS);
-                        strcat(temp, "]");
-                }
-                if ((*node).isValue) {
-                        strcat(temp, "=");
-                        if( (*node).type == 3) {
-                                deleteQuotes((*node).value);
-                                strcat(temp, "\'");
-                                strcat(temp, (*node).value);
-                                strcat(temp, "\'");
-                        }
-                        else {
-                                strcat(temp, (*node).value);
-                        }
-                }
-                strcat(temp,";\n");
-                if ((*node).isConstant) {
-                        strcat(constlist, temp);
-                }else{
-                        strcat(varlist, temp);
-                }
-                free(node);
-                DeleteElementT(queue);
-        }
-        strcat(final, constlist);
-        strcat(final, varlist);
-        free(varlist);
-        free(constlist);
-        free(temp);
-        return final;
-}
-
-/*0=int, 1=double, 2=string, 3=char*/
-char * getRef (int type){
-        char * ref = malloc (sizeof("%lf") + 1);
-        switch (type){
-                case 0: strcpy(ref, "%d");break;
-                case 1: strcpy(ref, "%lf");break;
-                case 2: strcpy(ref, "%s");break;
-                case 3: strcpy(ref, "%c");break; 
-                default: break;
-        }
-        return ref;
 }
 
 int isNumber(char * stringq) {
@@ -1951,7 +1788,7 @@ void funCreation(char* final, char* name, char* in){
 }
 
 char* resolveType(int parametro) {
-    char* tipo = obtenerTipo(parametro);
+    char* tipo = getType(parametro);
     if (strcmp(tipo, "struct") == 0) {
         // Si tipoStruct es un puntero a memoria estática o se maneja de forma distinta,
         // asegúrate de que la memoria asignada en 'tipo' se libere si es necesario.
@@ -1968,116 +1805,92 @@ void concatenateArray(char *final, char *strings[], int n) {
 }
 
 int main(int argc, char *argv[]) {
-       
-        //printf("Número de argumentos (argc): %d\n", argc);
 
-        printf("Argumentos (argv):\n");
-        for (int i = 0; i < argc; ++i) {
-                printf("argv[%d] = %s\n", i, argv[i]);
+    if (argc < 2) {
+        printf("Syntax:\n");
+        printf("  Para un archivo: ./traductorP <archivoC>\n");
+        printf("  Para múltiples archivos: ./traductorP -r <archivo1> <archivo2> ...\n");
+        exit(-1);
+    }
+
+    // Inicializar listas
+    InitializeListT(&typelist);
+    InitializeListN(&queue);
+
+    // Caso de procesamiento múltiple de archivos
+    if (strcmp(argv[1], "-r") == 0) {
+        if (argc < 3) {
+            printf("ERROR: Debes proporcionar al menos un archivo tras el flag -r.\n");
+            exit(-1);
         }
+
+        int num_files = argc - 2;
+        arraySize = num_files;
+
+        // Reservar memoria para arrayCabeceras
+        arrayCabeceras = (char**)malloc(arraySize * sizeof(char*));
+        if (arrayCabeceras == NULL) {
+            printf("Error al asignar memoria para arrayCabeceras\n");
+            exit(1);
+        }
+
+        // Para cada archivo, construir la ruta y reservar espacio
+        for (int i = 0; i < num_files; i++) {
+            char ruta[100] = "entrada/";
+            strcat(ruta, argv[i + 2]);
+
+            arrayCabeceras[i] = (char*)malloc((strlen(ruta) + 1) * sizeof(char));
+            if (arrayCabeceras[i] == NULL) {
+                printf("Error al asignar memoria para arrayCabeceras[%d]\n", i);
+                exit(1);
+            }
+            strcpy(arrayCabeceras[i], ruta);
+        }
+
+        // Procesar cada archivo en paralelo
+        #pragma omp parallel for shared(arrayCabeceras, arraySize) 
+        for (int i = 0; i < arraySize; i++) {
+            YY_BUFFER_STATE bufferState = NULL;
+
+            #pragma omp critical
+            {
+                bufferState = yy_current_buffer();
+                yy_flush_buffer(bufferState);
+                yyin = fopen(arrayCabeceras[i], "r");
+                if (yyin == NULL) {
+                    printf("ERROR: No se ha podido abrir el fichero %s.\n", arrayCabeceras[i]);
+                    continue; // Saltar si no se puede abrir el archivo
+                }
+                bufferState = yy_create_buffer(yyin, 1024);
+                yy_switch_to_buffer(bufferState);
+            }
+
+            // Actualizar filePath para el archivo actual
+            strcpy(filePath, arrayCabeceras[i]);
+            yyparse();
+
+            #pragma omp critical
+            {
+                fclose(yyin);
+            }
+            yy_delete_buffer(bufferState);
+        }
+    } 
+    // Caso de procesamiento de un único archivo
+    else {
         char ruta[100] = "entrada/";
-        char *archivo_c = argv[1];
+        strcat(ruta, argv[1]);
+        strcpy(filePath, ruta);
 
-        strcat(ruta, archivo_c);
-        
-        
-        InitializeListT(&typelist);
-        InitializeListN(&queue);
-	//pthread_mutex_lock(&file_mutex);
-	switch (argc) {
-		case 1:	printf("Syntax : ./traductorP <archivoC> [-s size_string]\n");
-			exit(-1);
-                        break;
-		case 2: int i = 0;
-                        arraySize++;
-			YY_BUFFER_STATE bufferState = NULL;
-
-			// Asegurar espacio suficiente en arrayCabeceras
-			arrayCabeceras = (char**)realloc(arrayCabeceras, arraySize * sizeof(char*));
-			if (arrayCabeceras == NULL) {
-    				printf("Error al reasignar memoria para arrayCabeceras\n");
-    				exit(1); // Termina si realloc falla
-			}
-
-			// Asignar memoria para la nueva cadena en arrayCabeceras[arraySize - 1]
-			// Añadimos +1 para el terminador nulo '\0'
-			arrayCabeceras[arraySize - 1] = (char*)malloc((strlen(ruta) + 1) * sizeof(char));
-			if (arrayCabeceras[arraySize - 1] == NULL) {
-    				printf("Error al asignar memoria para arrayCabeceras[%d]\n", arraySize - 1);
-    				exit(1); // Termina si malloc falla
-			}
-
-			// Copiar la cadena 'ruta' a la nueva posición en arrayCabeceras
-			strcpy(arrayCabeceras[arraySize - 1], ruta);
-
-			// Copiar la ruta también en filePath
-			strcpy(filePath, ruta);
-
-			#pragma omp parallel shared(arrayCabeceras, arraySize, yyin, filePath) private(i)
-			{
-    			#pragma omp for
-    			for (i = 0; i < arraySize; i++) {
-        			// printf("\n-------%i--------\n", arraySize);
-
-        			#pragma omp critical
-        			{
-            				bufferState = yy_current_buffer();
-            				yy_flush_buffer(bufferState);
-            				yyin = fopen(arrayCabeceras[i], "r");
-
-            				if (yyin == NULL) {
-                				printf("ERROR: No se ha podido abrir el fichero %s.\n", arrayCabeceras[i]);
-                				continue; // Saltar a la siguiente iteración si el archivo no se abre
-            				}
-
-           				bufferState = yy_create_buffer(yyin, 1024);
-            				yy_switch_to_buffer(bufferState);
-        			}
-		
-        			// Ejecutar la función que trabaja con el array
-        			#pragma omp critical
-        			{
-            				strcpy(filePath, arrayCabeceras[i]);
-        			}
-        			yyparse();
-
-        			#pragma omp critical
-        			{
-            				fclose(yyin);
-        			}
-
-        			#pragma omp critical
-        			{
-            				// printf("Thread %d realizando manipulaciones posteriores.\n", omp_get_thread_num());
-        			}
-
-        			yy_delete_buffer(bufferState);
-    			}
-		}
-
-		// printf("array size final %i\n", arraySize);
-                break;
-                
-                case 4 : if((strcmp(argv[2], "-s") != 0) || (isNumber(argv[3])==0)) {
-                                printf("Syntax : ./traductorP <archivoC> [-s size_string]\n");
-			        exit(-1);
-                        }
-                        else {
-                                strcpy(sizeS, argv[3]);
-                                yyin = fopen(ruta, "r");
-			        if (yyin == NULL) {
-				        printf("ERROR: No se ha podido abrir el fichero.\n");
-			        }
-			        else {
-				        yyparse();
-				        fclose(yyin);
-			        }
-                        }
-                        break;
-		default: printf("ERROR: Demasiados argumentos.\nSyntax : ./traductorP <archivoC> [-s size_string]\n\n");
-	}
-        //pthread_mutex_unlock(&file_mutex);
-        //ShowListT(&typelist);
-        
-	return 0;
+        yyin = fopen(ruta, "r");
+        if (yyin == NULL) {
+            printf("ERROR: No se ha podido abrir el fichero %s.\n", ruta);
+            exit(1);
+        }
+        yyparse();
+        fclose(yyin);
+    }
+    
+    return 0;
 }
+
