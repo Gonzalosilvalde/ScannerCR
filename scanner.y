@@ -433,7 +433,7 @@ vardef :
             
             $$ = final;
         }
-            
+           
         | types STRINGV LSQUAREPAREN atom RSQUAREPAREN EQ OPENCURLYBRACKET array CLOSECURLYBRACKET SEMICOLON{//4
             char *tipo;
             tipo = resolveType($1);
@@ -572,7 +572,7 @@ vardef :
             } else {
                 // Manejar el error si la primera llamada a reemplazar falla
             }
-}        
+    }        
 	| STRINGV operand vardef {
     		
 
@@ -601,8 +601,12 @@ vardef :
     }
     |atom SEMICOLON{//11
 
-        char * final = malloc(strlen($1)*sizeof(char) + sizeof(";  \n") );
-        memset(final, 0, sizeof(final));
+        size_t total_size = strlen($1) + strlen(";\n") + 1;
+        char *final = malloc(total_size);
+        if (final == NULL) {
+            // Manejo del error...
+        }
+        memset(final, 0, total_size);
         char* parts[] = {$1, ";\n"};
         int n = sizeof(parts)/sizeof(parts[0]);
         concatenateArray(final, parts, n);
@@ -619,7 +623,7 @@ vardef :
         free($3);
         $$ = final;
     }
-        
+       
 ;
 types :
 	type {
@@ -689,8 +693,10 @@ preprograma :
 programa : 
         types STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{                        
                         
-            char * final = malloc( strlen($4) * sizeof(char) + strlen($7) * sizeof(char)   + 20*sizeof(char) + sizeof("fn ->String {}"));
-            memset(final, 0, sizeof(final));
+            size_t size = strlen($4) + strlen($7)+ strlen($2) + sizeof("fn ->String {}");
+            char * final = malloc(size * sizeof(char));
+            memset(final, 0, size);
+
             funCreation(final, $2, $4);
             typeSwitch(final, $1);
             char * parts[] = {"{\n", $7, "\n", "}\n\n"};
@@ -1063,7 +1069,7 @@ case_chain :
 
 fun_cre :
         
-	 STRINGV LPAREN array RPAREN{
+         STRINGV LPAREN array RPAREN{
                 char * final = malloc(strlen($1)* sizeof(char) + strlen($3)*sizeof(char) + sizeof("()") + 1);
                 memset(final,0, sizeof(final));
                 funCreation(final, $1, $3);
@@ -1087,16 +1093,8 @@ fun_cre :
 
 ;
 
-line_program : 
-        WRITE LOWER LOWER precontentWrite SEMICOLON {
-        	char * final = malloc(strlen($4)*sizeof(char));
-            memset(final, 0, sizeof(final));
-            strcat(final, $4);
-            free($4);
-            $$ = final;
-                
-        }
-        | PRINTF LPAREN precontentWrite RPAREN SEMICOLON {
+line_program :
+        PRINTF LPAREN precontentWrite RPAREN SEMICOLON {
             char * final = malloc(strlen($3)*sizeof(char)+ sizeof("print!"));
             memset(final, 0, sizeof(final));
             char* parts[] = {"print!", $3};
@@ -1107,89 +1105,72 @@ line_program :
             $$ = final;
         }
         | SCANF LPAREN precontentWrite RPAREN SEMICOLON{
-                char * final = malloc(strlen($3)*sizeof(char)+ sizeof("let mut input = String::new();\nio::stdin()\n.read_line(&mut input)\n.expect(\"Failed to read line\");"));
-                memset(final, 0, sizeof(final));
-                strcpy(final, "let mut input = String::new();\nio::stdin()\n.read_line(&mut input)\n.expect(\"Failed to read line\");");
-                inputCount = inputCount + 1;
-                free($3);
-                $$ = final;
+            char * final = malloc(strlen($3)*sizeof(char)+ sizeof("let mut input = String::new();\nio::stdin()\n.read_line(&mut input)\n.expect(\"Failed to read line\");"));
+            memset(final, 0, sizeof(final));
+            strcpy(final, "let mut input = String::new();\nio::stdin()\n.read_line(&mut input)\n.expect(\"Failed to read line\");");
+            inputCount = inputCount + 1;
+            free($3);
+            $$ = final;
         }
        	| fun_cre{
-		$$ = $1;
-	} 
-	| if_statement{
-		$$ = $1;
-	}
-	| FOR LPAREN types STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
-		// Calcular el tamaño de `final` correctamente y asegurar espacio para el terminador nulo
-		char str3[12];  // Asumiendo que INT_MAX es el tamaño máximo
-		char str4[12];
-		char str8[12];
-		sprintf(str3, "%d", $3);
-		sprintf(str4, "%d", $4);
-		sprintf(str8, "%d", $8);
+            $$ = $1;
+        } 
+        | if_statement{
+            $$ = $1;
+        }
+        | FOR LPAREN types STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+            // Calcular el tamaño de `final` correctamente y asegurar espacio para el terminador nulo
+            char *final = malloc(strlen("for in .. {} \n\n") + strlen($4) +
+             strlen($6) + strlen($9) + strlen($10) + strlen($14) + 1);
+            // Inicializar `final` correctamente
+            final[0] = '\0';
 
-		char *final = malloc(strlen(str3) + strlen(str8) + strlen("for ; ; {}") + strlen($4) +
-                     strlen($6) + strlen($9) + strlen($10) + strlen($14) + 1);
-		// Inicializar `final` correctamente
-		final[0] = '\0';
+            // Obtener valor de `octavo`
+            char *numero = getEndNumber($8);
+            char *octavo;
+            if (strcmp(numero, "") == 0) {
+                octavo = getStringFromExp($8);
+            } else {
+                octavo = strdup(numero);  // Asegurar que octavo siempre esté inicializado
+            }
 
-		// Obtener valor de `octavo`
-		char *numero = getEndNumber($8);
-		char *octavo;
-		if (strcmp(numero, "") == 0) {
-		octavo = getStringFromExp($8);
-		} else {
-		octavo = strdup(numero);  // Asegurar que octavo siempre esté inicializado
-		}
+            // Concatenación de las cadenas en `final`
+            char * parts[] = {"for ", $4, " in ", $6, "..", octavo, "{\n", $14, "\n"};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            
+            // Liberar la memoria de las variables temporales
+            free($4);
+            free($6);
+            free($8);
+            free($10);
+            free($11);
+            free($14);
+            free(numero);
+            free(octavo);  // Asegurarse de liberar `octavo` después de usarlo
+            $$ = final;
+        }        //for ( int i = 8 ; i<20 ; i = i + 1) { lines}
+        | FOR LPAREN types STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
+                size_t size = $3*sizeof(int) + strlen($4)*sizeof(char) + strlen($6)*sizeof(char) +
+                  strlen($8)*sizeof(char) + strlen($10)*sizeof(char) + strlen($13)*sizeof(char) +
+                sizeof("for ; ; {} .step_by( )");
+                char *final = malloc(size);
+                memset(final, 0, size);
 
-		// Concatenación de las cadenas en `final`
-		strcat(final, "for ");
-		strcat(final, $4);
-		strcat(final, " in ");
-		strcat(final, $6);
-		strcat(final, "..");
-		strcat(final, octavo);
-		strcat(final, "{\n");
-		strcat(final, $14);
-		strcat(final, "\n}");
-
-		// Liberar la memoria de las variables temporales
-		free($4);
-		free($6);
-		free($8);
-		free($10);
-		free($11);
-		free($14);
-		free(numero);
-		free(octavo);  // Asegurarse de liberar `octavo` después de usarlo
-		$$ = final;
-	}        //for ( int i = 8 ; i<20 ; i = i + 1) { lines}
-        | FOR LPAREN types STRINGV EQ INTNUM SEMICOLON exp SEMICOLON vardef  RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
-                char * final = malloc ($3*sizeof(int) + strlen($4)*sizeof(char) + strlen($6)*sizeof(char) + strlen($8)*sizeof(char)  + strlen($10)*sizeof(char) + strlen($13)*sizeof(char)+ sizeof("for ; ; {} .step_by( )"));
-                memset(final,0, strlen(final));
                 char * numero = getEndNumber($8);
                 char * numero2 = getEndNumber($10);
                 
-                strcat(final, "for ");
-                strcat(final, $4);
-                strcat(final, " in ");
-                strcat(final, $6);
-                strcat(final, "..");
-                strcat(final, numero);
-                strcat(final, ".step_by(");
-                strcat(final, numero2);
-                strcat(final, ")");
-                strcat(final, "{\n");
-                strcat(final, $13);
-                strcat(final, "\n}");
-		free($4);
-		free($6);
-		free($8);
-		free($10);
-		free($13);
-		free(numero);
-		free(numero2);
+                char * parts[] = {"for ", $4, " in ", $6, "..", numero, ".step_by(", numero2, "){\n", $13, "\n"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+
+                free($4);
+                free($6);
+                free($8);
+                free($10);
+                free($13);
+                free(numero);
+                free(numero2);
                 $$=final;
         
         
@@ -1197,30 +1178,24 @@ line_program :
         | DO OPENCURLYBRACKET lines_program CLOSECURLYBRACKET WHILE LPAREN exp RPAREN SEMICOLON{
                 char * final = malloc( strlen($3)*sizeof(char) + strlen($7)*sizeof(char) + sizeof("loop {} if() == {} break; \n") );
                 memset(final, 0 , sizeof(final));
-
-                strcat(final, "loop{\n");
-                strcat(final, $3);
-                strcat(final, "if(");
-                strcat(final, $7);
-                strcat(final, "){\n");
-                strcat(final, "break;\n");
-                strcat(final, "}\n}");
-		free($3);
-		free($7);
+                char * parts[] = {"loop{\n", $3, "if(", $7, "){\nbreak;\n", "}\n}"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                
+                free($3);
+                free($7);
                 $$ = final;
         
         }
         | WHILE LPAREN exp RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{
                 char * final = malloc(strlen($3)*sizeof(char) + strlen($6)*sizeof(char) + sizeof("while () {} \n\n"));
                 memset(final, 0, sizeof(final));
+                char * parts[] = {"while(", $3, "){\n", $6, "\n}"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
 
-                strcat(final, "while(");
-                strcat(final, $3);
-                strcat(final, "){\n");
-                strcat(final, $6);
-                strcat(final, "\n}");
-		free($3);
-		free($6);
+                free($3);
+                free($6);
                 $$ = final;
                 
         }
@@ -1229,83 +1204,78 @@ line_program :
         | STRINGV operand SEMICOLON{
                 char * final = malloc (strlen($2)*sizeof(char) + strlen($1)*sizeof(char));
                 memset(final, 0, sizeof(final));
-                strcat(final, $1);
-                strcat(final, $2);
-                strcat(final, ";");
-		free($1);
-		free($2);
+                char * parts[] = {$1, $2, ";"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                free($1);
+                free($2);
                 $$ = final;
         }
-	| LPAREN prod STRINGV RPAREN operand SEMICOLON{
-                char * final = malloc (strlen($3)*sizeof(char) + strlen($5)*sizeof(char));
-                memset(final, 0, sizeof(final));
-                strcat(final, $3);
-                strcat(final, $5);
-                strcat(final, ";");
-		free($3);
-		free($5);
+        | LPAREN prod STRINGV RPAREN operand SEMICOLON{
+                size_t total_length = strlen($3) + strlen($5) + strlen(";") + 1;
+                char *final = malloc(total_length);
+                if (final == NULL) {
+                    // Manejar error de asignación
+                }
+                final[0] = '\0';  // Inicializar la cadena vacía
+                char *parts[] = { $3, $5, ";" };
+                int n = sizeof(parts) / sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+
+                free($3);
+                free($5);
                 $$ = final;
 
-	} 
+        } 
         | RETURN exp SEMICOLON {
-		char *final = malloc((strlen($2) + 1) * sizeof(char)); // Reservar espacio para $2 y el terminador nulo
-		if (final == NULL) {
-		    // Manejo de error de asignación
-		    exit(1);
-		}
+                char *final = malloc((strlen($2) + 1) * sizeof(char)); // Reservar espacio para $2 y el terminador nulo
+                if (final == NULL) {
+                    // Manejo de error de asignación
+                    exit(1);
+                }
 
-		final[0] = '\0'; // Inicializar el primer carácter con `\0` para que `strcat` funcione correctamente
-		strcat(final, $2); // Concatenar $2 en `final`
-		$$ = final; // Asignar `final` a $$
-			
+                final[0] = '\0';
+                char * parts[] = {$2};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                 
+                $$ = final; // Asignar `final` a $$
+                
         }
         | RETURN SEMICOLON {
                 char * final = malloc(sizeof("return;"));
                 memset(final, 0 , sizeof(final));
-                strcat(final, "return;");
+                char * parts[] = {"return;"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                
                 $$ = final;
                 
         }
         | vardef{
                 char * final = malloc(strlen($1)*sizeof(char)  + sizeof("\n"));
                 memset(final,0,sizeof(final));
-                strcat(final,$1);
-                strcat(final,"\n");
-
-          	free($1);      
+                char * parts[] = {$1, "\n"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                free($1);      
                 $$ = final;
                 
         }
-        /*| term  {
-                printf("\n\nAQUI\n\n");
-                char * final = malloc(strlen($1)*sizeof(char)  + sizeof("\n;"));
-                memset(final,0,sizeof(final));
-                strcat(final,$1);
-                strcat(final,";\n");
-
-                
-                $$ = final;
-        }*/
         |types OPENCURLYBRACKET lines_program CLOSECURLYBRACKET SEMICOLON{
-		char *tipo;
+                char *tipo;
+                tipo = resolveType($1);
 
-		if (strcmp(obtenerTipo($1), "struct") == 0) {
-			//printf("\n\n TIPO TIPO %s TIPO TIPO \n \n", obtenerTipo($1));
-			tipo = tipoStruct;
-		} else {
-			tipo = obtenerTipo($1);
-		}
 
                 char * final = malloc(strlen(tipo) + strlen($3)*sizeof(char) + strlen("struct { } \n\n"));
                 memset(final, 0 , sizeof(final));
-                strcat(final, "struct ");
-                strcat(final, tipo);
-                strcat(final, " {\n");
-                strcat(final, $3);
-                strcat(final, "}\n");
+                char * parts[] = {"struct ", tipo, " {\n", $3, "}\n"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+
                 replaceSemicolon(final);
-		free(tipo);
-		free($3);
+                free(tipo);
+                free($3);
                 $$ = final; 
         }
         
@@ -1316,66 +1286,64 @@ array :
        
         exp COMMA array{
                 // Calcular el tamaño total necesario para `final`
-		size_t size_final = strlen($1) * sizeof(char) + strlen($3) * sizeof(char) + sizeof(","); // +1 para la coma
+                size_t size_final = strlen($1) * sizeof(char) + strlen($3) * sizeof(char) + sizeof(","); // +1 para la coma
 
-		// Asignar memoria para `final` y asegurar que se incluye espacio para el terminador nulo
-		char *final = malloc(size_final + 1);  // +1 para '\0'
+                // Asignar memoria para `final` y asegurar que se incluye espacio para el terminador nulo
+                char *final = malloc(size_final + 1);  // +1 para '\0'
 
-		// Inicializar toda la memoria asignada con ceros
-		memset(final, 0, size_final + 1);
-
-		strcat(final, $1);
-		strcat(final, ",");
-		strcat(final, $3);
-
-		free($1);
-		free($3);
-		$$ = final;
+                // Inicializar toda la memoria asignada con ceros
+                memset(final, 0, size_final + 1);
+                char * parts[] = {$1, "," ,$3};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                free($1);
+                free($3);
+                $$ = final;
 
         }
         |exp{
                 $$ = $1;
         }
-	| types {
-		// Obtener el tipo y asignarlo a una nueva cadena con malloc
-		const char *obtenido = obtenerTipo($1);
-		if (obtenido == NULL) {
-			perror("Error: obtenerTipo devolvió NULL");
-			exit(1);  // Manejo de error si obtenerTipo falla
-		}
+        | types {
+            // Obtener el tipo y asignarlo a una nueva cadena con malloc
+            const char *obtenido = obtenerTipo($1);
+            if (obtenido == NULL) {
+                perror("Error: obtenerTipo devolvió NULL");
+                exit(1);  // Manejo de error si obtenerTipo falla
+            }
 
-		// Reservar memoria suficiente para el tipo
-		char *tipo = malloc(strlen(obtenido) + 1);  // +1 para el terminador nulo
-		if (tipo == NULL) {
-			perror("Error al asignar memoria para 'tipo'");
-			exit(1);
-		}
-		strcpy(tipo, obtenido);
+            // Reservar memoria suficiente para el tipo
+            char *tipo = malloc(strlen(obtenido) + 1);  // +1 para el terminador nulo
+            if (tipo == NULL) {
+                perror("Error al asignar memoria para 'tipo'");
+                exit(1);
+            }
+            strcpy(tipo, obtenido);
 
-		// Modificar `tipo` si es necesario
-		if (strcmp(tipo, "struct") == 0) {
-			free(tipo);  // Liberar memoria previamente asignada
-			tipo = malloc(strlen(tipoStruct) + 1);  // Reservar nueva memoria
-			if (tipo == NULL) {
-				perror("Error al asignar memoria para 'tipoStruct'");
-				exit(1);
-			}
-			strcpy(tipo, tipoStruct);
-		}
-		// Asignar el valor a $$
-		$$ = tipo;
-	}        
-
+            // Modificar `tipo` si es necesario
+            if (strcmp(tipo, "struct") == 0) {
+                free(tipo);  // Liberar memoria previamente asignada
+                tipo = malloc(strlen(tipoStruct) + 1);  // Reservar nueva memoria
+                if (tipo == NULL) {
+                    perror("Error al asignar memoria para 'tipoStruct'");
+                    exit(1);
+                }
+                strcpy(tipo, tipoStruct);
+            }
+            // Asignar el valor a $$
+            $$ = tipo;
+        }        
+;
 precontentWrite :
         contentWrite {
 	    	if (strlen(printV) == 0) {
         		char *final = malloc(strlen($1) + strlen(printV) + strlen("();") + 1);  // +1 para '\0'
         		if (final) {
             			final[0] = '\0';  // Inicializa la cadena a vacía
-            			strcat(final, "(");
-            			strcat(final, $1);
-            			strcat(final, ");");
-            			$$ = final;
+                        char * parts[] = {"(", $1, ")"};
+                        int n = sizeof(parts)/sizeof(parts[0]);
+                        concatenateArray(final, parts, n);
+                        $$ = final;
         		}
     		} else {
 	        	int longitud = strlen(printV);
@@ -1407,19 +1375,14 @@ precontentWrite :
 
                 			strcat(final, "(");
                 			if (strlen(printV) == contador) {
-                    				strcat(final, "\"");
-                    				strcat(final, $1);
-                    				strcat(final, "\"");
-                    				strcat(final, ",");
-                    				strcat(final, nueva_cadena);
+                                    char * parts[] = {"\"", $1, "\"", ",", nueva_cadena};
+                                    int n = sizeof(parts)/sizeof(parts[0]);
+                                    concatenateArray(final, parts, n);
                 			} else if (strlen(printV) > contador) {
-                    				strcat(final, "\"");
-                    				strcat(final, $1);
-                    				strcat(final, "{}");
-                    				strcat(final, "\"");
-                    				strcat(final, ",");
-                    				strcat(final, nueva_cadena);
-                			} else {
+                    				char * parts[] = {"\"", $1, "{}", "\"", ",", nueva_cadena};
+                                    int n = sizeof(parts)/sizeof(parts[0]);
+                                    concatenateArray(final, parts, n);
+                            } else {
                     				printf("Error: valores no coinciden\n");
                 			}
                 			strcat(final, ");");
@@ -1441,12 +1404,9 @@ contentWrite :
        contentWrite COMMA exp{
             char * final = malloc(strlen($1) * sizeof(char) + strlen($3) * sizeof(char) + strlen("{}") * sizeof(char)); 
             memset(final, 0, sizeof(final));
-
-            strcat(printV,$3);
-            strcat(printV,",");
-
-            
-            strcat(final, $1);
+            char * parts[] = {$3, ",", $1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
             deleteQuotes(final);
             free($1);
             free($3);
@@ -1465,17 +1425,14 @@ contentWrite :
 
 exp :   
         exp operand term {
-                
             char *final = malloc(strlen($1) + strlen($2) + strlen($3) + 1); // +1 para el terminador nulo
 
             // Inicializar el bloque de memoria completo
             memset(final, 0, strlen($1) + strlen($2) + strlen($3) + 1);
-
-            // Concatenar las cadenas
-            strcpy(final, $1);
-            strcat(final, $2);
-            strcat(final, $3);
-
+            char * parts[] = {$1, $2, $3};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            
             // Liberar las variables temporales
             free($1);
             free($2);
@@ -1499,18 +1456,19 @@ term :
         | LPAREN exp RPAREN {
                 char * final = malloc(strlen($2) * sizeof(char) + sizeof("()") + 1);
                 memset(final, 0, sizeof(final));
-                strcpy(final, "(");
-                strcat(final, $2);
-                strcat(final, ")");
+                char * parts[] = {"(", $2, ")"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                
                 free($2);
                 $$ = final;
         }
         | EX exp {
                 char * final = malloc(strlen($2) * sizeof(char) + sizeof("!()") + 1);
                 memset(final, 0, sizeof(final));
-                strcpy(final, "!(");
-                strcat(final, $2);
-                strcat(final, ")");
+                char * parts[] = {"!(", $2, ")"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
                 free($2);
                 $$ = final;
         }
@@ -1520,9 +1478,9 @@ operand :
         PLUS {
                 $$ = strdup(" + ");
         }
-	|PLUS EQ {$$ = strdup(" += ");}
+        |PLUS EQ {$$ = strdup(" += ");}
         |HYPHEN {$$ = strdup(" - ");}
-	|HYPHEN EQ {$$ = strdup(" -= ");}
+        |HYPHEN EQ {$$ = strdup(" -= ");}
         |HYPHEN HIGHER{$$ = strdup(".");}
         |PROD {$$ = strdup(" * ");}
         |DIV {$$ = strdup(" / ");}
@@ -1537,8 +1495,8 @@ operand :
         |PLUS PLUS {$$ = strdup(" ++ ");}
         |OR{$$ = strdup(" || ");}
         |DOT {$$ = strdup(".");}
-	|PERCENT {$$ = strdup(" % ");}
-	|EX EQ {$$ = strdup(" != ");}
+        |PERCENT {$$ = strdup(" % ");}
+        |EX EQ {$$ = strdup(" != ");}
 ;
 
 atom :
@@ -1561,13 +1519,10 @@ atom :
 
 		// Usar el tamaño total asignado en `malloc` para `memset`
 		memset(final, 0, strlen($1) * sizeof(char) + strlen($3) * sizeof(char) + sizeof("[]"));
-
-		strcat(final, $1);
-		strcat(final, "[");
-		strcat(final, $3);
-		strcat(final, "]");
-
-		free($1);
+        char * parts[] = {$1, "[", $3, "]"};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
 		free($3);
 		$$ = final;
     }
