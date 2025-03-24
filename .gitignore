@@ -4,9 +4,6 @@
 *.output
 *.o
 
-#carpetas
-
-/entrada
-/salida
+**/
 
 scanner
