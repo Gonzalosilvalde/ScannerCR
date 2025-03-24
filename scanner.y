@@ -693,21 +693,49 @@ preprograma :
 programa : 
         types STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{                        
                         
-            size_t size = strlen($4) + strlen($7)+ strlen($2) + sizeof("fn ->String {}");
-            char * final = malloc(size * sizeof(char));
+            // Reservar memoria inicial
+            size_t size = strlen($4) + strlen($7) + strlen($2) + strlen("{\n") + strlen("\n") + strlen("}\n\n") + 1;
+            char *final = malloc(size * sizeof(char));
+            if (!final) {
+                // Manejo de error: memoria no asignada
+            }
             memset(final, 0, size);
 
+            // Se realizan operaciones que modifican 'final'
             funCreation(final, $2, $4);
             typeSwitch(final, $1);
-            char * parts[] = {"{\n", $7, "\n", "}\n\n"};
-            int n = sizeof(parts)/sizeof(parts[0]);
+
+            // Calcular la longitud actual de 'final'
+            size_t current_length = strlen(final);
+
+            // Calcular la cantidad de memoria adicional necesaria para las nuevas partes
+            size_t extra = strlen("{\n") + strlen($7) + strlen("\n") + strlen("}\n\n");
+
+            // Calcular el nuevo tamaño total (longitud actual + extra + 1 para el carácter nulo)
+            size_t new_size = current_length + extra + 1;
+
+            // Realizar realloc para aumentar el tamaño de 'final'
+            char *temp = realloc(final, new_size * sizeof(char));
+            if (temp == NULL) {
+                // Manejo de error: realloc falló. 'final' sigue siendo válido.
+                // Se podría optar por liberar 'final' o gestionar el error adecuadamente.
+            } else {
+                final = temp;
+            }
+
+            // Concatenar las nuevas partes
+            char *parts[] = {"{\n", $7, "\n", "}\n\n"};
+            int n = sizeof(parts) / sizeof(parts[0]);
             concatenateArray(final, parts, n);
+
+            // Liberar la memoria que ya no se necesite
             free($7);
             free($4);
             free($2);
-            DeleteListT (&flist);
-            
+            DeleteListT(&flist);
+
             $$ = final;
+
                 
         }
 

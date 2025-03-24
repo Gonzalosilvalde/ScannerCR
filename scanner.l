@@ -47,8 +47,8 @@ struct {return STRUCT;}
 \} {return CLOSECURLYBRACKET;}
 \= {return EQ;}
 \: {return COLON;}
-\; {// printf("%i\n",i);
-    // i = i +1;
+\; { //printf("%i\n",i);
+     //i = i +1;
     return SEMICOLON;}
 \, {return COMMA;}
 \. {return DOT;}
