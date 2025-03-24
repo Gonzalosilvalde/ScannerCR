@@ -1,7 +1,11 @@
 SOURCE = scanner
 
 # Default target: compile the project
-all: compile
+all: output compile
+
+# Create the output folder if it doesn't exist
+output:
+	mkdir -p output
 
 # Compile using bison and flex, then link the objects
 compile: bison_compile flex_compile link
@@ -36,5 +40,5 @@ list.o: list.h list.c
 clean:
 	rm -f $(SOURCE) lex.yy.c $(SOURCE).tab.c $(SOURCE).tab.h *.o $(SOURCE).gv $(SOURCE).output
 
-.PHONY: all compile flex_compile bison_compile link clean compile_counter bison_counter
+.PHONY: all compile flex_compile bison_compile link clean compile_counter bison_counter output
 
