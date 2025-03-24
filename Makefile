@@ -1,4 +1,4 @@
-SOURCE = scanner
+SOURCE = scannerCR
 
 # Default target: compile the project
 all: output compile
