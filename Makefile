@@ -41,4 +41,3 @@ clean:
 	rm -f $(SOURCE) lex.yy.c $(SOURCE).tab.c $(SOURCE).tab.h *.o $(SOURCE).gv $(SOURCE).output
 
 .PHONY: all compile flex_compile bison_compile link clean compile_counter bison_counter output
-

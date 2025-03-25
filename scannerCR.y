@@ -53,8 +53,9 @@ void funCreation(char *, char *, char *);
 void typeSwitch(char *, int type);
 char * resolveType(int parameter);
 void concatenateArray(char *, char *[], int n);
-
-
+char * transform_dollar_vars_inside_parentheses(const char *str);
+char * wrap_in_parentheses(const char *str);
+void to_lowercase(char* str);
 //macros
 
 
@@ -63,7 +64,7 @@ void concatenateArray(char *, char *[], int n);
 %define parse.error verbose 
 %verbose
 %define parse.trace
-  
+%locations  
 
 %union {
     char * valString;
@@ -102,6 +103,7 @@ void concatenateArray(char *, char *[], int n);
 %token DOT
 %token PERCENT
 %token EQ
+%token QUESTION
 %token <valString>COMMENTLINE
 %token <valString>MULTILINE
 %token VAR
@@ -151,6 +153,7 @@ void concatenateArray(char *, char *[], int n);
 %left DIV
 %left DIVINT MOD
 %left AND OR
+%left COLON QUESTION 
 %left PROD
 %right EX
 %left LPAREN RPAREN
@@ -164,7 +167,7 @@ void concatenateArray(char *, char *[], int n);
 %right ELSE
 
 
-%type <valString> vardef constdef args if_statement fun_cre 
+%type <valString> vardef constdef macroargs args if_statement fun_cre 
 %type <valString> preprogram case_chain 
 
 %type <valString>  values array prod
@@ -175,7 +178,7 @@ void concatenateArray(char *, char *[], int n);
 %type <valString> comment
 %type <valString> atom
 %type <valString> operand 
-%type <valString> exp term
+%type <valString> exp term exp_macro
 %start S 
 %%
 S : 
@@ -321,6 +324,64 @@ header :
         }
 ;
 
+exp_macro :   
+        exp_macro operand term {
+            if(!strcmp($2," ? ")){
+                char * mod1 = replace($3, "(", "");
+                char * mod2 = replace(mod1, ")", "_val");
+                free(mod1);
+
+                char * final = malloc(strlen($1) + strlen(mod2) + strlen("if( ){}"));
+                memset(final, 0, sizeof(final));
+                char * parts[] = {"if(", $1, "){", mod2, "}"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                
+                free(mod2);
+
+                $$ = final;
+
+            }else if(!strcmp($2," : ")){
+                char * mod1 = replace($3, "(", "");
+                char * mod2 = replace(mod1, ")", "_val");
+                free(mod1);
+
+                char * final = malloc(strlen($1) + strlen(mod2) + strlen("else{}"));
+                memset(final, 0, sizeof(final));
+                char * parts[] = {$1, "else{", mod2, "}"};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+                free(mod2);
+                $$ = final;
+
+            }else{
+                char * mod1 = replace($1, "(", "");
+                char * mod2 = replace(mod1, ")", "_val");
+                char * mod3 = replace($3, "(", "");
+                char * mod4 = replace(mod3, ")", "_val");
+                free(mod1);
+                free(mod3);
+
+
+                char * final = malloc(strlen(mod2) + strlen($2) + strlen(mod4));
+                memset(final, 0, sizeof(final));
+                char * parts[] = {mod2, $2, mod4};
+                int n = sizeof(parts)/sizeof(parts[0]);
+                concatenateArray(final, parts, n);
+
+
+                free(mod2);
+                free(mod4);
+                $$ = final;
+            }
+
+        }
+        |term {
+        	$$ = $1;
+        }
+
+;
+
 constdef : 
         DEFINE STRINGV values {
             size_t size_final = strlen($2) + strlen($3) + 6 + 10 + 2 + 1;
@@ -340,6 +401,43 @@ constdef :
             free($3);
             free($5);
         }
+        |DEFINE STRINGV LPAREN macroargs RPAREN LPAREN exp_macro RPAREN{
+            char * temp = wrap_in_parentheses($4);            
+            char * vars = transform_dollar_vars_inside_parentheses(temp);
+            size_t longitud_final = strlen($2) + strlen(temp) + strlen(vars) + strlen($7) + strlen("macro_rules!  {\n => {{\n\n}}\n};\n") + 1;
+            char * final = malloc(longitud_final * sizeof(char));
+            to_lowercase($2); 
+            char * parts[] = {"macro_rules! ", $2, "{\n", temp, " => {{\n", vars, $7, "\n}}\n;\n}\n"};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            $$ = final;
+
+        }
+;
+
+macroargs:
+        STRINGV COMMA macroargs{
+            size_t longitud_final = strlen($1) + strlen($3) + strlen("$:, expr ") + 1;
+            char *final = malloc(longitud_final * sizeof(char));
+            final[0] = '\0'; 
+            char * parts[] = {"$", $1, ": expr, ", $3};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($3);
+            $$ = final;
+
+        } 
+        
+        |STRINGV{
+            size_t longitud_final = strlen($1) + strlen("$: expr") + 1;
+            char *final = malloc(longitud_final * sizeof(char));
+            final[0] = '\0'; 
+            char * parts[] = {"$", $1, ": expr"};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            $$ = final;
+        }
+
 ;
 
 
@@ -1356,8 +1454,10 @@ term :
         }
 
         | LPAREN exp RPAREN {
-            char * final = malloc(strlen($2) * sizeof(char) + sizeof("()") + 1);
-            memset(final, 0, sizeof(final));
+            size_t size = strlen($2) + sizeof("()") + 1;
+            char *final = malloc(size);
+            memset(final, 0, size);
+
             char * parts[] = {"(", $2, ")"};
             int n = sizeof(parts)/sizeof(parts[0]);
             concatenateArray(final, parts, n);
@@ -1399,6 +1499,8 @@ operand :
         |DOT {$$ = strdup(".");}
         |PERCENT {$$ = strdup(" % ");}
         |EX EQ {$$ = strdup(" != ");}
+        |COLON {$$ = strdup(" : ");}
+        |QUESTION {$$ = strdup(" ? ");}
 ;
 
 atom :
@@ -1686,6 +1788,81 @@ void concatenateArray(char *final, char *strings[], int n) {
     }
 }
 
+
+char * transform_dollar_vars_inside_parentheses(const char *str) {
+    int paren_level = 0;
+    size_t result_capacity = 128;
+    size_t result_length = 0;
+    char *result = malloc(result_capacity);
+    if (!result) {
+        fprintf(stderr, "Error al asignar memoria para el resultado.\n");
+        return "";
+    }
+    result[0] = '\0';
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] == '(') {
+            paren_level++;
+        } else if (str[i] == ')') {
+            if (paren_level > 0)
+                paren_level--;
+        } else if (str[i] == '$' && paren_level > 0) {
+            int start = i;
+            i++;
+            while (str[i] != '\0' && (isalnum((unsigned char)str[i]) || str[i] == '_')) {
+                i++;
+            }
+            int var_len = i - start;
+            int line_len = 2 * var_len + 13;
+            while (result_length + line_len >= result_capacity) {
+                result_capacity *= 2;
+                char *temp = realloc(result, result_capacity);
+                if (!temp) {
+                    fprintf(stderr, "Error al realocar memoria.\n");
+                    free(result);
+                    return "";
+                }
+                result = temp;
+            }
+            int written = snprintf(result + result_length, result_capacity - result_length,
+                                   "let %.*s_val = %.*s;\n", var_len - 1, str + start + 1,
+                                   var_len, str + start);
+            if (written < 0) {
+                fprintf(stderr, "Error en snprintf.\n");
+                free(result);
+                return "";
+            }
+            result_length += written;
+            i--;
+        }
+    }
+    return result;
+}
+
+
+
+
+char *wrap_in_parentheses(const char *str) {
+    size_t len = strlen(str);
+    char *result = malloc(len + 3);
+    if (result == NULL) {
+        return NULL;
+    }
+    
+    result[0] = '(';
+    strcpy(result + 1, str);
+    result[len + 1] = ')';
+    result[len + 2] = '\0';
+    
+    return result;
+}
+
+void to_lowercase(char* str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        str[i] = tolower((unsigned char) str[i]); 
+    }
+}
+
 int main(int argc, char *argv[]) {
 
     if (argc < 2) {
@@ -1724,7 +1901,7 @@ int main(int argc, char *argv[]) {
             }
             strcpy(headersArray[i], route);
             
-            char buffer[256];  // Asegúrate de que el tamaño sea suficiente para almacenar route.
+            char buffer[256]; 
             strcpy(buffer, route);
 
             char* lastSlash = strrchr(buffer, '/');

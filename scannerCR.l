@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "scannerCR.tab.h"
-// int i = 0;
+ //int i = 0;
 %}
 
 letter [a-zA-Z]
@@ -47,11 +47,10 @@ struct {return STRUCT;}
 \} {return CLOSECURLYBRACKET;}
 \= {return EQ;}
 \: {return COLON;}
-\; { //printf("%i\n",i);
-     //i = i +1;
-    return SEMICOLON;}
+\; {return SEMICOLON;}
 \, {return COMMA;}
 \. {return DOT;}
+\? {return QUESTION;}
 ! {return EX;}
 if {return IF;}
 (?i:then) {return THEN;}
@@ -89,7 +88,10 @@ const {return CONST;}
 	yylval.valString = strdup(yytext); 
 	return QUOTESTRING;
 }
-\n ;
+\n {
+    yylineno++;
+} 
+
 . ;
 %%
 YY_BUFFER_STATE yy_current_buffer(){
