@@ -53,9 +53,12 @@ void funCreation(char *, char *, char *);
 void typeSwitch(char *, int type);
 char * resolveType(int parameter);
 void concatenateArray(char *, char *[], int n);
-char * transform_dollar_vars_inside_parentheses(const char *str);
-char * wrap_in_parentheses(const char *str);
-void to_lowercase(char* str);
+char * transformDollarVarsInsideParentheses(const char *str);
+char * transformVariadic(const char * str);
+char * wrapInParentheses(const char *str);
+void toLowercase(char* str);
+char * transformStringOutput(const char *input);
+char * transformStringInput(const char *input);
 //macros
 
 
@@ -108,6 +111,7 @@ void to_lowercase(char* str);
 %token <valString>MULTILINE
 %token VAR
 %token CONST
+%token VOLATILE
 %token DEFINE
 %token LISTCONTENT
 %token VALUE
@@ -137,7 +141,6 @@ void to_lowercase(char* str);
 %token SCANF
 %token <valString> STRING
 %token <valString> STRINGV
-%token <valString> QUOTESTRING
 %token <valString>TRUEVAL
 %token <valString>FALSEVAL
 %token <valString> INTNUM
@@ -145,16 +148,18 @@ void to_lowercase(char* str);
 %token RETURN
 %token STRUCT
 %token AMPERSAND
+%token ASM
+
 
 %left <valString>SEMICOLON
 %left <valString>EQ
 %left LOWER HIGHER
-%left <valString>PLUS HYPHEN PERCENT
+%left <valString>PLUS HYPHEN PERCENT QUOTESTRING
 %left DIV
 %left DIVINT MOD
 %left AND OR
 %left COLON QUESTION 
-%left PROD
+%left PROD 
 %right EX
 %left LPAREN RPAREN
 %left STRINGV 
@@ -166,13 +171,14 @@ void to_lowercase(char* str);
 %left INTEGER
 %right ELSE
 
+%nonassoc LOWPREC
 
 %type <valString> vardef constdef macroargs args if_statement fun_cre 
 %type <valString> preprogram case_chain 
 
-%type <valString>  values array prod
+%type <valString>  values array prod ms_inline 
 %type <valInt> type types
-%type <valString>  header 
+%type <valString> header asm_fun asm_string asm_input_output 
 %type <valString> lines_program line_program
 %type <valString> contentWrite program precontentWrite 
 %type <valString> comment
@@ -346,7 +352,7 @@ exp_macro :
                 char * mod2 = replace(mod1, ")", "_val");
                 free(mod1);
 
-                char * final = malloc(strlen($1) + strlen(mod2) + strlen("else{}"));
+                char * final = malloc(strlen($1) + strlen(mod2) + strlen("else{}") + 1);
                 memset(final, 0, sizeof(final));
                 char * parts[] = {$1, "else{", mod2, "}"};
                 int n = sizeof(parts)/sizeof(parts[0]);
@@ -362,8 +368,8 @@ exp_macro :
                 free(mod1);
                 free(mod3);
 
-
-                char * final = malloc(strlen(mod2) + strlen($2) + strlen(mod4));
+                
+                char * final = malloc(strlen(mod2) + strlen($2) + strlen(mod4) + 1);
                 memset(final, 0, sizeof(final));
                 char * parts[] = {mod2, $2, mod4};
                 int n = sizeof(parts)/sizeof(parts[0]);
@@ -402,17 +408,54 @@ constdef :
             free($5);
         }
         |DEFINE STRINGV LPAREN macroargs RPAREN LPAREN exp_macro RPAREN{
-            char * temp = wrap_in_parentheses($4);            
-            char * vars = transform_dollar_vars_inside_parentheses(temp);
+            char * temp = wrapInParentheses($4);            
+            char * vars = transformDollarVarsInsideParentheses(temp);
             size_t longitud_final = strlen($2) + strlen(temp) + strlen(vars) + strlen($7) + strlen("macro_rules!  {\n => {{\n\n}}\n};\n") + 1;
             char * final = malloc(longitud_final * sizeof(char));
-            to_lowercase($2); 
-            char * parts[] = {"macro_rules! ", $2, "{\n", temp, " => {{\n", vars, $7, "\n}}\n;\n}\n"};
+            final[0] = '\0';
+            toLowercase($2); 
+            char * parts[] = {"macro_rules! ", $2, "{\n", temp, " => {{\n", vars, $7, "\n}};\n}\n"};
             int n = sizeof(parts)/sizeof(parts[0]);
             concatenateArray(final, parts, n);
+            free($4);
+            free($7);
+            $$ = final;
+
+        }//#define PRINT(fmt, ...) printf(fmt, __VA_ARGS__)
+        |DEFINE STRINGV LPAREN macroargs RPAREN STRINGV LPAREN macroargs RPAREN{
+            char * temp = wrapInParentheses($4);            
+            char * vars = transformVariadic($8);
+            size_t longitud_final = strlen($2) + strlen(temp) + strlen($6) + strlen(vars) + strlen("macro_rules!()  {\n => {{\n\n}}\n};\n") + 1;
+            char * final = malloc(longitud_final * sizeof(char));
+            final[0] = '\0';
+            toLowercase($2); 
+            char * parts[] = {"macro_rules! ", $2, "{\n", temp, " => {\n", $6,"(", vars, ");\n}};\n}\n"};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($4);
+            free($8);
+            free(temp);
+            free(vars);
+            $$ = final;
+        }
+        |DEFINE STRINGV LPAREN macroargs RPAREN PRINTF LPAREN macroargs RPAREN{
+            char * temp = wrapInParentheses($4);            
+            char * vars = transformVariadic($8);
+            size_t longitud_final = strlen($2) + strlen(temp) + strlen(vars) + strlen("macro_rules!println!()  {\n => {\n\n}}\n};\n") + 1;
+            char * final = malloc(longitud_final * sizeof(char));
+            final[0] = '\0';
+            toLowercase($2); 
+            char * parts[] = {"macro_rules! ", $2, "{\n", temp, " => {\nprintln!(" , vars, ");\n};\n}\n"};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($4);
+            free($8);
+            free(temp);
+            free(vars);
             $$ = final;
 
         }
+        
 ;
 
 macroargs:
@@ -437,11 +480,17 @@ macroargs:
             concatenateArray(final, parts, n);
             $$ = final;
         }
+        |DOT DOT DOT{
+            size_t longitud_final = strlen("$($args: tt)*") + 1;
+            char *final = malloc(longitud_final * sizeof(char));
+            final[0] = '\0'; 
+            char * parts[] = {"$($args: tt)*"};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            $$ = final;
+        }
 
 ;
-
-
-
 
 vardef : 
         types STRINGV SEMICOLON {
@@ -1295,8 +1344,184 @@ line_program :
         free($3);
         $$ = final; 
     }
-    
+    |asm_fun{
+        char * final = malloc(strlen($1)*sizeof(char) + 1);
+        memset(final, 0, sizeof(final));
+        char * parts[] = {$1};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        
+        free($1);
+        $$=final;
+    }    
 
+;
+
+asm_fun :
+        //__asm__("movl %ecx, %eax");
+    ASM LPAREN asm_string RPAREN SEMICOLON{
+        char * final = malloc(strlen($3)*sizeof(char) + strlen("unsafe{\nasm!();\n}\n") + 1);
+        memset(final, 0, sizeof(final));
+        char * parts[] = {"unsafe{\nasm!(", $3,");\n}\n"};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+
+        free($3);
+
+        $$ = final;
+    }
+    |ASM LPAREN asm_string COLON asm_input_output COLON asm_input_output COLON asm_string RPAREN SEMICOLON{
+        char * modOut = transformStringOutput($5);   
+        char * modIn = transformStringInput($7);
+        memmove($9, $9 + 1, strlen($9));
+        free($5);
+        free($7);
+
+        char * final = malloc(strlen($3)*sizeof(char)+ strlen(modOut)*sizeof(char) + strlen(modIn)*sizeof(char) + strlen($9)*sizeof(char) +strlen("unsafe{\nasm!(\n\n// );\n}\n"));
+        memset(final, 0, sizeof(final));
+        char * parts[] = {"unsafe{\nasm!(", $3,"\n", modOut, modIn, "\n// ", $9, "\n);\n}\n"};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+
+        free($3);
+        free($9);
+        free(modOut);
+        free(modIn);
+
+        $$ = final;
+
+    }
+    |ASM VOLATILE LPAREN asm_string RPAREN SEMICOLON{
+        char * final = malloc(strlen($4)*sizeof(char) + strlen("unsafe{\nasm!();\n}\n") + 1);
+        memset(final, 0, sizeof(final));
+        char * parts[] = {"unsafe{\nasm!(", $4,");\n}\n"};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+
+        free($4);
+
+        $$ = final;
+
+    }
+    |ASM VOLATILE LPAREN asm_string COLON asm_input_output COLON asm_input_output COLON asm_string RPAREN SEMICOLON{
+        char * modOut = transformStringOutput($6);   
+        char * modIn = transformStringInput($8);
+        memmove($10, $10 + 1, strlen($10));
+        free($6);
+        free($8);
+
+        char * final = malloc(strlen($4)*sizeof(char)+ strlen(modOut)*sizeof(char) + strlen(modIn)*sizeof(char) + strlen($10)*sizeof(char) +strlen("unsafe{\nasm!(\n\n// );\n}\n"));
+        memset(final, 0, sizeof(final));
+        char * parts[] = {"unsafe{\nasm!(", $4,"\n", modOut, modIn, "\n// ", $10, "\n);\n}\n"};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+
+        free($4);
+        free($10);
+        free(modOut);
+        free(modIn);
+
+        $$ = final;
+    }
+    |ASM OPENCURLYBRACKET ms_inline CLOSECURLYBRACKET {
+        size_t totalSize = strlen($3) + strlen("ASM{/**/}\n") + 1;
+        char * final = malloc(totalSize);
+        memset(final, 0, totalSize);
+
+        char * parts[] = {"/*ASM{",$3, "}*/\n"};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($3);
+        $$ = final;
+
+    }
+;
+
+ms_inline :
+    STRINGV ms_inline{
+            
+        size_t totalSize = strlen($1) + strlen($2) + strlen("\n") + 1;
+        char * final = malloc(totalSize);
+        memset(final, 0, totalSize);
+
+        char * parts[] = {$1,"\n", $2};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
+        free($2);
+        $$ = final;
+    }
+    |STRINGV COMMA ms_inline{
+        size_t totalSize = strlen($1) + strlen($3) + strlen(",") + 1;
+        char * final = malloc(totalSize);
+        memset(final, 0, totalSize);
+
+        char * parts[] = {$1,",", $3};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
+        free($3);
+        $$ = final;
+
+    }
+    |/*empty*/{$$=strdup("");} %prec LOWPREC
+
+;
+
+asm_input_output :
+    LSQUAREPAREN STRINGV RSQUAREPAREN QUOTESTRING LPAREN STRINGV RPAREN COMMA asm_input_output{
+        char * final = malloc(strlen($2)*sizeof(char)+ strlen($6)*sizeof(char)+ strlen($9)*sizeof(char) + strlen("\n\n") + 1);
+        memset(final, 0, sizeof(final));
+        char * parts[] = {$2," ", $6, " ", $9};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+
+
+        $$ = final;
+    }
+    |LSQUAREPAREN STRINGV RSQUAREPAREN QUOTESTRING LPAREN STRINGV RPAREN {
+        char * final = malloc(strlen($2)*sizeof(char)+ strlen($6)*sizeof(char) + strlen("\n") + 1);
+        memset(final, 0, sizeof(final));
+        char * parts[] = {$2," ", $6};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+
+        $$ = final;
+    }
+    |/*empty*/{$$=strdup("");} %prec LOWPREC
+
+;
+
+
+asm_string:
+    asm_string QUOTESTRING{
+        
+        size_t totalSize = strlen($1) + strlen($2) + strlen("\n") + 1;
+        char * final = malloc(totalSize);
+        memset(final, 0, totalSize);
+
+        char * parts[] = {$1,"\n", $2};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
+        free($2);
+        $$ = final;
+    }
+    |asm_string COMMA QUOTESTRING{
+        size_t totalSize = strlen($1) + strlen($3) + strlen(",") + 1;
+        char * final = malloc(totalSize);
+        memset(final, 0, totalSize);
+
+        char * parts[] = {$1,",", $3};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
+        free($3);
+        $$ = final;
+
+    }
+    |/*empty*/{$$=strdup("");} %prec LOWPREC
+    
 ;
 
 array :
@@ -1789,7 +2014,7 @@ void concatenateArray(char *final, char *strings[], int n) {
 }
 
 
-char * transform_dollar_vars_inside_parentheses(const char *str) {
+char * transformDollarVarsInsideParentheses(const char *str) {
     int paren_level = 0;
     size_t result_capacity = 128;
     size_t result_length = 0;
@@ -1839,10 +2064,59 @@ char * transform_dollar_vars_inside_parentheses(const char *str) {
     return result;
 }
 
+char *trim(char *str) {
+    while (isspace((unsigned char)*str)) str++;
+    if (*str == '\0')
+        return str;
+    
+    char *end = str + strlen(str) - 1;
+    while (end > str && isspace((unsigned char)*end))
+        end--;
+    *(end + 1) = '\0';
+    return str;
+}
+
+char * transformVariadic(const char * str){
+    
+    char *input = strdup(str);
+    if (!input) return NULL;
+
+    char *resultado = malloc(strlen(str) + 1);
+    if (!resultado) {
+        free(input);
+        return NULL;
+    }
+    resultado[0] = '\0';
+
+    char *token = strtok(input, ",");
+    int primerToken = 1;
+    while (token != NULL) {
+        char *t = trim(token);
+
+        char *dosPuntos = strchr(t, ':');
+        if (dosPuntos) {
+            *dosPuntos = '\0';
+        }
+        t = trim(t);
+
+        if (strcmp(t, "$__VA_ARGS__") == 0) {
+            t = "$($args)*";
+        }
+
+        if (!primerToken) {
+            strcat(resultado, ", ");
+        }
+        primerToken = 0;
+        strcat(resultado, t);
+
+        token = strtok(NULL, ",");
+    }
+
+    free(input);
+    return resultado;}
 
 
-
-char *wrap_in_parentheses(const char *str) {
+char *wrapInParentheses(const char *str) {
     size_t len = strlen(str);
     char *result = malloc(len + 3);
     if (result == NULL) {
@@ -1857,10 +2131,76 @@ char *wrap_in_parentheses(const char *str) {
     return result;
 }
 
-void to_lowercase(char* str) {
+void toLowercase(char* str) {
     for (int i = 0; str[i] != '\0'; i++) {
         str[i] = tolower((unsigned char) str[i]); 
     }
+}
+
+char * transformStringOutput(const char *input) {
+    size_t len = strlen(input);
+    char *result = malloc(len * 2 + 100);
+    if(result == NULL) {
+        return NULL;
+    }
+    result[0] = '\0';
+
+    char *copy = strdup(input);
+    if(copy == NULL) {
+        free(result);
+        return NULL;
+    }
+    
+    char *token = strtok(copy, " ");
+    int count = 0;
+    
+    while(token != NULL) {
+        count++;
+        if(count % 2 == 1) {
+            strcat(result, token);
+        } else {
+            strcat(result, " = lateout(reg) ");
+            strcat(result, token);
+            strcat(result, ",\n");
+        }
+        token = strtok(NULL, " ");
+    }
+    
+    free(copy);
+    return result;
+}
+
+char * transformStringInput(const char *input) {
+    size_t len = strlen(input);
+    char *result = malloc(len * 2 + 100);
+    if(result == NULL) {
+        return NULL;
+    }
+    result[0] = '\0';
+
+    char *copy = strdup(input);
+    if(copy == NULL) {
+        free(result);
+        return NULL;
+    }
+    
+    char *token = strtok(copy, " ");
+    int count = 0;
+    
+    while(token != NULL) {
+        count++;
+        if(count % 2 == 1) {
+            strcat(result, token);
+        } else {
+            strcat(result, " = inout(reg) ");
+            strcat(result, token);
+            strcat(result, ",\n");
+        }
+        token = strtok(NULL, " ");
+    }
+    
+    free(copy);
+    return result;
 }
 
 int main(int argc, char *argv[]) {

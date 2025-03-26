@@ -79,7 +79,10 @@ stringquote {return STRINGQUOTE;}
 (?i:return) {return RETURN;}
 "#define" {return DEFINE;}
 const {return CONST;}
-
+volatile {return VOLATILE;}
+asm {return ASM;}
+__asm {return ASM;}
+__asm__ {return ASM;}
 ({letter}|\_|&)({letter}|{digit}|\_)*  {
     	yylval.valString = strdup(yytext);
         return STRINGV;
