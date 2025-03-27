@@ -195,6 +195,7 @@ S :
                 
                 strcpy(input, filePath);
                 char output[100];
+                free($1);
 
                 char* lastSlash = strrchr(input, '/');
                 if(lastSlash != NULL) {
@@ -217,14 +218,13 @@ S :
                 FILE *fp = fopen(output, "w");
 
                 if (fp != NULL) {
-		    	char *result = insertTabsBetweenBraces($2);
-    			if (result != NULL) {
-        			fputs(result, fp);
-        			free(result);
-        			fclose(fp);
-    			}
-		}
-
+                    char *result = insertTabsBetweenBraces($2);
+                    if (result != NULL) {
+                        fputs(result, fp);
+                        free(result);
+                        fclose(fp);
+                    }
+                }
                 free($2);
                 
         }
@@ -245,13 +245,13 @@ comment :
 header : 	
         PROGRAM LOWER STRINGV HIGHER {
 	 		free($3);
-			$$ = "";
+			$$ = strdup("");
 
 		}
         |PROGRAM LOWER STRINGV DOT STRINGV HIGHER {
 			free($3);
 			free($5);
-			$$ = "";
+			$$ = strdup("");
 		}
 		|PROGRAM QUOTESTRING {
             #pragma omp critical
@@ -291,12 +291,16 @@ header :
 		}
         |PROGRAM LOWER STRINGV HIGHER header {
 			free($3);	
-			$$ = "";
+            free($5);
+			$$ = strdup("");
 		}
         |PROGRAM LOWER STRINGV DOT STRINGV HIGHER header{
 			free($3);
-			free($5);
-			$$ = "";
+            if($5 != $7){
+                free($7);
+            }
+            free($5);
+			$$ = strdup("");
 		}
 		|PROGRAM QUOTESTRING header{
                                                 
@@ -343,6 +347,9 @@ exp_macro :
                 int n = sizeof(parts)/sizeof(parts[0]);
                 concatenateArray(final, parts, n);
                 
+                free($1);
+                free($2);
+                free($3);
                 free(mod2);
 
                 $$ = final;
@@ -357,6 +364,9 @@ exp_macro :
                 char * parts[] = {$1, "else{", mod2, "}"};
                 int n = sizeof(parts)/sizeof(parts[0]);
                 concatenateArray(final, parts, n);
+                free($1);
+                free($2);
+                free($3);
                 free(mod2);
                 $$ = final;
 
@@ -375,7 +385,9 @@ exp_macro :
                 int n = sizeof(parts)/sizeof(parts[0]);
                 concatenateArray(final, parts, n);
 
-
+                free($1);
+                free($2);
+                free($3);
                 free(mod2);
                 free(mod4);
                 $$ = final;
@@ -383,7 +395,14 @@ exp_macro :
 
         }
         |term {
-        	$$ = $1;
+        	char *final = malloc(strlen($1) * sizeof(char) + 1);
+
+            memset(final, 0, strlen($1) * sizeof(char));
+            char * parts[] = {$1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($1);
+            $$ = final;
         }
 
 ;
@@ -417,6 +436,9 @@ constdef :
             char * parts[] = {"macro_rules! ", $2, "{\n", temp, " => {{\n", vars, $7, "\n}};\n}\n"};
             int n = sizeof(parts)/sizeof(parts[0]);
             concatenateArray(final, parts, n);
+            free(temp);
+            free(vars);
+            free($2);
             free($4);
             free($7);
             $$ = final;
@@ -433,6 +455,8 @@ constdef :
             int n = sizeof(parts)/sizeof(parts[0]);
             concatenateArray(final, parts, n);
             free($4);
+            free($2);
+            free($6);
             free($8);
             free(temp);
             free(vars);
@@ -448,6 +472,7 @@ constdef :
             char * parts[] = {"macro_rules! ", $2, "{\n", temp, " => {\nprintln!(" , vars, ");\n};\n}\n"};
             int n = sizeof(parts)/sizeof(parts[0]);
             concatenateArray(final, parts, n);
+            free($2);
             free($4);
             free($8);
             free(temp);
@@ -466,6 +491,7 @@ macroargs:
             char * parts[] = {"$", $1, ": expr, ", $3};
             int n = sizeof(parts)/sizeof(parts[0]);
             concatenateArray(final, parts, n);
+            free($1);
             free($3);
             $$ = final;
 
@@ -478,6 +504,7 @@ macroargs:
             char * parts[] = {"$", $1, ": expr"};
             int n = sizeof(parts)/sizeof(parts[0]);
             concatenateArray(final, parts, n);
+            free($1);
             $$ = final;
         }
         |DOT DOT DOT{
@@ -534,6 +561,7 @@ vardef :
             int n = sizeof(parts)/sizeof(parts[0]);
             concatenateArray(final, parts, n);
             free($2);
+            free($4);
             
             $$ = final;
         }
@@ -611,6 +639,7 @@ vardef :
                 free(finalMod);
 
                 if (temp != NULL) {
+                        free(final);
                         $$ = temp;
                 } else {
                         $$ = final;
@@ -632,7 +661,6 @@ vardef :
                 int n = sizeof(parts)/sizeof(parts[0]);
                 concatenateArray(final, parts, n);
             }
-
             free($2);
             free($4);
             free($6);
@@ -656,12 +684,21 @@ vardef :
             
             char *finalMod = replace(final, ":;", modType1);
             if (finalMod != NULL) {
-                finalMod = replace(finalMod, ":=", modType2);
-                if (finalMod != NULL) {
+                
+                char *temp = replace(finalMod, ":=", modType2);
+                if (temp != NULL) {
+                    free(finalMod);
+                    finalMod = temp;
+                    free(final);
                     $$ = finalMod;
                 } else {
+                    free(temp);
+                    $$ = final;
                 }
+
             } else {
+                free(finalMod);
+                $$ = final;
             }
     }        
 	| STRINGV operand vardef {
@@ -673,11 +710,13 @@ vardef :
                 char* parts[] = {"\0", $1, $2, $3};
                 int n = sizeof(parts)/sizeof(parts[0]);
                 concatenateArray(final, parts, n);
+                
     		}
-
-    		free($1);
+            free($1);
             free($2);
             free($3);
+
+   
     		$$ = final;
 	}
     |STRINGV COMMA vardef{//10
@@ -720,6 +759,7 @@ types :
 		$$=$1;
 	}
 	|type prod{
+        free($2);
 		$$ = $1;
 	}
 ;
@@ -752,10 +792,36 @@ values :
         TRUEVAL {
             $$ = strdup("true");
         }
-        | FALSEVAL {$$ = $1;}
-        | INTNUM {$$ = $1;}
-        | REALNUM {$$ = $1;}
-        | QUOTESTRING {$$ = $1;}
+        | FALSEVAL {$$ = strdup("false");}
+        | INTNUM {
+            char *final = malloc(strlen($1) * sizeof(char) + 1);
+
+            memset(final, 0, strlen($1) * sizeof(char));
+            char * parts[] = {$1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($1);
+            $$ = final;
+        }
+        | REALNUM {
+            char *final = malloc(strlen($1) * sizeof(char) + 1);
+
+            memset(final, 0, strlen($1) * sizeof(char));
+            char * parts[] = {$1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($1);
+            $$ = final;       
+        }
+        | QUOTESTRING {
+            char *final = malloc(strlen($1) * sizeof(char) + 1);
+
+            memset(final, 0, strlen($1) * sizeof(char));
+            char * parts[] = {$1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($1);
+            $$ = final;}
 ;
 
 preprogram : 
@@ -783,11 +849,15 @@ preprogram :
 program : 
         types STRINGV LPAREN args RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET{                        
                         
-            size_t size = strlen($4) + strlen($7) + strlen($2) + strlen("{\n") + strlen("\n") + strlen("}\n\n") + 1;
+            
+            size_t size = strlen($4) + strlen($7) + strlen($2) +
+                          strlen("{\n") + strlen("\n") + strlen("}\n\n") + 2;
             char *final = malloc(size * sizeof(char));
-            if (!final) {
+            if (final == NULL) {
+                fprintf(stderr, "Error en la asignación de memoria\n");
+                exit(EXIT_FAILURE);
             }
-            memset(final, 0, size);
+            final[0] = '\0';
 
             funCreation(final, $2, $4);
             typeSwitch(final, $1);
@@ -797,9 +867,11 @@ program :
             size_t extra = strlen("{\n") + strlen($7) + strlen("\n") + strlen("}\n\n");
 
             size_t new_size = current_length + extra + 1;
-
             char *temp = realloc(final, new_size * sizeof(char));
             if (temp == NULL) {
+                fprintf(stderr, "Error en la realocación de memoria\n");
+                free(final);
+                exit(EXIT_FAILURE);
             } else {
                 final = temp;
             }
@@ -814,6 +886,7 @@ program :
             DeleteListT(&flist);
 
             $$ = final;
+
 
                 
         }
@@ -838,7 +911,7 @@ program :
 
         |types STRINGV LPAREN RPAREN SEMICOLON{
             free($2);
-            $$ = "";
+            $$ = strdup("");
         }
 
         | vardef program {
@@ -903,11 +976,12 @@ program :
 
 prod :
 	PROD prod{
-		$$="";
+        free($2);
+		$$=strdup("");
 
 	}
 	| PROD{
-		$$="";
+		$$=strdup("");
 	}
 ;
 
@@ -1075,7 +1149,7 @@ case_chain :
 		size_t longitud_final = strlen(" => {\n") + strlen($2) + strlen($4) + strlen("\n}, ") + strlen($5) + 1;
 		char *final = malloc(longitud_final);
 		if (final == NULL) {
-			$$ = "";
+			$$ = strdup("");
 		}
         final[0] = '\0';
 
@@ -1162,7 +1236,8 @@ fun_cre :
 
     }
     |LPAREN types RPAREN fun_cre{
-        $$ = ""	;
+        free($4);
+        $$ = strdup("")	;
     } 
 
 ;
@@ -1192,9 +1267,7 @@ line_program :
         $$ = $1;
     }
     | FOR LPAREN types STRINGV EQ INTNUM SEMICOLON exp SEMICOLON STRINGV operand RPAREN OPENCURLYBRACKET lines_program CLOSECURLYBRACKET {
-        char *final = malloc(strlen("for in .. {} \n\n") + strlen($4) +
-         strlen($6) + strlen($9) + strlen($10) + strlen($14) + 1);
-        final[0] = '\0';
+        
 
         char *numero = getEndNumber($8);
         char *octavo;
@@ -1204,6 +1277,9 @@ line_program :
             octavo = strdup(numero);
         }
 
+        char *final = malloc(strlen("for  in .. {} \n\n") + strlen($4)*sizeof(char) +
+         strlen($6)*sizeof(char)+ strlen(octavo)*sizeof(char) + strlen($14)*sizeof(char) + 1);
+        final[0] = '\0';
         char * parts[] = {"for ", $4, " in ", $6, "..", octavo, "{\n", $14, "\n"};
         int n = sizeof(parts)/sizeof(parts[0]);
         concatenateArray(final, parts, n);
@@ -1227,6 +1303,8 @@ line_program :
 
         char * numero = getEndNumber($8);
         char * numero2 = getEndNumber($10);
+        free($8);
+        free($10);
         
         char * parts[] = {"for ", $4, " in ", $6, "..", numero, ".step_by(", numero2, "){\n", $13, "\n"};
         int n = sizeof(parts)/sizeof(parts[0]);
@@ -1234,8 +1312,7 @@ line_program :
 
         free($4);
         free($6);
-        free($8);
-        free($10);
+
         free($13);
         free(numero);
         free(numero2);
@@ -1288,7 +1365,8 @@ line_program :
         char *parts[] = { $3, $5, ";" };
         int n = sizeof(parts) / sizeof(parts[0]);
         concatenateArray(final, parts, n);
-
+        
+        free($2);
         free($3);
         free($5);
         $$ = final;
@@ -1304,7 +1382,7 @@ line_program :
         char * parts[] = {$2};
         int n = sizeof(parts)/sizeof(parts[0]);
         concatenateArray(final, parts, n);
-         
+        free($2); 
         $$ = final;
             
     }
@@ -1340,7 +1418,6 @@ line_program :
         concatenateArray(final, parts, n);
 
         replaceSemicolon(final);
-        free(type);
         free($3);
         $$ = final; 
     }
@@ -1376,9 +1453,10 @@ asm_fun :
         memmove($9, $9 + 1, strlen($9));
         free($5);
         free($7);
-
-        char * final = malloc(strlen($3)*sizeof(char)+ strlen(modOut)*sizeof(char) + strlen(modIn)*sizeof(char) + strlen($9)*sizeof(char) +strlen("unsafe{\nasm!(\n\n// );\n}\n"));
-        memset(final, 0, sizeof(final));
+        size_t finalSize = strlen($3) + strlen(modOut) + strlen(modIn) + strlen($9) +
+                    strlen("unsafe{\nasm!(\n\n// );\n}\n\n") + 1;
+        char *final = malloc(finalSize);
+        final[0]='\0';
         char * parts[] = {"unsafe{\nasm!(", $3,"\n", modOut, modIn, "\n// ", $9, "\n);\n}\n"};
         int n = sizeof(parts)/sizeof(parts[0]);
         concatenateArray(final, parts, n);
@@ -1410,8 +1488,10 @@ asm_fun :
         free($6);
         free($8);
 
-        char * final = malloc(strlen($4)*sizeof(char)+ strlen(modOut)*sizeof(char) + strlen(modIn)*sizeof(char) + strlen($10)*sizeof(char) +strlen("unsafe{\nasm!(\n\n// );\n}\n"));
-        memset(final, 0, sizeof(final));
+        size_t finalSize = strlen($4) + strlen(modOut) + strlen(modIn) + strlen($10) +
+                    strlen("unsafe{\nasm!(\n\n// );\n}\n\n") + 1;
+        char *final = malloc(finalSize);
+        final[0]='\0';
         char * parts[] = {"unsafe{\nasm!(", $4,"\n", modOut, modIn, "\n// ", $10, "\n);\n}\n"};
         int n = sizeof(parts)/sizeof(parts[0]);
         concatenateArray(final, parts, n);
@@ -1475,7 +1555,10 @@ asm_input_output :
         char * parts[] = {$2," ", $6, " ", $9};
         int n = sizeof(parts)/sizeof(parts[0]);
         concatenateArray(final, parts, n);
-
+        free($2);
+        free($4);
+        free($6);
+        free($9);
 
         $$ = final;
     }
@@ -1485,7 +1568,9 @@ asm_input_output :
         char * parts[] = {$2," ", $6};
         int n = sizeof(parts)/sizeof(parts[0]);
         concatenateArray(final, parts, n);
-
+        free($2);
+        free($4);
+        free($6);
         $$ = final;
     }
     |/*empty*/{$$=strdup("");} %prec LOWPREC
@@ -1578,6 +1663,7 @@ precontentWrite :
                         char * parts[] = {"(", $1, ")"};
                         int n = sizeof(parts)/sizeof(parts[0]);
                         concatenateArray(final, parts, n);
+                        free($1);
                         $$ = final;
         		}
     		} else {
@@ -1622,6 +1708,7 @@ precontentWrite :
                 			memset(printV, 0, strlen(printV));
                 			free(newString);
             			}
+                        free($1);
             			$$ = final;
         		}
         		free($1);
@@ -1645,10 +1732,25 @@ contentWrite :
         }
         
         | QUOTESTRING {
-                $$ = $1;}
+            char *final = malloc(strlen($1) * sizeof(char) + 1);
+
+            memset(final, 0, strlen($1) * sizeof(char));
+            char * parts[] = {$1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($1);
+            $$ = final;
+        }
         | STRINGV {
-                $$ = $1;
-	}
+            char *final = malloc(strlen($1) * sizeof(char) + 1);
+
+            memset(final, 0, strlen($1) * sizeof(char));
+            char * parts[] = {$1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($1);
+            $$ = final;	
+        }
 ;
 
 
@@ -1664,18 +1766,32 @@ exp :
             
             free($1);
             free($2);
+            free($3);
             $$ = final;
         }
         |term {
-        	$$ = $1;
+            size_t size = strlen($1) * sizeof(char) + 1;
+            char * final = malloc(size);
+            memset(final, 0, size);
+            char * parts[] = {$1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($1);
+            $$ = final;
         }
 
 ;
 
 term :
         atom {
-
-                $$ = $1;
+            size_t size = strlen($1) * sizeof(char) + 1;
+            char * final = malloc(size);
+            memset(final, 0, size);
+            char * parts[] = {$1};
+            int n = sizeof(parts)/sizeof(parts[0]);
+            concatenateArray(final, parts, n);
+            free($1);
+            $$ = final;
         }
 
         | LPAREN exp RPAREN {
@@ -1732,15 +1848,36 @@ atom :
 
     STRINGV {
 
-		$$ = $1;
-	}
+		char *final = malloc(strlen($1) * sizeof(char) + 1);
+
+		memset(final, 0, strlen($1) * sizeof(char));
+        char * parts[] = {$1};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
+		$$ = final;
+    }
 	|prod STRINGV {
-	
-		$$ = $2;
+		char *final = malloc(strlen($2) * sizeof(char) + 1);
+
+		memset(final, 0, strlen($2) * sizeof(char));
+        char * parts[] = {$2};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
+        free($2);
+		$$ = final;		
+
 	}
     | values {
+        char *final = malloc(strlen($1) * sizeof(char) + 1);
 
-		$$ = $1;		
+		memset(final, 0, strlen($1) * sizeof(char));
+        char * parts[] = {$1};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
+		$$ = final;		
 	}
     |STRINGV LSQUAREPAREN exp RSQUAREPAREN{
 
@@ -1757,7 +1894,14 @@ atom :
 	
 
 	| fun_cre{
-		$$ = $1;
+        char *final = malloc(strlen($1) * sizeof(char) + sizeof("[]"));
+
+		memset(final, 0, strlen($1) * sizeof(char)  + sizeof("[]"));
+        char * parts[] = {$1};
+        int n = sizeof(parts)/sizeof(parts[0]);
+        concatenateArray(final, parts, n);
+        free($1);
+		$$ = final;
 	}
 
 
@@ -1850,6 +1994,7 @@ char *replace(const char *string, const char *search, const char *replacement) {
 
     char *nuevoString = (char *)malloc(nuevaLongitud + 1);
     if (nuevoString == NULL) {
+        free(nuevoString);
         return NULL;
     }
     
